@@ -16,12 +16,12 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    ThemeMode _themeMode = ThemeMode.light; 
+    ThemeMode themeMode = ThemeMode.light; 
 
     return MaterialApp(
       theme: AppTheme.lightTheme,
       darkTheme: AppTheme.darkTheme,
-      themeMode: _themeMode,
+      themeMode: themeMode,
       home: BlocProvider(create: (context) => LoginCubit(),
       child: LoginPage()),
     );

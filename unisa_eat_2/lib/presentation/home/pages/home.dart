@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:unisa_eat_2/presentation/widget/profile_appbar.dart';
 
 
 class HomePage extends StatelessWidget {
@@ -7,11 +8,12 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
+      appBar: ProfileAppBar(),
       body: Center(
         child: Text(
-          'Welcome to Home Page',
-          style: Theme.of(context).textTheme.headlineLarge,
+          'Welcome to the Home Page',
+          style: TextStyle(fontSize: 24),
+
         ),
       ),
     );

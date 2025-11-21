@@ -18,9 +18,11 @@ class AuthApiServiceImpl extends AuthApiService {
       var response = await sl<DioClient>().post(ApiUrl.login, data: params.toJson());
       return Right(response);
     } on DioException catch(e) {
-      
-      
-      return Left(e.response?.data['msg'] ?? 'Unknown Dio error');
-    }
+      if (e.response?.data is Map<String, dynamic>) {
+          return Left(e.response!.data['error'] ?? 'Unknown Dio error');
+        } else {
+          return Left(e.message ?? 'Unknown Dio error');
+        }
+    } 
   }
 }

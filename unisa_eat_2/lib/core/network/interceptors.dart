@@ -1,9 +1,10 @@
 import 'package:dio/dio.dart';
 import 'package:logger/logger.dart';
+import 'package:unisa_eat_2/service_locator.dart';
 
 /// This interceptor is used to show request and response logs
 class LoggerInterceptor extends Interceptor {
-  Logger logger = Logger(printer: PrettyPrinter(methodCount: 0, colors: true,printEmojis: true));
+  Logger logger = sl<Logger>();
 
   @override
   void onError( DioException err, ErrorInterceptorHandler handler) {

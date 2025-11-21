@@ -7,6 +7,7 @@ import 'package:unisa_eat_2/data/auth/models/log_in_params.dart';
 import 'package:unisa_eat_2/presentation/auth/bloc/login_cubit.dart';
 import 'package:unisa_eat_2/presentation/auth/bloc/login_state.dart';
 import 'package:unisa_eat_2/presentation/auth/pages/signup.dart';
+import 'package:unisa_eat_2/presentation/home/pages/home.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -27,12 +28,12 @@ class _LoginPageState extends State<LoginPage> {
         listener: (BuildContext context, state) { 
           if (state is LoginFailure) {
             ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text('${state.error}')),
+              SnackBar(content: Text(state.error)),
             );
           } else if (state is LoginSuccess) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text('Login Successful')),
-            );
+            
+            AppNavigation.pushReplacement(context, HomePage());
+            
             // Navigate to home or another page if needed
           }
         },
@@ -47,8 +48,10 @@ class _LoginPageState extends State<LoginPage> {
                 _emailField(),
                 const SizedBox(height: 20),
                 _passwordField(),
-                _loginButton(context),
                 _showPasswordCheckbox(),
+                const SizedBox(height: 20),
+                _loginButton(context),
+                const SizedBox(height: 15),
                 _signupText()
               ],
             ),
@@ -59,15 +62,27 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   Widget _loginButton(BuildContext context) {
-    return ElevatedButton(onPressed: () {
-    context.read<LoginCubit>().login(
-      LogInParams(
-        email: _emailController.text,
-        password: _passwordController.text,
+    return Container(
+      width: 200,
+      height: 50,
+
+      child: ElevatedButton(
+        onPressed: () {
+          context.read<LoginCubit>().login(
+            LogInParams(
+              email: _emailController.text,
+              password: _passwordController.text,
+            ),
+          );
+        },
+        style: ElevatedButton.styleFrom(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+        )),
+        
+        child: Text('Login', style: TextStyle(color: Colors.white),),
       ),
     );
-  },
-  child: const Text('Login'),);
   }
 
   Widget _loginText() {

@@ -15,6 +15,8 @@ dependencies:
   dartz:
   logger:
   shared_preferences:
+  flutter_secure_storage: 
+  jwt_decoder:
 
 dev_dependencies:
   flutter_test:

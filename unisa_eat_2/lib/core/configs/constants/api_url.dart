@@ -4,6 +4,6 @@ class ApiUrl {
 
   static const apiVersion = 'api/v1/';
 
-  static const login = '$apiVersion/auth/login';
+  static const login = '${apiVersion}auth/login';
 
 }
