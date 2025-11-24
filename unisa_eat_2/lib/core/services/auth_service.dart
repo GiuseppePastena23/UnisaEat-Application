@@ -1,9 +1,12 @@
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
+import 'package:logger/logger.dart';
+import 'package:unisa_eat_2/service_locator.dart';
 
 class AuthService {
 
   final FlutterSecureStorage _storage;
+  Logger logger = sl<Logger>();
 
   AuthService(this._storage);
 
@@ -14,7 +17,10 @@ class AuthService {
   }
 
   Future<String?> getToken() async {
+    var token = _storage.read(key: _tokenKey).toString();
+    logger.d('Retrieved token: $token');
     return await _storage.read(key: _tokenKey);
+    
   }
 
   Future<bool> isTokenValid() async {

@@ -6,4 +6,6 @@ class ApiUrl {
 
   static const login = '${apiVersion}auth/login';
 
+  static const getUser = '${apiVersion}users/getUser';
+
 }

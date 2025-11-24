@@ -1,1 +1,4 @@
 - Error when server is not on
+- Simplify Dio by creating an helper class
+- app key versioning
+- add check for email and password fields in login without making request to Server

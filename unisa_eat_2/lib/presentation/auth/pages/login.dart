@@ -1,13 +1,13 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:unisa_eat_2/common/helper/navigation/app_navigation.dart';
 import 'package:unisa_eat_2/core/configs/theme/app_colors.dart';
 import 'package:unisa_eat_2/data/auth/models/log_in_params.dart';
 import 'package:unisa_eat_2/presentation/auth/bloc/login_cubit.dart';
 import 'package:unisa_eat_2/presentation/auth/bloc/login_state.dart';
 import 'package:unisa_eat_2/presentation/auth/pages/signup.dart';
-import 'package:unisa_eat_2/presentation/home/pages/home.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -27,14 +27,26 @@ class _LoginPageState extends State<LoginPage> {
       body: BlocListener<LoginCubit, LoginState>(
         listener: (BuildContext context, state) { 
           if (state is LoginFailure) {
+            Navigator.of(context, rootNavigator: true).pop();
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(content: Text(state.error)),
             );
+            
+          
           } else if (state is LoginSuccess) {
             
-            AppNavigation.pushReplacement(context, HomePage());
+            context.go('/');
+            Navigator.of(context, rootNavigator: true).pop();
             
-            // Navigate to home or another page if needed
+          } else if (state is LoginLoading) {
+            // Optionally show a loading indicator
+            showDialog(
+              context: context,
+              barrierDismissible: false,
+              builder: (BuildContext context) {
+                return Center(child: CircularProgressIndicator());
+              },
+            );
           }
         },
         child: SafeArea(

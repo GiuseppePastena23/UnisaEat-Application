@@ -1,5 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:logger/logger.dart';
+import 'package:unisa_eat_2/core/services/auth_service.dart';
+
 import 'package:unisa_eat_2/service_locator.dart';
 
 /// This interceptor is used to show request and response logs
@@ -30,5 +32,25 @@ class LoggerInterceptor extends Interceptor {
         'HEADERS: ${response.headers} \n'
         'Data: ${response.data}'); // Debug log
     handler.next(response); // continue with the Response
+  }
+
+  
+}
+
+class TokenInterceptor extends Interceptor{
+
+
+  @override
+  Future<void> onRequest(RequestOptions options, RequestInterceptorHandler handler) async{
+
+    final token = await sl<AuthService>().getToken();
+
+    
+    if (token != null) {
+      options.headers['Authorization'] = 'Bearer $token';
+    
+    }
+    
+    super.onRequest(options, handler);
   }
 }

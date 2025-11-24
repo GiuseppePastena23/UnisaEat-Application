@@ -17,6 +17,7 @@ dependencies:
   shared_preferences:
   flutter_secure_storage: 
   jwt_decoder:
+  go_router: 
 
 dev_dependencies:
   flutter_test:

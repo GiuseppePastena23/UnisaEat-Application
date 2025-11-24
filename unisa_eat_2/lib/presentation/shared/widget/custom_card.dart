@@ -1,0 +1,36 @@
+import 'package:flutter/material.dart';
+import 'package:unisa_eat_2/core/configs/theme/app_colors.dart';
+
+
+class CustomCard extends StatelessWidget {
+  final Widget child;
+  final EdgeInsetsGeometry padding;
+  final double borderRadius;
+  final double elevation;
+
+
+  const CustomCard({
+    Key? key,
+    required this.child,
+    this.padding = const EdgeInsets.all(10),
+    
+    this.borderRadius = 12,
+    this.elevation = 6,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      color: AppColors.surfaceLight,
+      elevation: elevation,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(borderRadius),
+        side: BorderSide(color: AppColors.borderLight),
+      ),
+      child: Padding(
+        padding: padding,
+        child: child,
+      ),
+    );
+  }
+}
