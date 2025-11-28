@@ -17,11 +17,10 @@ class AuthService {
   }
 
   Future<String?> getToken() async {
-    var token = _storage.read(key: _tokenKey).toString();
-    logger.d('Retrieved token: $token');
-    return await _storage.read(key: _tokenKey);
-    
-  }
+  final token = await _storage.read(key: _tokenKey); 
+  logger.d('Retrieved token: $token');
+  return token;
+}
 
   Future<bool> isTokenValid() async {
     final token = await getToken();

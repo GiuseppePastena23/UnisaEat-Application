@@ -7,7 +7,7 @@ import 'package:unisa_eat_2/presentation/shared/bloc/user_profile_state.dart';
 
 
 class ProfileAppBar extends StatelessWidget implements PreferredSizeWidget {
-  const ProfileAppBar({Key? key}) : super(key: key);
+  const ProfileAppBar({super.key});
 
   @override
   Widget build(BuildContext context) {

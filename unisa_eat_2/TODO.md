@@ -1,4 +1,5 @@
-- Error when server is not on
+- Error when server is not on try login when server is off
 - Simplify Dio by creating an helper class
 - app key versioning
 - add check for email and password fields in login without making request to Server
+- save user info in cache they are not chaning use them as first option then use the request as fallback

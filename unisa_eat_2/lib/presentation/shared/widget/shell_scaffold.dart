@@ -10,7 +10,7 @@ import 'package:unisa_eat_2/presentation/shared/widget/profile_app_bar.dart';
 class ShellScaffold extends StatelessWidget {
   final Widget body;
 
-  const ShellScaffold({required this.body, Key? key}) : super(key: key);
+  const ShellScaffold({required this.body, super.key});
 
   
 

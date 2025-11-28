@@ -17,12 +17,12 @@ class UserModel {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['codice_fiscale'] = this.codiceFiscale;
-    data['cognome'] = this.cognome;
-    data['email'] = this.email;
-    data['nome'] = this.nome;
-    data['saldo'] = this.saldo;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['codice_fiscale'] = codiceFiscale;
+    data['cognome'] = cognome;
+    data['email'] = email;
+    data['nome'] = nome;
+    data['saldo'] = saldo;
     return data;
   }
 }

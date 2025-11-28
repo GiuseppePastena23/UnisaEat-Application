@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 class BottomNavBar extends StatelessWidget {
-  const BottomNavBar({Key? key}) : super(key: key);
+  const BottomNavBar({super.key});
 
   int _getCurrentIndex(BuildContext context) {
     final location = GoRouterState.of(context).uri.path;
@@ -33,9 +33,6 @@ class BottomNavBar extends StatelessWidget {
         break;
       case 3:
         context.go('/wallet');
-        break;
-      case 3:
-        context.go('/settings');
         break;
     }
   }

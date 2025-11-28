@@ -74,7 +74,7 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   Widget _loginButton(BuildContext context) {
-    return Container(
+    return SizedBox(
       width: 200,
       height: 50,
 

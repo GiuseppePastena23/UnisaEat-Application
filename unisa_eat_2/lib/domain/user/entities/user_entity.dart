@@ -8,6 +8,7 @@ class UserEntity {
   UserEntity(
       {this.codiceFiscale, this.cognome, this.email, this.nome, this.saldo});
 
+  @override
   String toString() {
     return 'UserModel{codiceFiscale: $codiceFiscale, cognome: $cognome, email: $email, nome: $nome, saldo: $saldo}';
   }

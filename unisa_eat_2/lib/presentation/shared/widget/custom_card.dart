@@ -10,13 +10,12 @@ class CustomCard extends StatelessWidget {
 
 
   const CustomCard({
-    Key? key,
+    super.key,
     required this.child,
     this.padding = const EdgeInsets.all(10),
-    
     this.borderRadius = 12,
     this.elevation = 6,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
