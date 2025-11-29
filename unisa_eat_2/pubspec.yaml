@@ -19,6 +19,8 @@ dependencies:
   jwt_decoder:
   go_router: 
   qr_flutter: 
+  google_fonts: 
+  material_design_icons_flutter: 
 
 dev_dependencies:
   flutter_test:

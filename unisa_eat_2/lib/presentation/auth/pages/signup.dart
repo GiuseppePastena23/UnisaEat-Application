@@ -45,7 +45,7 @@ class _SignupPageState extends State<SignupPage> {
       style: TextStyle(
         fontSize: 32,
         fontWeight: FontWeight.bold,
-        color: AppColors.primaryBlueLight,
+        
       ),
     );
   }
@@ -94,9 +94,7 @@ class _SignupPageState extends State<SignupPage> {
           TextSpan(
             
             text: "Log In",
-            style: TextStyle(
-              color: AppColors.primaryBlueLight,
-            ),
+            
             recognizer: TapGestureRecognizer()..onTap=(){
               AppNavigation.push(context, LoginPage());
             }
