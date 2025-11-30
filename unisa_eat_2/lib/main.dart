@@ -26,7 +26,10 @@ class MainApp extends StatelessWidget {
         BlocProvider(create: (context) => UserProfileCubit()),
       ],
       child: MaterialApp.router(
-        themeMode: ThemeMode.dark,
+        debugShowCheckedModeBanner: false,
+        theme: AppTheme.lightTheme,
+        darkTheme: AppTheme.darkTheme,
+        themeMode: ThemeMode.light,
         routerConfig: appRouter,
       ),
     );

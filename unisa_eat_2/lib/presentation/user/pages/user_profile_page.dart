@@ -17,13 +17,13 @@ class UserProfilePage extends StatelessWidget {
       padding: const EdgeInsets.symmetric(vertical: .0),
       child: Row(
         children: [
-          Icon(icon, color: AppColors.primaryBlue),
+          Icon(icon, ),
           const SizedBox(width: 12),
           Text(
             '$label:',
             style: TextStyle(
               fontWeight: FontWeight.bold,
-              color: AppColors.primaryBlue,
+              
             ),
           ),
           const SizedBox(width: 8),
@@ -43,7 +43,7 @@ class UserProfilePage extends StatelessWidget {
 
     return ElevatedButton(
       style: ButtonStyle(
-        backgroundColor: WidgetStatePropertyAll<Color>(AppColors.primaryBlue),
+        
       ),
       onPressed: () {sl<LogoutUsecase>().call(); context.go('/login');},
       child: Text("Logout", style: TextStyle(color: Colors.white)),
@@ -53,7 +53,7 @@ class UserProfilePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.backgroundLight,
+      
       body: BlocBuilder<UserProfileCubit, UserProfileState>(
         builder: (context, state) {
           if (state is UserProfileSuccess) {
@@ -71,7 +71,7 @@ class UserProfilePage extends StatelessWidget {
                         Text(
                           '${user.nome} ${user.cognome}',
                           style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                color: AppColors.primaryBlueDark,
+                                
                                 fontWeight: FontWeight.bold,
                               ),
                         ),
@@ -96,11 +96,11 @@ class UserProfilePage extends StatelessWidget {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  const Icon(Icons.error_outline, color: AppColors.errorRed, size: 50),
+                  const Icon(Icons.error_outline, size: 50),
                   const SizedBox(height: 12),
                   Text(
                     "Error Loading User Profile",
-                    style: TextStyle(fontSize: 18, color: AppColors.errorRed),
+                    style: TextStyle(fontSize: 18),
                   ),
                   const SizedBox(height: 12),
                   ElevatedButton.icon(
@@ -109,10 +109,7 @@ class UserProfilePage extends StatelessWidget {
                     },
                     icon: const Icon(Icons.refresh),
                     label: const Text('Retry'),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: AppColors.primaryBlue,
-                      foregroundColor: AppColors.buttonTextDark,
-                    ),
+                    
                   ),
                 ],
               ),

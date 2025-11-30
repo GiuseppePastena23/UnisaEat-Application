@@ -44,11 +44,11 @@ class BottomNavBar extends StatelessWidget {
       currentIndex: _getCurrentIndex(context),
       onTap: (index) => _onTap(context, index),
       items: const [
-        BottomNavigationBarItem(icon: Icon(Icons.home_outlined, ), label: 'Home',),
-        BottomNavigationBarItem(icon: Icon(Icons.push_pin_outlined), label: 'Menu'),
-        BottomNavigationBarItem(icon: Icon(Icons.shopping_bag_outlined), label: 'Orders'),
-        BottomNavigationBarItem(icon: Icon(Icons.account_balance_wallet_outlined), label: 'Wallet'),
-        BottomNavigationBarItem(icon: Icon(Icons.settings_outlined), label: 'Settings'),
+        BottomNavigationBarItem(icon: Icon(Icons.home_filled, ), label: 'Home',),
+        BottomNavigationBarItem(icon: Icon(Icons.restaurant_menu), label: 'Menu'),
+        BottomNavigationBarItem(icon: Icon(Icons.receipt_long), label: 'Orders'),
+        BottomNavigationBarItem(icon: Icon(Icons.account_balance_wallet), label: 'Wallet'),
+        BottomNavigationBarItem(icon: Icon(Icons.settings), label: 'Settings'),
       ],
     );
   }
