@@ -1,6 +1,8 @@
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get_it/get_it.dart';
+import 'package:hive/hive.dart';
 import 'package:logger/logger.dart';
+import 'package:unisa_eat_2/core/configs/constants/hive_boxes.dart';
 import 'package:unisa_eat_2/core/network/dio_client.dart';
 import 'package:unisa_eat_2/core/services/auth_service.dart';
 import 'package:unisa_eat_2/data/auth/repositories/auth_repository.dart';
@@ -14,12 +16,21 @@ import 'package:unisa_eat_2/domain/auth/usecases/login.dart';
 import 'package:unisa_eat_2/domain/auth/usecases/logout.dart';
 import 'package:unisa_eat_2/domain/home/repositories/home_repository.dart';
 import 'package:unisa_eat_2/domain/home/usecases/get_qr_code.dart';
+import 'package:unisa_eat_2/domain/user/entities/cached_user.dart';
+
 import 'package:unisa_eat_2/domain/user/repositories/user_repository.dart';
 import 'package:unisa_eat_2/domain/user/usecases/get_user.dart';
 
 final sl  = GetIt.instance;
 
 void setupServiceLocator() {
+  
+  sl.registerSingleton<Box<CachedUser>>(Hive.box<CachedUser>(HiveBoxes.user));
+
+
+  
+
+
 
   // Services
   sl.registerSingleton<Logger>(Logger(printer: PrettyPrinter(methodCount: 0, colors: true,printEmojis: true)));

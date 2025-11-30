@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:go_router/go_router.dart';
-import 'package:unisa_eat_2/core/configs/theme/app_colors.dart';
 import 'package:unisa_eat_2/domain/auth/usecases/logout.dart';
 import 'package:unisa_eat_2/presentation/shared/bloc/user_profile_cubit.dart';
 import 'package:unisa_eat_2/presentation/shared/bloc/user_profile_state.dart';
@@ -45,7 +43,7 @@ class UserProfilePage extends StatelessWidget {
       style: ButtonStyle(
         
       ),
-      onPressed: () {sl<LogoutUsecase>().call(); context.go('/login');},
+      onPressed: () {sl<LogoutUsecase>().call(); context.read<UserProfileCubit>().reset();},
       child: Text("Logout", style: TextStyle(color: Colors.white)),
     );
   }

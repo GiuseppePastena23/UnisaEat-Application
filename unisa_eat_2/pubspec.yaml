@@ -15,17 +15,24 @@ dependencies:
   dartz:
   logger:
   shared_preferences:
-  flutter_secure_storage: 
+  flutter_secure_storage: ^9.2.1
   jwt_decoder:
   go_router: 
   qr_flutter: 
   google_fonts: 
-  material_design_icons_flutter: 
+  material_design_icons_flutter:
+  hive:
+  hive_flutter: 
+  loading_animation_widget: 
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^5.0.0
+  hive_generator: 
+  build_runner: 
+  analyzer:
+  
 
 flutter:
   uses-material-design: true

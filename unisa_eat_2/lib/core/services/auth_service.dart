@@ -1,6 +1,9 @@
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:hive/hive.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:logger/logger.dart';
+import 'package:unisa_eat_2/core/configs/constants/hive_boxes.dart';
+import 'package:unisa_eat_2/domain/user/entities/cached_user.dart';
 import 'package:unisa_eat_2/service_locator.dart';
 
 class AuthService {
@@ -39,6 +42,10 @@ class AuthService {
   }
 
   Future<void> logout() async {
+    final userBox = sl<Box<CachedUser>>();
+    await userBox.delete(HiveBoxes.user);
+    
+    
     await _storage.delete(key: _tokenKey);
   }
 

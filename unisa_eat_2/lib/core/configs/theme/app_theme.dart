@@ -8,19 +8,26 @@ class AppTheme {
     return ThemeData(
       textTheme: GoogleFonts.workSansTextTheme().copyWith(
       headlineMedium: GoogleFonts.workSans(
-      fontSize: 28,
-      fontWeight: FontWeight.bold,
-      color: AppColors.lightTextHeadings,
+      fontSize: 32,
+      fontWeight: FontWeight.w600,
+      letterSpacing: -1,
+      color: AppColors.lightTextBody,
+      ),
+      bodyMedium: GoogleFonts.workSans(
+        fontWeight: FontWeight.normal,
+        fontSize: 16,
+        color: AppColors.lightTextBody,
+        letterSpacing: 0.0,
       ),
       ),
       useMaterial3: true,
       brightness: Brightness.light,
       scaffoldBackgroundColor: AppColors.lightBackground,
       colorScheme: ColorScheme.light(
-        primary: AppColors.primaryLight,
+        primary: AppColors.primaryDark,
         onPrimary: Colors.white,
         surface: AppColors.lightBackground,
-        onSurface: AppColors.lightTextHeadings,
+        onSurface: AppColors.primaryDark,
         secondary: AppColors.lightSecondaryAccent,
       ),
       bottomNavigationBarTheme: const BottomNavigationBarThemeData(
@@ -36,11 +43,11 @@ class AppTheme {
       ),
       appBarTheme: AppBarThemeData(
         backgroundColor: AppColors.lightBackground,
-        foregroundColor: AppColors.primaryDark,
+        
         
         titleTextStyle: TextStyle(
-          color: AppColors.lightTextHeadings,
-          fontWeight: FontWeight.w900,
+          color: AppColors.lightTextBody,
+          fontWeight: FontWeight.bold,
           fontSize: 19
         )
       )

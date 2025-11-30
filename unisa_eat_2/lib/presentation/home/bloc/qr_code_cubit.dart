@@ -35,4 +35,6 @@ class QrcodeCubit extends Cubit<QrcodeState> {
     _timer?.cancel();
     return super.close();
   }
+
+  getQrCode() {}
 }
