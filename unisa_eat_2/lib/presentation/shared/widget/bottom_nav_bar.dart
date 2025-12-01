@@ -13,7 +13,7 @@ class BottomNavBar extends StatelessWidget {
         return 1;
       case '/profile':
         return 2;
-      case '/orders':
+      case '/wallet':
         return 3;
       default:
         return 0;

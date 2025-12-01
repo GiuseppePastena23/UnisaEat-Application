@@ -5,7 +5,6 @@ import 'package:unisa_eat_2/core/configs/constants/hive_boxes.dart';
 import 'package:unisa_eat_2/data/user/models/user_model.dart';
 import 'package:unisa_eat_2/data/user/sources/user_api_service.dart';
 import 'package:unisa_eat_2/domain/user/entities/cached_user.dart';
-import 'package:unisa_eat_2/domain/user/entities/user_entity.dart';
 import 'package:unisa_eat_2/domain/user/repositories/user_repository.dart';
 import 'package:unisa_eat_2/service_locator.dart';
 

@@ -1,8 +1,6 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:unisa_eat_2/common/helper/navigation/app_navigation.dart';
-import 'package:unisa_eat_2/core/configs/theme/app_colors.dart';
-import 'package:unisa_eat_2/presentation/auth/pages/login.dart';
+
 
 class SignupPage extends StatefulWidget {
   const SignupPage({super.key});
@@ -96,7 +94,7 @@ class _SignupPageState extends State<SignupPage> {
             text: "Log In",
             
             recognizer: TapGestureRecognizer()..onTap=(){
-              AppNavigation.push(context, LoginPage());
+              
             }
             
           )

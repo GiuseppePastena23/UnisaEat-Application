@@ -13,12 +13,8 @@ class AppTheme {
       letterSpacing: -1,
       color: AppColors.lightTextBody,
       ),
-      bodyMedium: GoogleFonts.workSans(
-        fontWeight: FontWeight.normal,
-        fontSize: 16,
-        color: AppColors.lightTextBody,
-        letterSpacing: 0.0,
-      ),
+      
+      
       ),
       useMaterial3: true,
       brightness: Brightness.light,

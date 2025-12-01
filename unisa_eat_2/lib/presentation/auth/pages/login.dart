@@ -3,12 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
-import 'package:unisa_eat_2/common/helper/navigation/app_navigation.dart';
+
 import 'package:unisa_eat_2/core/configs/theme/app_colors.dart';
 import 'package:unisa_eat_2/data/auth/models/log_in_params.dart';
 import 'package:unisa_eat_2/presentation/auth/bloc/login_cubit.dart';
 import 'package:unisa_eat_2/presentation/auth/bloc/login_state.dart';
-import 'package:unisa_eat_2/presentation/auth/pages/signup.dart';
+
 import 'package:unisa_eat_2/presentation/shared/bloc/user_profile_cubit.dart';
 
 class LoginPage extends StatefulWidget {
@@ -157,7 +157,7 @@ class _LoginPageState extends State<LoginPage> {
             text: "Sign Up",
            
             recognizer: TapGestureRecognizer()..onTap=(){
-              AppNavigation.push(context, SignupPage());
+              
             }
             
           )

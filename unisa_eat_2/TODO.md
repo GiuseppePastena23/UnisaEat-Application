@@ -2,5 +2,5 @@
 - Simplify Dio by creating an helper class
 - app key versioning
 - add check for email and password fields in login without making request to Server
-- save user info in cache they are not chaning use them as first option then use the request as fallback
 - use skeletonizer when loading the page
+- use getsaldo in the appbar 

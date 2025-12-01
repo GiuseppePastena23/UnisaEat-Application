@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:unisa_eat_2/core/configs/theme/app_colors.dart';
+
 
 
 class CustomCard extends StatelessWidget {

@@ -9,8 +9,9 @@ class QrcodeLoading extends QrcodeState {}
 
 class QrcodeSuccess extends QrcodeState {
   final String token;
+  final double remainingTime;
   
-  QrcodeSuccess(this.token);
+  QrcodeSuccess(this.token, {this.remainingTime = 5.0});
 
 }
 

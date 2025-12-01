@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 
 
-class AppColors {
+abstract class AppColors {
   // Shared brand colors (from both themes)
   static const Color primary = Color.fromARGB(255, 255, 189, 22);      
   static const Color primaryLight = Color(0xFFF47B25); 

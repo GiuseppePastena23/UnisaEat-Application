@@ -25,7 +25,7 @@ class ProfileAppBar extends StatelessWidget implements PreferredSizeWidget {
               children: [
                 _buildProfileSection(context, state),
 
-                _buildBalanceInfo(state),
+                _buildBalanceInfo(state, context),
               ],
             ),
           );
@@ -35,7 +35,7 @@ class ProfileAppBar extends StatelessWidget implements PreferredSizeWidget {
   }
 
   // Saldo
-  Widget _buildBalanceInfo(UserProfileSuccess state) {
+  Widget _buildBalanceInfo(UserProfileSuccess state, BuildContext context) {
     return GestureDetector(
       onTap: () {
 
@@ -49,41 +49,48 @@ class ProfileAppBar extends StatelessWidget implements PreferredSizeWidget {
             
             borderRadius: BorderRadius.circular(10),
           ),
-        child: Row(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.end,
           children: [
-            Text(
-              '€${state.user.saldo?.toStringAsFixed(2) ?? '0.00'}',
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 16,
-                color: AppColors.primaryDark,
-                letterSpacing: 0.24,
-                height: 1.25,
+            Text('Balance', style: Theme.of(context).textTheme.displaySmall),
+            SizedBox(height: 3,),
+            Row(
+              children: [
+                Text(
+                  '€${state.user.saldo?.toStringAsFixed(2) ?? '0.00'}',
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16,
+                    color: AppColors.primaryDark,
+                    letterSpacing: 0.24,
+                    height: 1.25,
+                  ),
+                ),
+                const SizedBox(width: 8),
+                Container(
+              width: 22,
+              height: 22,
+              decoration: BoxDecoration(
+                color: AppColors.balanceIconBackground,
+                shape: BoxShape.circle,
               ),
-            ),
-            const SizedBox(width: 8),
-            Container(
-          width: 22,
-          height: 22,
-          decoration: BoxDecoration(
-            color: AppColors.balanceIconBackground,
-            shape: BoxShape.circle,
-          ),
-          child: Icon(Icons.add, color: AppColors.primaryDark, size: 18, fontWeight: FontWeight.w700,),
-        
-          
-            
+              child: Icon(Icons.add, color: AppColors.primaryDark, size: 15, fontWeight: FontWeight.normal,),
             
               
-          
-          ),
+                
+                
+                  
+              
+              ),
+              ],
+            ),
           ],
         ),
       ),
     );
   }
 
-  // Piu
+  
 
   // DESTRA
   Widget _buildProfileSection(BuildContext context, UserProfileSuccess state) {
