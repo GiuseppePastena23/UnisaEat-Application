@@ -9,6 +9,9 @@ class ApiUrl {
   static const getUser = '${apiVersion}users/getUser';
 
   static const getQrcode = '${apiVersion}users/generate-qr';
+
+  static const getBalance = '${apiVersion}users/get-saldo';
+  
   
 
 }

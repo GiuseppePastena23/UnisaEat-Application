@@ -11,6 +11,8 @@ import 'package:unisa_eat_2/data/home/repositories/home_repository.dart';
 import 'package:unisa_eat_2/data/home/sources/home_api_service.dart';
 import 'package:unisa_eat_2/data/user/repositories/user_repository.dart';
 import 'package:unisa_eat_2/data/user/sources/user_api_service.dart';
+import 'package:unisa_eat_2/data/wallet/repositories/wallet_repository.dart';
+import 'package:unisa_eat_2/data/wallet/sources/wallet_api_service.dart';
 import 'package:unisa_eat_2/domain/auth/repositories/auth_repository.dart';
 import 'package:unisa_eat_2/domain/auth/usecases/login.dart';
 import 'package:unisa_eat_2/domain/auth/usecases/logout.dart';
@@ -20,6 +22,8 @@ import 'package:unisa_eat_2/domain/user/entities/cached_user.dart';
 
 import 'package:unisa_eat_2/domain/user/repositories/user_repository.dart';
 import 'package:unisa_eat_2/domain/user/usecases/get_user.dart';
+import 'package:unisa_eat_2/domain/wallet/repositories/wallet_repository.dart';
+import 'package:unisa_eat_2/domain/wallet/usecases/get_balance_usecase.dart';
 
 final sl  = GetIt.instance;
 
@@ -41,16 +45,19 @@ void setupServiceLocator() {
   sl.registerSingleton<DioClient>(DioClient());
   
   // ApiService
+  sl.registerSingleton<WalletApiService>(WalletApiServiceImpl());
   sl.registerSingleton<AuthApiService>(AuthApiServiceImpl());
   sl.registerSingleton<UserApiService>(UserApiServiceImpl());
   sl.registerSingleton<HomeApiService>(HomeApiServiceImpl());
 
   // Repositories
+  sl.registerSingleton<WalletRepository>(WalletRepositoryImpl());
   sl.registerSingleton<AuthRepository>(AuthRepositoryImpl());
   sl.registerSingleton<UserRepository>(UserRepositoryImpl());
   sl.registerSingleton<HomeRepository>(HomeRepositoryImpl());
   
   // Usecases
+  sl.registerSingleton<GetBalanceUsecase>(GetBalanceUsecase());
   sl.registerSingleton<LoginUsecase>(LoginUsecase());
   sl.registerSingleton<GetUserUsecase>(GetUserUsecase());
   sl.registerSingleton<LogoutUsecase>(LogoutUsecase());

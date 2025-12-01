@@ -4,3 +4,4 @@
 - add check for email and password fields in login without making request to Server
 - use skeletonizer when loading the page
 - use getsaldo in the appbar 
+- put balance in user cubit
