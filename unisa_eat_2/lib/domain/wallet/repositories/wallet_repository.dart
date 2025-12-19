@@ -4,4 +4,5 @@ abstract class WalletRepository {
 
   Future<Either> getBalance();
 
+  Future<Either> getTransactions();
 }

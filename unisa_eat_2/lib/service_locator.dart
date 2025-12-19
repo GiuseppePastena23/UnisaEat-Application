@@ -24,6 +24,7 @@ import 'package:unisa_eat_2/domain/user/repositories/user_repository.dart';
 import 'package:unisa_eat_2/domain/user/usecases/get_user.dart';
 import 'package:unisa_eat_2/domain/wallet/repositories/wallet_repository.dart';
 import 'package:unisa_eat_2/domain/wallet/usecases/get_balance_usecase.dart';
+import 'package:unisa_eat_2/domain/wallet/usecases/get_transactions_usecase.dart';
 
 final sl  = GetIt.instance;
 
@@ -57,6 +58,7 @@ void setupServiceLocator() {
   sl.registerSingleton<HomeRepository>(HomeRepositoryImpl());
   
   // Usecases
+  sl.registerSingleton<GetTransactionsUsecase>(GetTransactionsUsecase());
   sl.registerSingleton<GetBalanceUsecase>(GetBalanceUsecase());
   sl.registerSingleton<LoginUsecase>(LoginUsecase());
   sl.registerSingleton<GetUserUsecase>(GetUserUsecase());

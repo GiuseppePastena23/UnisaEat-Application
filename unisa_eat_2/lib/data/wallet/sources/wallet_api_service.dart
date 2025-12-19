@@ -6,6 +6,8 @@ import 'package:unisa_eat_2/service_locator.dart';
 
 abstract class WalletApiService {
   Future<Either> getBalance();
+
+  Future<Either> getTransactions();
 }
 
 class WalletApiServiceImpl extends WalletApiService {
@@ -13,6 +15,20 @@ class WalletApiServiceImpl extends WalletApiService {
   Future<Either> getBalance() async {
     try {
       var response = await sl<DioClient>().get(ApiUrl.getBalance); 
+      return Right(response);
+    } on DioException catch (e) {
+      if (e.response?.data is Map<String, dynamic>) {
+        return Left(e.response!.data['error'] ?? 'Unknown Dio error');
+      } else {
+        return Left(e.message ?? 'Unknown Dio error');
+      }
+    }
+  }
+  
+  @override
+  Future<Either<dynamic, dynamic>> getTransactions() async {
+    try {
+      var response = await sl<DioClient>().get(ApiUrl.getTransactions); 
       return Right(response);
     } on DioException catch (e) {
       if (e.response?.data is Map<String, dynamic>) {

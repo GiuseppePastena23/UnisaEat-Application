@@ -12,6 +12,6 @@ class ApiUrl {
 
   static const getBalance = '${apiVersion}users/get-saldo';
   
-  
+  static const getTransactions = '${apiVersion}transazioni/get-by-userid';
 
 }

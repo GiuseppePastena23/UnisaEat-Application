@@ -14,7 +14,7 @@ class WalletPage extends StatelessWidget {
         // TIPICO: prendi il repository da context o getIt
         create: (context) => WalletCubit(
           // es: context.read<WalletRepository>(),
-        )..getBalance(), // fai partire il fetch qui
+        )..getData(), // fai partire il fetch qui
         child: BlocBuilder<WalletCubit, WalletState>(
           builder: (context, state) {
             if (state is WalletSuccess) {
@@ -75,7 +75,7 @@ class WalletPage extends StatelessWidget {
                 ),
                 child: IconButton(
                   onPressed: () {
-                    // es: context.read<WalletCubit>().onAddMoneyPressed();
+                    
                   },
                   icon: const Icon(Icons.add),
                   padding: EdgeInsets.zero,
@@ -90,60 +90,63 @@ class WalletPage extends StatelessWidget {
     );
   }
 
-  Widget _recentTransactions(BuildContext context, WalletSuccess state) {
-    final transactions = state.transactions; // lista dal cubit
+ Widget _recentTransactions(BuildContext context, WalletSuccess state) {
+  final transactions = state.transactions;
 
-    return Container(
-      padding: const EdgeInsets.all(25),
-      width: double.infinity,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const Text(
-            'Recent Transactions',
-            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-          ),
-          const SizedBox(height: 10),
-          if (transactions.isEmpty)
-            const Text('No recent transactions')
-          else
-            ListView.separated(
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              itemCount: transactions.length,
-              separatorBuilder: (_, __) => const Divider(height: 16),
-              itemBuilder: (context, index) {
-                final tx = transactions[index];
-                return Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    // qui dipende dal tuo model Transaction
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(tx.title),
-                        Text(
-                          tx.dateFormatted,
-                          style: const TextStyle(
-                            fontSize: 12,
-                            color: Colors.grey,
-                          ),
-                        ),
-                      ],
-                    ),
-                    Text(
-                      '${tx.isNegative ? '-' : '+'}€${tx.amount.toStringAsFixed(2)}',
-                      style: TextStyle(
-                        color: tx.isNegative ? Colors.red : Colors.green,
-                        fontWeight: FontWeight.bold,
+  return Container(
+    padding: const EdgeInsets.all(25),
+    width: double.infinity,
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Text(
+          'Recent Transactions',
+          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+        ),
+        const SizedBox(height: 10),
+        if (transactions.isEmpty)
+          const Text('No recent transactions')
+        else
+          ListView.separated(
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            itemCount: transactions.length,
+            separatorBuilder: (_, __) => const Divider(height: 16),
+            itemBuilder: (context, index) {
+              final tx = transactions[index];
+              return Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        tx.typeFormatted,  
+                        style: const TextStyle(fontWeight: FontWeight.bold),
                       ),
+                      Text(
+                        tx.dateFormatted,  
+                        style: const TextStyle(
+                          fontSize: 12,
+                          color: Colors.grey,
+                        ),
+                      ),
+                    ],
+                  ),
+                  Text(
+                    '${tx.isNegative ? '-' : '+'}€${tx.amount?.toStringAsFixed(2) ?? '0.00'}',
+                    style: TextStyle(
+                      color: tx.isNegative ? Colors.red : Colors.green,
+                      fontWeight: FontWeight.bold,
                     ),
-                  ],
-                );
-              },
-            ),
-        ],
-      ),
-    );
-  }
+                  ),
+                ],
+              );
+            },
+          ),
+      ],
+    ),
+  );
+}
+
 }

@@ -13,7 +13,7 @@ class UserApiServiceImpl extends UserApiService {
   Future<Either> getUser() async {
     
     try {
-      var response = await sl<DioClient>().get(ApiUrl.getUser,);
+      var response = await sl<DioClient>().get(ApiUrl.getUser);
       return Right(response);
     } on DioException catch (e) {
       if (e.response?.data is Map<String, dynamic>) {
