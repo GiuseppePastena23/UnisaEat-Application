@@ -26,7 +26,7 @@ class WalletApiServiceImpl extends WalletApiService {
   }
   
   @override
-  Future<Either> getTransactions() async {
+  Future<Either<dynamic, dynamic>> getTransactions() async {
     try {
       var response = await sl<DioClient>().get(ApiUrl.getTransactions); 
       return Right(response);

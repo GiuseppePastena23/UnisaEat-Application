@@ -3,7 +3,6 @@ import 'package:go_router/go_router.dart';
 import 'package:unisa_eat_2/core/services/auth_service.dart';
 import 'package:unisa_eat_2/presentation/auth/pages/login.dart';
 import 'package:unisa_eat_2/presentation/home/pages/home.dart';
-import 'package:unisa_eat_2/presentation/menu/pages/menu_page.dart';
 import 'package:unisa_eat_2/presentation/shared/widget/shell_scaffold.dart';
 import 'package:unisa_eat_2/presentation/splash.dart';
 import 'package:unisa_eat_2/presentation/user/pages/user_profile_page.dart';
@@ -48,7 +47,6 @@ final appRouter = GoRouter(
           path: '/wallet',
           builder: (context, state) => WalletPage(),
         ),
-        GoRoute(path: '/menu', builder: (context, state) => MenuPage()),
       ],
     ),
   ],
