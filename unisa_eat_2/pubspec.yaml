@@ -24,6 +24,7 @@ dependencies:
   hive:
   hive_flutter: 
   loading_animation_widget: 
+  intl: 
 
 dev_dependencies:
   flutter_test:
