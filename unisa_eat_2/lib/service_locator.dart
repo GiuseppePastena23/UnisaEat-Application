@@ -9,6 +9,8 @@ import 'package:unisa_eat_2/data/auth/repositories/auth_repository.dart';
 import 'package:unisa_eat_2/data/auth/sources/auth_api_service.dart';
 import 'package:unisa_eat_2/data/home/repositories/home_repository.dart';
 import 'package:unisa_eat_2/data/home/sources/home_api_service.dart';
+import 'package:unisa_eat_2/data/menu/repositories/menu_repository.dart';
+import 'package:unisa_eat_2/data/menu/sources/menu_api_service.dart';
 import 'package:unisa_eat_2/data/user/repositories/user_repository.dart';
 import 'package:unisa_eat_2/data/user/sources/user_api_service.dart';
 import 'package:unisa_eat_2/data/wallet/repositories/wallet_repository.dart';
@@ -18,6 +20,8 @@ import 'package:unisa_eat_2/domain/auth/usecases/login.dart';
 import 'package:unisa_eat_2/domain/auth/usecases/logout.dart';
 import 'package:unisa_eat_2/domain/home/repositories/home_repository.dart';
 import 'package:unisa_eat_2/domain/home/usecases/get_qr_code.dart';
+import 'package:unisa_eat_2/domain/menu/repository/menu_repository.dart';
+import 'package:unisa_eat_2/domain/menu/usecases/get_menu_by_date_usecase.dart';
 import 'package:unisa_eat_2/domain/user/entities/cached_user.dart';
 
 import 'package:unisa_eat_2/domain/user/repositories/user_repository.dart';
@@ -50,12 +54,14 @@ void setupServiceLocator() {
   sl.registerSingleton<AuthApiService>(AuthApiServiceImpl());
   sl.registerSingleton<UserApiService>(UserApiServiceImpl());
   sl.registerSingleton<HomeApiService>(HomeApiServiceImpl());
+  sl.registerSingleton<MenuApiService>(MenuApiServiceImpl());
 
   // Repositories
   sl.registerSingleton<WalletRepository>(WalletRepositoryImpl());
   sl.registerSingleton<AuthRepository>(AuthRepositoryImpl());
   sl.registerSingleton<UserRepository>(UserRepositoryImpl());
   sl.registerSingleton<HomeRepository>(HomeRepositoryImpl());
+  sl.registerSingleton<MenuRepository>(MenuRepositoryImpl());
   
   // Usecases
   sl.registerSingleton<GetTransactionsUsecase>(GetTransactionsUsecase());
@@ -64,6 +70,7 @@ void setupServiceLocator() {
   sl.registerSingleton<GetUserUsecase>(GetUserUsecase());
   sl.registerSingleton<LogoutUsecase>(LogoutUsecase());
   sl.registerSingleton<GetQrcodeUsecase>(GetQrcodeUsecase());
+  sl.registerSingleton<GetMenuByDateUsecase>(GetMenuByDateUsecase());
 
 }
 

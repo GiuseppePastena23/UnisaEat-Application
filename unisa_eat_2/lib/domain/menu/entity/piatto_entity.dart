@@ -1,20 +1,21 @@
-class Piatti {
+
+class PiattoEntity {
   String? allergeni;
   String? categoria;
   double? costoBase;
-  String? createdAt;
   String? descrizione;
-  int? id;
   String? nome;
+  int? piattoId;
   String? tipo;
 
-  Piatti(
+  PiattoEntity(
       {this.allergeni,
       this.categoria,
       this.costoBase,
-      this.createdAt,
       this.descrizione,
-      this.id,
       this.nome,
+      this.piattoId,
       this.tipo});
+
+  
 }

@@ -3,9 +3,11 @@ import 'package:go_router/go_router.dart';
 import 'package:unisa_eat_2/core/services/auth_service.dart';
 import 'package:unisa_eat_2/presentation/auth/pages/login.dart';
 import 'package:unisa_eat_2/presentation/home/pages/home.dart';
+import 'package:unisa_eat_2/presentation/menu/pages/menu.dart';
 import 'package:unisa_eat_2/presentation/shared/widget/shell_scaffold.dart';
 import 'package:unisa_eat_2/presentation/splash.dart';
 import 'package:unisa_eat_2/presentation/user/pages/user_profile_page.dart';
+import 'package:unisa_eat_2/presentation/wallet/pages/add_funds_page.dart';
 import 'package:unisa_eat_2/presentation/wallet/pages/wallet_page.dart';
 import 'package:unisa_eat_2/service_locator.dart';
 
@@ -42,11 +44,19 @@ final appRouter = GoRouter(
         GoRoute(
           path: '/profile',
           builder: (context, state) => UserProfilePage(),
+          
         ),
         GoRoute(
           path: '/wallet',
           builder: (context, state) => WalletPage(),
+          routes: [
+            GoRoute(
+              path: 'add-funds',
+              builder: (context, state) => AddFundsPage(),
+            ),
+          ],
         ),
+        GoRoute(path: '/menu', builder: (context, state) => MenuPage()),
       ],
     ),
   ],

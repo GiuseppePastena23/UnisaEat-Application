@@ -18,7 +18,7 @@ class ShellScaffold extends StatelessWidget {
   Widget build(BuildContext context) {
     final location = GoRouterState.of(context).uri.path;
 
-    final hideNavRoutes = ['/login', '/signup', '/splash'];
+    final hideNavRoutes = ['/login', '/signup', '/splash', '/wallet/add-funds'];
     final shouldHideNav = hideNavRoutes.contains(location);
 
     return BlocProvider(

@@ -24,6 +24,8 @@ dependencies:
   hive:
   hive_flutter: 
   loading_animation_widget: 
+  intl: 
+  flutter_paypal_payment: ^1.0.7
 
 dev_dependencies:
   flutter_test:

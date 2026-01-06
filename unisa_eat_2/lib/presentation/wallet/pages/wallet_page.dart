@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:unisa_eat_2/core/configs/theme/app_colors.dart';
 import 'package:unisa_eat_2/presentation/wallet/bloc/wallet_cubit.dart';
 import 'package:unisa_eat_2/presentation/wallet/bloc/wallet_state.dart';
@@ -75,7 +76,7 @@ class WalletPage extends StatelessWidget {
                 ),
                 child: IconButton(
                   onPressed: () {
-                    
+                    context.push('/wallet/add-funds/');
                   },
                   icon: const Icon(Icons.add),
                   padding: EdgeInsets.zero,

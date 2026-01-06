@@ -12,6 +12,9 @@ class ApiUrl {
 
   static const getBalance = '${apiVersion}users/get-saldo';
   
-  static const getTransactions = '${apiVersion}transazioni/get-by-userid';
+  static const getTransactions = '${apiVersion}transazioni/get-by-userid'; 
 
+  static String getMenuByDate(String date) {
+    return '${apiVersion}menu/by-date?date=$date';
+  }
 }
