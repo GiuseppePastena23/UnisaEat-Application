@@ -1,10 +1,16 @@
-// domain/wallet/entities/transaction_entity.dart
+
+enum TransactionType {
+  topup,
+  kiosk,
+  order,
+}
+
 class TransactionEntity {
   final double? amount;
   final String? createdAt;
   final int? id;
   final String? paymentMethod;
-  final String? type;
+  final TransactionType? type;
   final int? userId;
 
   TransactionEntity({
@@ -29,22 +35,11 @@ class TransactionEntity {
 
   
   bool get isNegative {
-    return type == 'kiosk' || type == 'order';
+    return type == TransactionType.kiosk || type == TransactionType.order;
   }
 
   
-  String get typeFormatted {
-    switch (type) {
-      case 'topup':
-        return 'Ricarica';
-      case 'kiosk':
-        return 'Kiosk';
-      case 'order':
-        return 'Ordine';
-      default:
-        return type ?? '';
-    }
-  }
+  
 
   @override
   String toString() {

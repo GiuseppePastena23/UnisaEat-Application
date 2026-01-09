@@ -122,7 +122,7 @@ class WalletPage extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        tx.typeFormatted,  
+                        tx.type.toString(),  
                         style: const TextStyle(fontWeight: FontWeight.bold),
                       ),
                       Text(

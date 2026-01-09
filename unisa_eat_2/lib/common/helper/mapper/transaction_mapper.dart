@@ -1,6 +1,6 @@
 import 'package:unisa_eat_2/data/wallet/models/transaction_model.dart';
 
-import 'package:unisa_eat_2/domain/wallet/entities/transaction_entity.dart';
+import 'package:unisa_eat_2/domain/wallet/entities/transaction_entity.dart' ;
 
 class TransactionMapper {
 
@@ -10,7 +10,7 @@ class TransactionMapper {
           createdAt: model.createdAt,
           id: model.id,
           paymentMethod: model.paymentMethod,
-          type: model.type,
+          type: model.type != null ? TransactionType.values.firstWhere((e) => e.name == model.type!.name) : null,
           userId: model.userId,
           
         );

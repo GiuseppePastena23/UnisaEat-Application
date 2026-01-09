@@ -1,9 +1,15 @@
+
+
+
+
+import 'package:unisa_eat_2/domain/wallet/entities/transaction_entity.dart';
+
 class TransactionModel {
   double? amount;
   String? createdAt;
   int? id;
   String? paymentMethod;
-  String? type;
+  TransactionType? type;
   int? userId;
 
   TransactionModel(
@@ -29,7 +35,7 @@ class TransactionModel {
     data['created_at'] = this.createdAt;
     data['id'] = this.id;
     data['payment_method'] = this.paymentMethod;
-    data['type'] = this.type;
+    data['type'] = this.type.toString();
     data['user_id'] = this.userId;
     return data;
   }
