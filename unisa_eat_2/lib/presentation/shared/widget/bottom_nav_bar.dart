@@ -34,6 +34,9 @@ class BottomNavBar extends StatelessWidget {
       case 3:
         context.go('/wallet');
         break;
+      case 4:
+        context.go('/test');
+        break;
     }
   }
 
