@@ -1,8 +1,9 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide DateUtils;
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:unisa_eat_2/domain/menu/entity/menu_entity.dart';
 import 'package:unisa_eat_2/presentation/menu/bloc/menu_cubit.dart';
 import 'package:unisa_eat_2/presentation/menu/bloc/menu_state.dart';
+import 'package:unisa_eat_2/common/utils/date_utils.dart';
 
 class MenuPage extends StatefulWidget {
   const MenuPage({super.key});
@@ -26,29 +27,20 @@ class _MenuPageState extends State<MenuPage> {
   @override
   void initState() {
     super.initState();
-    selectedDate = _getInitialDate();
-    // Fetch menu for initial date using global MenuCubit
+    selectedDate = DateUtils.getInitialDate();
+    
     Future.microtask(() {
-      context.read<MenuCubit>().fetchMenuByDate(_formatDateForApi(selectedDate));
+      context.read<MenuCubit>().fetchMenuByDate(DateUtils.formatDateForApi(selectedDate));
     });
   }
 
-  DateTime _getInitialDate() {
-    final today = DateTime.now();
-    if (today.weekday >= 1 && today.weekday <= 5) {
-      return today;
-    }
-    final daysToSubtract = today.weekday == 6 ? 1 : 2;
-    return today.subtract(Duration(days: daysToSubtract));
-  }
+  
 
   bool _isWeekday(DateTime date) {
     return date.weekday >= 1 && date.weekday <= 5;
   }
 
-  String _formatDateForApi(DateTime date) {
-    return '${date.year}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}';
-  }
+  
 
   String _formatDate(DateTime date) {
     final days = ['Lunedì', 'Martedì', 'Mercoledì', 'Giovedì', 'Venerdì', 'Sabato', 'Domenica'];
@@ -83,7 +75,7 @@ class _MenuPageState extends State<MenuPage> {
         setState(() {
           selectedDate = pickedDate;
         });
-        menuCubit.fetchMenuByDate(_formatDateForApi(pickedDate));
+        menuCubit.fetchMenuByDate(DateUtils.formatDateForApi(pickedDate));
       }
     });
   }
@@ -326,7 +318,7 @@ class _MenuPageState extends State<MenuPage> {
           ),
           const SizedBox(height: 16.0),
           ElevatedButton(
-            onPressed: () => context.read<MenuCubit>().fetchMenuByDate(_formatDateForApi(selectedDate)),
+            onPressed: () => context.read<MenuCubit>().fetchMenuByDate(DateUtils.formatDateForApi(selectedDate)),
             child: const Text('Riprova'),
           ),
         ],

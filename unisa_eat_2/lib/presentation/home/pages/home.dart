@@ -2,10 +2,12 @@ import 'dart:ui' show ImageFilter;
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:unisa_eat_2/core/configs/assets/images.dart';
 
 import 'package:unisa_eat_2/presentation/shared/widget/qr_dialog.dart';
 import 'package:unisa_eat_2/presentation/shared/bloc/user_profile_cubit.dart';
 import 'package:unisa_eat_2/presentation/shared/bloc/user_profile_state.dart';
+import 'package:unisa_eat_2/presentation/shared/widget/tappable_image.dart';
 
 class HomePage extends StatelessWidget {
   @override
@@ -45,10 +47,9 @@ class HomePage extends StatelessWidget {
                     style: Theme.of(context).textTheme.headlineMedium,
                   ),
                   SizedBox(height: 10),
-                  Text(
-                    "What's on the menu today?",
-                    style: Theme.of(context).textTheme.bodyMedium,
-                  ),
+            
+                  SizedBox(height: 10),
+                  TappableImageCard(assetImagePath: AppImages.todayMenuImage, overlayText: "Today's Menu", routePath: '/menu', subtitleText: "Tap To See What's Cooking!"),
                 ],
               ),
             );
