@@ -1,0 +1,77 @@
+{
+  "@@locale": "es",
+
+  "app_name": "UnisaEat",
+
+  "menu": "Menú",
+
+  "date": "Fecha",
+
+  "weekdays_monday": "Lunes",
+  "weekdays_tuesday": "Martes",
+  "weekdays_wednesday": "Miércoles",
+  "weekdays_thursday": "Jueves",
+  "weekdays_friday": "Viernes",
+  "weekdays_saturday": "Sábado",
+  "weekdays_sunday": "Domingo",
+
+  "months_january": "Enero",
+  "months_february": "Febrero",
+  "months_march": "Marzo",
+  "months_april": "Abril",
+  "months_may": "Mayo",
+  "months_june": "Junio",
+  "months_july": "Julio",
+  "months_august": "Agosto",
+  "months_september": "Septiembre",
+  "months_october": "Octubre",
+  "months_november": "Noviembre",
+  "months_december": "Diciembre",
+
+  "category_first": "Primeros Platos",
+  "category_second": "Segundos Platos",
+  "category_side": "Acompañamientos",
+  "category_dessert": "Postre",
+  "category_drink": "Bebidas",
+  "category_other": "Otro",
+
+  "no_dishes_available": "No hay platos disponibles",
+  "error_loading": "Error al cargar",
+  "retry": "Reintentar",
+
+  "greeting_morning": "Buenos días, {name}!",
+  "@greeting_morning": {
+    "description": "Mensaje de saludo con el nombre del usuario",
+    "placeholders": {
+      "name": {
+        "example": "Mario",
+        "type": "String"
+      }
+    }
+  },
+
+  "whats_on_menu": "¿Qué hay en el menú hoy?",
+
+  "todays_menu": "Menú de Hoy",
+  "tap_to_see_cooking": "¡Toca Para Ver Qué Se Está Cocinando!",
+
+  "login_title": "Iniciar Sesión",
+  "email_label": "Correo Electrónico",
+  "password_label": "Contraseña",
+  "show_password": "Mostrar Contraseña",
+  "dont_have_account": "¿No tienes una cuenta?",
+  "sign_up": "Registrarse",
+
+  "current_balance": "Saldo Actual",
+  "recent_transactions": "Transacciones Recientes",
+  "no_recent_transactions": "No hay transacciones recientes",
+
+  "settings": "Configuración",
+  "language": "Idioma",
+  "language_english": "Inglés",
+  "language_italian": "Italiano",
+  "language_spanish": "Español",
+
+  "qr_code": "Código QR",
+  "add_funds": "Agregar Fondos"
+}

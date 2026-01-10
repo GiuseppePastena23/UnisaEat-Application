@@ -3,16 +3,29 @@ import 'dart:ui' show ImageFilter;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:unisa_eat_2/core/configs/assets/images.dart';
+import 'package:unisa_eat_2/l10n/app_localizations.dart';
 
 import 'package:unisa_eat_2/presentation/shared/widget/qr_dialog.dart';
+import 'package:unisa_eat_2/presentation/shared/widget/locale_switcher.dart';
 import 'package:unisa_eat_2/presentation/shared/bloc/user_profile_cubit.dart';
 import 'package:unisa_eat_2/presentation/shared/bloc/user_profile_state.dart';
 import 'package:unisa_eat_2/presentation/shared/widget/tappable_image.dart';
 
 class HomePage extends StatelessWidget {
+  const HomePage({super.key});
+
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Scaffold(
+      appBar: AppBar(
+        actions: const [
+          Padding(
+            padding: EdgeInsets.only(right: 16),
+            child: LocaleSwitcher(),
+          ),
+        ],
+      ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           showDialog(
@@ -43,13 +56,13 @@ class HomePage extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'Good Morning, ${user.nome}!',
+                    l10n.greeting_morning(user.nome ?? ''),
                     style: Theme.of(context).textTheme.headlineMedium,
                   ),
                   SizedBox(height: 10),
-            
+
                   SizedBox(height: 10),
-                  TappableImageCard(assetImagePath: AppImages.todayMenuImage, overlayText: "Today's Menu", routePath: '/menu', subtitleText: "Tap To See What's Cooking!"),
+                  TappableImageCard(assetImagePath: AppImages.todayMenuImage, overlayText: l10n.todays_menu, routePath: '/menu', subtitleText: l10n.tap_to_see_cooking),
                 ],
               ),
             );

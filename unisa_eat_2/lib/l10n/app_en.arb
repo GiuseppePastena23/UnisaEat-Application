@@ -1,0 +1,80 @@
+{
+  "@@locale": "en",
+
+  "app_name": "UnisaEat",
+  "@app_name": {
+    "description": "Application name"
+  },
+
+  "menu": "Menu",
+
+  "date": "Date",
+
+  "weekdays_monday": "Monday",
+  "weekdays_tuesday": "Tuesday",
+  "weekdays_wednesday": "Wednesday",
+  "weekdays_thursday": "Thursday",
+  "weekdays_friday": "Friday",
+  "weekdays_saturday": "Saturday",
+  "weekdays_sunday": "Sunday",
+
+  "months_january": "January",
+  "months_february": "February",
+  "months_march": "March",
+  "months_april": "April",
+  "months_may": "May",
+  "months_june": "June",
+  "months_july": "July",
+  "months_august": "August",
+  "months_september": "September",
+  "months_october": "October",
+  "months_november": "November",
+  "months_december": "December",
+
+  "category_first": "First Courses",
+  "category_second": "Second Courses",
+  "category_side": "Side Dishes",
+  "category_dessert": "Dessert",
+  "category_drink": "Drinks",
+  "category_other": "Other",
+
+  "no_dishes_available": "No dishes available",
+  "error_loading": "Error loading",
+  "retry": "Retry",
+
+  "greeting_morning": "Good Morning, {name}!",
+  "@greeting_morning": {
+    "description": "Greeting message with user name",
+    "placeholders": {
+      "name": {
+        "example": "Mario",
+        "type": "String"
+      }
+    }
+  },
+
+  "whats_on_menu": "What's on the menu today?",
+
+  "todays_menu": "Today's Menu",
+  "tap_to_see_cooking": "Tap To See What's Cooking!",
+
+  "login_title": "Log In",
+  "email_label": "Email",
+  "password_label": "Password",
+  "show_password": "Show Password",
+  "dont_have_account": "Don't Have an Account?",
+  "sign_up": "Sign Up",
+
+  "current_balance": "Current Balance",
+  "recent_transactions": "Recent Transactions",
+  "no_recent_transactions": "No recent transactions",
+
+  "settings": "Settings",
+  "language": "Language",
+  "language_english": "English",
+  "language_italian": "Italian",
+  "language_spanish": "Spanish",
+
+  "qr_code": "QR Code",
+  "add_funds": "Add Funds"
+}

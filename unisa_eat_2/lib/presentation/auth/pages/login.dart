@@ -6,8 +6,10 @@ import 'package:loading_animation_widget/loading_animation_widget.dart';
 
 import 'package:unisa_eat_2/core/configs/theme/app_colors.dart';
 import 'package:unisa_eat_2/data/auth/models/log_in_params.dart';
+import 'package:unisa_eat_2/l10n/app_localizations.dart';
 import 'package:unisa_eat_2/presentation/auth/bloc/login_cubit.dart';
 import 'package:unisa_eat_2/presentation/auth/bloc/login_state.dart';
+import 'package:unisa_eat_2/presentation/shared/widget/locale_switcher.dart';
 
 import 'package:unisa_eat_2/presentation/shared/bloc/user_profile_cubit.dart';
 
@@ -26,6 +28,14 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        actions: const [
+          Padding(
+            padding: EdgeInsets.only(right: 16),
+            child: LocaleSwitcher(),
+          ),
+        ],
+      ),
       body: BlocListener<LoginCubit, LoginState>(
         listener: (BuildContext context, state) { 
           if (state is LoginFailure) {
@@ -77,6 +87,7 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   Widget _loginButton(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return SizedBox(
       width: 200,
       height: 50,
@@ -94,15 +105,16 @@ class _LoginPageState extends State<LoginPage> {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(10),
         )),
-        
-        child: Text('Login', style: TextStyle(color: Colors.white),),
+
+        child: Text(l10n.login_title, style: TextStyle(color: Colors.white)),
       ),
     );
   }
 
   Widget _loginText() {
-    return const Text(
-      'Log In',
+    final l10n = AppLocalizations.of(context)!;
+    return Text(
+      l10n.login_title,
       style: TextStyle(
         fontSize: 32,
         fontWeight: FontWeight.bold,
@@ -111,32 +123,35 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   Widget _emailField() {
+    final l10n = AppLocalizations.of(context)!;
     return TextField(
       controller: _emailController,
-      decoration: const InputDecoration(
-        labelText: 'Email',
+      decoration: InputDecoration(
+        labelText: l10n.email_label,
         border: OutlineInputBorder(),
       ),
     );
   }
 
   Widget _passwordField() {
+    final l10n = AppLocalizations.of(context)!;
     return TextField(
       obscureText: !_passwordVisible,
       controller: _passwordController,
-      decoration: const InputDecoration(
-        labelText: 'Password',
+      decoration: InputDecoration(
+        labelText: l10n.password_label,
         border: OutlineInputBorder(),
-        
+
       ),
     );
   }
 
   Widget _showPasswordCheckbox() {
+    final l10n = AppLocalizations.of(context)!;
     return CheckboxListTile(
-      
+
       contentPadding: EdgeInsets.zero,
-      title: const Text('Show Password'),
+      title: Text(l10n.show_password),
       value: _passwordVisible,
       onChanged: (newValue) {
         setState(() {
@@ -148,18 +163,19 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   Widget _signupText() {
+    final l10n = AppLocalizations.of(context)!;
     return Text.rich(
       TextSpan(
-        text: "Don't Have an Account? ",
+        text: l10n.dont_have_account,
         children: [
           TextSpan(
-            
-            text: "Sign Up",
-           
+
+            text: l10n.sign_up,
+
             recognizer: TapGestureRecognizer()..onTap=(){
-              
+
             }
-            
+
           )
         ]
       )

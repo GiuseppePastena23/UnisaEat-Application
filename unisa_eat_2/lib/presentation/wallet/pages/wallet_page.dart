@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:unisa_eat_2/core/configs/theme/app_colors.dart';
+import 'package:unisa_eat_2/l10n/app_localizations.dart';
 import 'package:unisa_eat_2/presentation/wallet/bloc/wallet_cubit.dart';
 import 'package:unisa_eat_2/presentation/wallet/bloc/wallet_state.dart';
 
@@ -48,6 +49,7 @@ class WalletPage extends StatelessWidget {
 
   Widget _balance(BuildContext context, WalletSuccess state) {
     final balance = state.balance; // double dal cubit
+    final l10n = AppLocalizations.of(context)!;
 
     return Container(
       padding: const EdgeInsets.only(top: 25, right: 25, left: 25),
@@ -55,7 +57,7 @@ class WalletPage extends StatelessWidget {
       child: Column(
         children: [
           Text(
-            'Current Balance',
+            l10n.current_balance,
             style: Theme.of(context).textTheme.displaySmall,
           ),
           const SizedBox(height: 10),
@@ -91,63 +93,63 @@ class WalletPage extends StatelessWidget {
     );
   }
 
- Widget _recentTransactions(BuildContext context, WalletSuccess state) {
-  final transactions = state.transactions;
+  Widget _recentTransactions(BuildContext context, WalletSuccess state) {
+    final transactions = state.transactions;
+    final l10n = AppLocalizations.of(context)!;
 
-  return Container(
-    padding: const EdgeInsets.all(25),
-    width: double.infinity,
-    child: Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const Text(
-          'Recent Transactions',
-          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-        ),
-        const SizedBox(height: 10),
-        if (transactions.isEmpty)
-          const Text('No recent transactions')
-        else
-          ListView.separated(
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            itemCount: transactions.length,
-            separatorBuilder: (_, __) => const Divider(height: 16),
-            itemBuilder: (context, index) {
-              final tx = transactions[index];
-              return Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        tx.type.toString(),  
-                        style: const TextStyle(fontWeight: FontWeight.bold),
-                      ),
-                      Text(
-                        tx.dateFormatted,  
-                        style: const TextStyle(
-                          fontSize: 12,
-                          color: Colors.grey,
-                        ),
-                      ),
-                    ],
-                  ),
-                  Text(
-                    '${tx.isNegative ? '-' : '+'}€${tx.amount?.toStringAsFixed(2) ?? '0.00'}',
-                    style: TextStyle(
-                      color: tx.isNegative ? Colors.red : Colors.green,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ],
-              );
-            },
+    return Container(
+      padding: const EdgeInsets.all(25),
+      width: double.infinity,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            l10n.recent_transactions,
+            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
           ),
-      ],
-    ),
-  );
-}
-
+          const SizedBox(height: 10),
+          if (transactions.isEmpty)
+            Text(l10n.no_recent_transactions)
+          else
+            ListView.separated(
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              itemCount: transactions.length,
+              separatorBuilder: (_, __) => const Divider(height: 16),
+              itemBuilder: (context, index) {
+                final tx = transactions[index];
+                return Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          tx.type.toString(),
+                          style: const TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                        Text(
+                          tx.dateFormatted,
+                          style: const TextStyle(
+                            fontSize: 12,
+                            color: Colors.grey,
+                          ),
+                        ),
+                      ],
+                    ),
+                    Text(
+                      '${tx.isNegative ? '-' : '+'}€${tx.amount?.toStringAsFixed(2) ?? '0.00'}',
+                      style: TextStyle(
+                        color: tx.isNegative ? Colors.red : Colors.green,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
+                );
+              },
+            ),
+        ],
+      ),
+    );
+  }
 }

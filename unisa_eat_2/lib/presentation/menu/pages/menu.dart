@@ -4,6 +4,7 @@ import 'package:unisa_eat_2/domain/menu/entity/menu_entity.dart';
 import 'package:unisa_eat_2/presentation/menu/bloc/menu_cubit.dart';
 import 'package:unisa_eat_2/presentation/menu/bloc/menu_state.dart';
 import 'package:unisa_eat_2/common/utils/date_utils.dart';
+import 'package:unisa_eat_2/l10n/app_localizations.dart';
 
 class MenuPage extends StatefulWidget {
   const MenuPage({super.key});
@@ -24,6 +25,23 @@ class _MenuPageState extends State<MenuPage> {
     'Bevande',
   ];
 
+  String _getLocalizedCategory(String categoria, AppLocalizations l10n) {
+    switch (categoria) {
+      case 'Primi':
+        return l10n.category_first;
+      case 'Secondi':
+        return l10n.category_second;
+      case 'Contorni':
+        return l10n.category_side;
+      case 'Dolce':
+        return l10n.category_dessert;
+      case 'Bevande':
+        return l10n.category_drink;
+      default:
+        return l10n.category_other;
+    }
+  }
+
   @override
   void initState() {
     super.initState();
@@ -42,21 +60,30 @@ class _MenuPageState extends State<MenuPage> {
 
   
 
-  String _formatDate(DateTime date) {
-    final days = ['Lunedì', 'Martedì', 'Mercoledì', 'Giovedì', 'Venerdì', 'Sabato', 'Domenica'];
+  String _formatDate(DateTime date, BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    final days = [
+      l10n.weekdays_monday,
+      l10n.weekdays_tuesday,
+      l10n.weekdays_wednesday,
+      l10n.weekdays_thursday,
+      l10n.weekdays_friday,
+      l10n.weekdays_saturday,
+      l10n.weekdays_sunday,
+    ];
     final months = [
-      'Gennaio',
-      'Febbraio',
-      'Marzo',
-      'Aprile',
-      'Maggio',
-      'Giugno',
-      'Luglio',
-      'Agosto',
-      'Settembre',
-      'Ottobre',
-      'Novembre',
-      'Dicembre'
+      l10n.months_january,
+      l10n.months_february,
+      l10n.months_march,
+      l10n.months_april,
+      l10n.months_may,
+      l10n.months_june,
+      l10n.months_july,
+      l10n.months_august,
+      l10n.months_september,
+      l10n.months_october,
+      l10n.months_november,
+      l10n.months_december,
     ];
     return '${days[date.weekday - 1]}, ${date.day} ${months[date.month - 1]}';
   }
@@ -87,9 +114,10 @@ class _MenuPageState extends State<MenuPage> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Menu'),
+        title: Text(l10n.menu),
         elevation: 0,
       ),
       body: Column(
@@ -119,14 +147,14 @@ class _MenuPageState extends State<MenuPage> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          'Data',
+                          AppLocalizations.of(context)!.date,
                           style: Theme.of(context).textTheme.labelSmall?.copyWith(
                                 color: Colors.teal.shade700,
                               ),
                         ),
                         const SizedBox(height: 4.0),
                         Text(
-                          _formatDate(selectedDate),
+                          _formatDate(selectedDate, context),
                           style: Theme.of(context).textTheme.titleMedium?.copyWith(
                                 fontWeight: FontWeight.w600,
                               ),
@@ -151,9 +179,9 @@ class _MenuPageState extends State<MenuPage> {
                     child: CircularProgressIndicator(),
                   );
                 } else if (state is MenuLoaded) {
-                  return _buildMenu(state.menu);
+                  return _buildMenu(state.menu, l10n);
                 } else if (state is MenuError) {
-                  return _buildError(state.message);
+                  return _buildError(state.message, l10n);
                 }
                 return const Center(
                   child: CircularProgressIndicator(),
@@ -166,11 +194,11 @@ class _MenuPageState extends State<MenuPage> {
     );
   }
 
-  Widget _buildMenu(MenuEntity menu) {
+  Widget _buildMenu(MenuEntity menu, AppLocalizations l10n) {
     if (menu.piatti == null || menu.piatti!.isEmpty) {
       return Center(
         child: Text(
-          'Nessun piatto disponibile',
+          l10n.no_dishes_available,
           style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                 color: Colors.grey.shade600,
               ),
@@ -206,7 +234,7 @@ class _MenuPageState extends State<MenuPage> {
             Padding(
               padding: const EdgeInsets.only(top: 16.0, bottom: 12.0),
               child: Text(
-                categoria,
+                _getLocalizedCategory(categoria, AppLocalizations.of(context)!),
                 style: Theme.of(context).textTheme.titleMedium?.copyWith(
                       fontWeight: FontWeight.w700,
                       color: Colors.teal.shade700,
@@ -291,7 +319,7 @@ class _MenuPageState extends State<MenuPage> {
     );
   }
 
-  Widget _buildError(String message) {
+  Widget _buildError(String message, AppLocalizations l10n) {
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -303,7 +331,7 @@ class _MenuPageState extends State<MenuPage> {
           ),
           const SizedBox(height: 16.0),
           Text(
-            'Errore nel caricamento',
+            l10n.error_loading,
             style: Theme.of(context).textTheme.titleMedium?.copyWith(
                   fontWeight: FontWeight.w600,
                 ),
@@ -319,7 +347,7 @@ class _MenuPageState extends State<MenuPage> {
           const SizedBox(height: 16.0),
           ElevatedButton(
             onPressed: () => context.read<MenuCubit>().fetchMenuByDate(DateUtils.formatDateForApi(selectedDate)),
-            child: const Text('Riprova'),
+            child: Text(l10n.retry),
           ),
         ],
       ),

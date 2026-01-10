@@ -1,0 +1,77 @@
+{
+  "@@locale": "it",
+
+  "app_name": "UnisaEat",
+
+  "menu": "Menu",
+
+  "date": "Data",
+
+  "weekdays_monday": "Lunedì",
+  "weekdays_tuesday": "Martedì",
+  "weekdays_wednesday": "Mercoledì",
+  "weekdays_thursday": "Giovedì",
+  "weekdays_friday": "Venerdì",
+  "weekdays_saturday": "Sabato",
+  "weekdays_sunday": "Domenica",
+
+  "months_january": "Gennaio",
+  "months_february": "Febbraio",
+  "months_march": "Marzo",
+  "months_april": "Aprile",
+  "months_may": "Maggio",
+  "months_june": "Giugno",
+  "months_july": "Luglio",
+  "months_august": "Agosto",
+  "months_september": "Settembre",
+  "months_october": "Ottobre",
+  "months_november": "Novembre",
+  "months_december": "Dicembre",
+
+  "category_first": "Primi",
+  "category_second": "Secondi",
+  "category_side": "Contorni",
+  "category_dessert": "Dolce",
+  "category_drink": "Bevande",
+  "category_other": "Altro",
+
+  "no_dishes_available": "Nessun piatto disponibile",
+  "error_loading": "Errore nel caricamento",
+  "retry": "Riprova",
+
+  "greeting_morning": "Buongiorno, {name}!",
+  "@greeting_morning": {
+    "description": "Messaggio di saluto con il nome dell'utente",
+    "placeholders": {
+      "name": {
+        "example": "Mario",
+        "type": "String"
+      }
+    }
+  },
+
+  "whats_on_menu": "Cosa c'è nel menu oggi?",
+
+  "todays_menu": "Menu di Oggi",
+  "tap_to_see_cooking": "Premi Per Vedere Cosa C'è in Cucina!",
+
+  "login_title": "Accedi",
+  "email_label": "Email",
+  "password_label": "Password",
+  "show_password": "Mostra Password",
+  "dont_have_account": "Non hai un account?",
+  "sign_up": "Registrati",
+
+  "current_balance": "Saldo Corrente",
+  "recent_transactions": "Transazioni Recenti",
+  "no_recent_transactions": "Nessuna transazione recente",
+
+  "settings": "Impostazioni",
+  "language": "Lingua",
+  "language_english": "Inglese",
+  "language_italian": "Italiano",
+  "language_spanish": "Spagnolo",
+
+  "qr_code": "Codice QR",
+  "add_funds": "Aggiungi Fondi"
+}
