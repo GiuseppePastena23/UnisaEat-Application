@@ -33,9 +33,15 @@ class TransactionEntity {
     }
   }
 
-  
+
   bool get isNegative {
     return type == TransactionType.kiosk || type == TransactionType.order;
+  }
+
+  String get typeDisplayName {
+    if (type == null) return '';
+    final name = type!.name;
+    return name[0].toUpperCase() + name.substring(1);
   }
 
   

@@ -1,8 +1,7 @@
-// lib/presentation/shared/widgets/profile_app_bar.dart
+// lib/presentation/shared/widget/profile_app_bar.dart
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:unisa_eat_2/core/configs/theme/app_colors.dart';
 import 'package:unisa_eat_2/presentation/shared/bloc/user_profile_cubit.dart';
 import 'package:unisa_eat_2/presentation/shared/bloc/user_profile_state.dart';
 
@@ -22,11 +21,10 @@ class ProfileAppBar extends StatelessWidget implements PreferredSizeWidget {
             padding: const EdgeInsets.symmetric(horizontal: 13),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                _buildProfileSection(context, state),
-
-                _buildBalanceInfo(state, context),
-              ],
+               children: [
+                 _buildProfileSection(context, state),
+                 _buildBalanceInfo(context, state),
+               ],
             ),
           );
         },
@@ -34,65 +32,53 @@ class ProfileAppBar extends StatelessWidget implements PreferredSizeWidget {
     );
   }
 
-  // Saldo
-  Widget _buildBalanceInfo(UserProfileSuccess state, BuildContext context) {
+  // Balance
+  Widget _buildBalanceInfo(BuildContext context, UserProfileSuccess state) {
     return GestureDetector(
       onTap: () {
 
       },
-      child: Container(
-        
-        padding: EdgeInsets.all(5),
-        decoration: BoxDecoration(
-             
-            shape: BoxShape.rectangle,
-            
-            borderRadius: BorderRadius.circular(10),
-          ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.end,
-          children: [
-            Text('Balance', style: Theme.of(context).textTheme.displaySmall),
-            SizedBox(height: 3,),
-            Row(
-              children: [
-                Text(
-                  '€${state.user.saldo?.toStringAsFixed(2) ?? '0.00'}',
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 16,
-                    color: AppColors.primaryDark,
-                    letterSpacing: 0.24,
-                    height: 1.25,
-                  ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.end,
+        children: [
+          Text('Balance', style: Theme.of(context).textTheme.bodySmall?.copyWith(
+            color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.7),
+            fontWeight: FontWeight.w500,
+          )),
+          const SizedBox(height: 2),
+          Row(
+            children: [
+              Text(
+                '€${state.user.saldo?.toStringAsFixed(2) ?? '0.00'}',
+                style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                  fontWeight: FontWeight.bold,
+                  color: Theme.of(context).colorScheme.primary,
                 ),
-                const SizedBox(width: 8),
-                Container(
-              width: 22,
-              height: 22,
-              decoration: BoxDecoration(
-                color: AppColors.balanceIconBackground,
-                shape: BoxShape.circle,
               ),
-              child: Icon(Icons.add, color: AppColors.primaryDark, size: 15, fontWeight: FontWeight.normal,),
-            
-              
-                
-                
-                  
-              
+              const SizedBox(width: 8),
+              Container(
+                width: 20,
+                height: 20,
+                decoration: BoxDecoration(
+                  color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.1),
+                  shape: BoxShape.circle,
+                ),
+                child: Icon(
+                  Icons.add,
+                  color: Theme.of(context).colorScheme.primary,
+                  size: 12,
+                ),
               ),
-              ],
-            ),
-          ],
-        ),
+            ],
+          ),
+        ],
       ),
     );
   }
 
   
 
-  // DESTRA
+  // Profile section
   Widget _buildProfileSection(BuildContext context, UserProfileSuccess state) {
     return GestureDetector(
       onTap: () {
@@ -100,25 +86,25 @@ class ProfileAppBar extends StatelessWidget implements PreferredSizeWidget {
       },
       child: Row(
         children: [
-          _buildUserAvatar(state),
+           _buildUserAvatar(context, state),
           const SizedBox(width: 12),
-          _buildUserInfo(state),
+           _buildUserInfo(context, state),
         ],
       ),
     );
   }
 
   // Avatar
-  Widget _buildUserAvatar(UserProfileSuccess state) {
+  Widget _buildUserAvatar(BuildContext context, UserProfileSuccess state) {
     return CircleAvatar(
       radius: 22,
-      backgroundColor: Colors.teal.shade200,
+      backgroundColor: Theme.of(context).colorScheme.secondary.withValues(alpha: 0.8),
       child: Text(
         (state.user.nome?.isNotEmpty ?? false)
             ? state.user.nome![0].toUpperCase()
             : '?',
-        style: const TextStyle(
-          color: Colors.white,
+        style: TextStyle(
+          color: Theme.of(context).colorScheme.onSecondary,
           fontWeight: FontWeight.bold,
           fontSize: 14,
         ),
@@ -126,8 +112,8 @@ class ProfileAppBar extends StatelessWidget implements PreferredSizeWidget {
     );
   }
 
-  // Nome Cognome
-  Widget _buildUserInfo(UserProfileSuccess state) {
+  // Name
+  Widget _buildUserInfo(BuildContext context, UserProfileSuccess state) {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisAlignment: MainAxisAlignment.center,

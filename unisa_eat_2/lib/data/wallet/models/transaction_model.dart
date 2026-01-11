@@ -25,7 +25,9 @@ class TransactionModel {
     createdAt = json['created_at'];
     id = json['id'];
     paymentMethod = json['payment_method'];
-    type = json['type'];
+    if (json['type'] != null && json['type'] is String) {
+      type = TransactionType.values.byName(json['type']);
+    }
     userId = json['user_id'];
   }
 

@@ -10,25 +10,27 @@ import 'package:unisa_eat_2/service_locator.dart';
 class UserProfilePage extends StatelessWidget {
   const UserProfilePage({super.key});
 
-  Widget _infoRow(IconData icon, String label, String value) {
+  Widget _infoRow(BuildContext context, IconData icon, String label, String value) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: .0),
+      padding: const EdgeInsets.symmetric(vertical: 8.0),
       child: Row(
         children: [
-          Icon(icon, ),
+          Icon(icon, color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.7)),
           const SizedBox(width: 12),
           Text(
             '$label:',
-            style: TextStyle(
+            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
               fontWeight: FontWeight.bold,
-              
+              color: Theme.of(context).colorScheme.onSurface,
             ),
           ),
           const SizedBox(width: 8),
           Expanded(
             child: Text(
               value,
-              style: const TextStyle(fontSize: 16, color: Colors.black87),
+              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.8),
+              ),
               overflow: TextOverflow.ellipsis,
             ),
           ),
@@ -38,13 +40,13 @@ class UserProfilePage extends StatelessWidget {
   }
 
   Widget _logoutButton(BuildContext context) {
-
     return ElevatedButton(
-      style: ButtonStyle(
-        
-      ),
       onPressed: () {sl<LogoutUsecase>().call(); context.read<UserProfileCubit>().reset();},
-      child: Text("Logout", style: TextStyle(color: Colors.white)),
+      style: ElevatedButton.styleFrom(
+        backgroundColor: Theme.of(context).colorScheme.primary,
+        foregroundColor: Theme.of(context).colorScheme.onPrimary,
+      ),
+      child: const Text("Logout"),
     );
   }
 
@@ -66,18 +68,18 @@ class UserProfilePage extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        Text(
-                          '${user.nome} ${user.cognome}',
-                          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                
-                                fontWeight: FontWeight.bold,
-                              ),
-                        ),
+                         Text(
+                           '${user.nome} ${user.cognome}',
+                           style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                                 fontWeight: FontWeight.bold,
+                                 color: Theme.of(context).colorScheme.onSurface,
+                               ),
+                         ),
                          SizedBox(height: 15,),
                         
-                        _infoRow(Icons.email, 'Email', user.email.toString()),
-                        SizedBox(height: 10,),
-                        _infoRow(Icons.badge, 'Codice Fiscale', user.codiceFiscale.toString()),
+                         _infoRow(context, Icons.email, 'Email', user.email.toString()),
+                         const SizedBox(height: 10),
+                         _infoRow(context, Icons.badge, 'Codice Fiscale', user.codiceFiscale.toString()),
                         SizedBox(height: 20,),
                         Center(child: _logoutButton(context))
                       ],
@@ -96,10 +98,12 @@ class UserProfilePage extends StatelessWidget {
                 children: [
                   const Icon(Icons.error_outline, size: 50),
                   const SizedBox(height: 12),
-                  Text(
-                    "Error Loading User Profile",
-                    style: TextStyle(fontSize: 18),
-                  ),
+                   Text(
+                     "Error Loading User Profile",
+                     style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                       color: Theme.of(context).colorScheme.onSurface,
+                     ),
+                   ),
                   const SizedBox(height: 12),
                   ElevatedButton.icon(
                     onPressed: () {

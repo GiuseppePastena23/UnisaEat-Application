@@ -10,7 +10,7 @@ class TransactionMapper {
           createdAt: model.createdAt,
           id: model.id,
           paymentMethod: model.paymentMethod,
-          type: model.type != null ? TransactionType.values.firstWhere((e) => e.name == model.type!.name) : null,
+          type: model.type,
           userId: model.userId,
           
         );

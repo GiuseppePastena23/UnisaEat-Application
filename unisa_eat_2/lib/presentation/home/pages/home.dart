@@ -6,7 +6,6 @@ import 'package:unisa_eat_2/core/configs/assets/images.dart';
 import 'package:unisa_eat_2/l10n/app_localizations.dart';
 
 import 'package:unisa_eat_2/presentation/shared/widget/qr_dialog.dart';
-import 'package:unisa_eat_2/presentation/shared/widget/locale_switcher.dart';
 import 'package:unisa_eat_2/presentation/shared/bloc/user_profile_cubit.dart';
 import 'package:unisa_eat_2/presentation/shared/bloc/user_profile_state.dart';
 import 'package:unisa_eat_2/presentation/shared/widget/tappable_image.dart';
@@ -18,14 +17,6 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     return Scaffold(
-      appBar: AppBar(
-        actions: const [
-          Padding(
-            padding: EdgeInsets.only(right: 16),
-            child: LocaleSwitcher(),
-          ),
-        ],
-      ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           showDialog(

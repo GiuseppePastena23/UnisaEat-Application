@@ -6,6 +6,8 @@ class ApiUrl {
 
   static const login = '${apiVersion}auth/login';
 
+  static const refresh = '${apiVersion}auth/refresh';
+
   static const getUser = '${apiVersion}users/getUser';
 
   static const getQrcode = '${apiVersion}users/generate-qr';

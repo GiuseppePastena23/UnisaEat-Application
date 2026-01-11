@@ -4,6 +4,7 @@ import 'package:unisa_eat_2/core/services/auth_service.dart';
 import 'package:unisa_eat_2/presentation/auth/pages/login.dart';
 import 'package:unisa_eat_2/presentation/home/pages/home.dart';
 import 'package:unisa_eat_2/presentation/menu/pages/menu.dart';
+import 'package:unisa_eat_2/presentation/settings/pages/settings.dart';
 import 'package:unisa_eat_2/presentation/shared/widget/shell_scaffold.dart';
 import 'package:unisa_eat_2/presentation/splash.dart';
 import 'package:unisa_eat_2/presentation/user/pages/user_profile_page.dart';
@@ -48,13 +49,11 @@ final appRouter = GoRouter(
         ),
         GoRoute(
           path: '/wallet',
-          builder: (context, state) => WalletPage(),
-          routes: [
-            GoRoute(
-              path: 'add-funds',
-              builder: (context, state) => AddFundsPage(),
-            ),
-          ],
+          builder: (context, state) => const WalletPage(),
+        ),
+        GoRoute(
+          path: '/settings',
+          builder: (context, state) => const SettingsPage(),
         ),
         GoRoute(path: '/menu', builder: (context, state) => MenuPage()),
       ],

@@ -39,20 +39,54 @@ class AppTheme {
       ),
       appBarTheme: AppBarThemeData(
         backgroundColor: AppColors.lightBackground,
-        
-        
         titleTextStyle: TextStyle(
-          color: AppColors.lightTextBody,
+          color: AppColors.lightTextHeadings,
           fontWeight: FontWeight.bold,
-          fontSize: 19
-        )
+          fontSize: 16, // Reduced for better proportion
+        ),
       )
     );
   }
 
   static ThemeData get darkTheme {
     return ThemeData(
+      textTheme: GoogleFonts.workSansTextTheme().copyWith(
+        headlineMedium: GoogleFonts.workSans(
+          fontSize: 32,
+          fontWeight: FontWeight.w600,
+          letterSpacing: -1,
+          color: AppColors.darkTextHeadings,
+        ),
+      ),
       useMaterial3: true,
+      brightness: Brightness.dark,
+      scaffoldBackgroundColor: AppColors.darkBackground,
+      colorScheme: ColorScheme.dark(
+        primary: AppColors.primary,
+        onPrimary: Colors.black,
+        surface: AppColors.darkSurface,
+        onSurface: AppColors.darkTextHeadings,
+        secondary: AppColors.darkSecondaryAccent,
+      ),
+      bottomNavigationBarTheme: const BottomNavigationBarThemeData(
+        backgroundColor: AppColors.darkSurface,
+        selectedItemColor: AppColors.primary,
+        unselectedItemColor: AppColors.darkTextBody,
+      ),
+      floatingActionButtonTheme: FloatingActionButtonThemeData(
+        backgroundColor: AppColors.darkSecondaryAccent,
+        iconSize: 32,
+        shape: CircleBorder(),
+        elevation: 0,
+      ),
+      appBarTheme: AppBarThemeData(
+        backgroundColor: AppColors.darkBackground,
+        titleTextStyle: TextStyle(
+          color: AppColors.darkTextHeadings,
+          fontWeight: FontWeight.bold,
+          fontSize: 16, // Reduced from 19
+        ),
+      ),
     );
   }
 }

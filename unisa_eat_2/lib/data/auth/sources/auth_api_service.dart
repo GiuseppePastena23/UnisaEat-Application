@@ -7,6 +7,7 @@ import 'package:unisa_eat_2/service_locator.dart';
 
 abstract class AuthApiService {
   Future<Either> login(LogInParams params);
+  Future<Either> refresh(String refreshToken);
 
 }
 
@@ -23,6 +24,20 @@ class AuthApiServiceImpl extends AuthApiService {
         } else {
           return Left(e.message ?? 'Unknown Dio error');
         }
-    } 
+    }
+  }
+
+  @override
+  Future<Either> refresh(String refreshToken) async {
+    try {
+      var response = await sl<DioClient>().post(ApiUrl.refresh, data: {'refresh_token': refreshToken});
+      return Right(response);
+    } on DioException catch(e) {
+      if (e.response?.data is Map<String, dynamic>) {
+          return Left(e.response!.data['error'] ?? 'Unknown Dio error');
+        } else {
+          return Left(e.message ?? 'Unknown Dio error');
+        }
+    }
   }
 }

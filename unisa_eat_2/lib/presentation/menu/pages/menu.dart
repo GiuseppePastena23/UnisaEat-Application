@@ -132,39 +132,40 @@ class _MenuPageState extends State<MenuPage> {
                   horizontal: 16.0,
                   vertical: 12.0,
                 ),
-                decoration: BoxDecoration(
-                  color: Colors.teal.shade100,
-                  borderRadius: BorderRadius.circular(12.0),
-                  border: Border.all(
-                    color: Colors.teal.shade300,
-                    width: 1.5,
-                  ),
-                ),
+                 decoration: BoxDecoration(
+                   color: Theme.of(context).colorScheme.surface,
+                   borderRadius: BorderRadius.circular(12.0),
+                   border: Border.all(
+                     color: Theme.of(context).colorScheme.outline,
+                     width: 1.5,
+                   ),
+                 ),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
-                          AppLocalizations.of(context)!.date,
-                          style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                                color: Colors.teal.shade700,
-                              ),
-                        ),
+                         Text(
+                           AppLocalizations.of(context)!.date,
+                           style: Theme.of(context).textTheme.labelSmall?.copyWith(
+                                 color: Theme.of(context).colorScheme.primary,
+                               ),
+                         ),
                         const SizedBox(height: 4.0),
-                        Text(
-                          _formatDate(selectedDate, context),
-                          style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                                fontWeight: FontWeight.w600,
-                              ),
-                        ),
+                         Text(
+                           _formatDate(selectedDate, context),
+                           style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                                 fontWeight: FontWeight.w600,
+                                 color: Theme.of(context).colorScheme.onSurface,
+                               ),
+                         ),
                       ],
                     ),
-                    Icon(
-                      Icons.calendar_today,
-                      color: Colors.teal.shade700,
-                    ),
+                     Icon(
+                       Icons.calendar_today,
+                       color: Theme.of(context).colorScheme.primary,
+                     ),
                   ],
                 ),
               ),
@@ -235,10 +236,10 @@ class _MenuPageState extends State<MenuPage> {
               padding: const EdgeInsets.only(top: 16.0, bottom: 12.0),
               child: Text(
                 _getLocalizedCategory(categoria, AppLocalizations.of(context)!),
-                style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                      fontWeight: FontWeight.w700,
-                      color: Colors.teal.shade700,
-                    ),
+                 style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                       fontWeight: FontWeight.w700,
+                       color: Theme.of(context).colorScheme.primary,
+                     ),
               ),
             ),
             // Dishes in this category
@@ -265,45 +266,47 @@ class _MenuPageState extends State<MenuPage> {
                             Expanded(
                               child: Text(
                                 piatto.nome ?? 'Senza nome',
-                                style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                                 style: Theme.of(context).textTheme.headlineMedium?.copyWith(
                                       fontWeight: FontWeight.w600,
+                                      fontSize: 18,
                                     ),
+
                               ),
                             ),
                             const SizedBox(width: 8.0),
                             if (piatto.costoBase != null)
-                              Text(
-                                '€${piatto.costoBase!.toStringAsFixed(2)}',
-                                style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                                      fontWeight: FontWeight.w600,
-                                      color: Colors.teal.shade600,
-                                    ),
-                              ),
+                               Text(
+                                 '€${piatto.costoBase!.toStringAsFixed(2)}',
+                                 style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                                       fontWeight: FontWeight.w600,
+                                       color: Theme.of(context).colorScheme.primary,
+                                     ),
+                               ),
                           ],
                         ),
                         const SizedBox(height: 8.0),
                         // Description
                         if (piatto.descrizione != null)
-                          Text(
-                            piatto.descrizione!,
-                            style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                                  color: Colors.grey.shade700,
-                                ),
-                          ),
+                           Text(
+                             piatto.descrizione!,
+                             style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                                   color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.7),
+                                 ),
+                           ),
                         if (piatto.descrizione != null) const SizedBox(height: 8.0),
                         // Allergens
                         if (piatto.allergeni != null && piatto.allergeni!.isNotEmpty)
                           Container(
                             padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
                             decoration: BoxDecoration(
-                              color: Colors.red.shade50,
+                              color: Theme.of(context).colorScheme.primary,
                               borderRadius: BorderRadius.circular(6.0),
-                              border: Border.all(color: Colors.red.shade200),
+                              border: Border.all(color: Colors.red.shade100),
                             ),
                             child: Text(
                               '⚠️ ${piatto.allergeni}',
                               style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                                    color: Colors.red.shade700,
+                                    color: Colors.black,
                                   ),
                             ),
                           ),
@@ -327,7 +330,7 @@ class _MenuPageState extends State<MenuPage> {
           Icon(
             Icons.error_outline,
             size: 48.0,
-            color: Colors.red.shade600,
+            color: Theme.of(context).colorScheme.error,
           ),
           const SizedBox(height: 16.0),
           Text(
@@ -340,7 +343,7 @@ class _MenuPageState extends State<MenuPage> {
           Text(
             message,
             style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                  color: Colors.grey.shade600,
+                   color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.6),
                 ),
             textAlign: TextAlign.center,
           ),

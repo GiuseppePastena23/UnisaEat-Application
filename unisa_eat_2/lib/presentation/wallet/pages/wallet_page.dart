@@ -58,7 +58,9 @@ class WalletPage extends StatelessWidget {
         children: [
           Text(
             l10n.current_balance,
-            style: Theme.of(context).textTheme.displaySmall,
+            style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+              color: Theme.of(context).colorScheme.onSurface,
+            ),
           ),
           const SizedBox(height: 10),
           Row(
@@ -66,7 +68,10 @@ class WalletPage extends StatelessWidget {
             children: [
               Text(
                 '€${balance.toStringAsFixed(2)}',
-                style: Theme.of(context).textTheme.headlineLarge,
+                style: Theme.of(context).textTheme.headlineLarge?.copyWith(
+                  color: Theme.of(context).colorScheme.onSurface,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
               const SizedBox(width: 10),
               Container(
@@ -105,7 +110,10 @@ class WalletPage extends StatelessWidget {
         children: [
           Text(
             l10n.recent_transactions,
-            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+            style: Theme.of(context).textTheme.titleMedium?.copyWith(
+              fontWeight: FontWeight.bold,
+              color: Theme.of(context).colorScheme.onSurface,
+            ),
           ),
           const SizedBox(height: 10),
           if (transactions.isEmpty)
@@ -125,25 +133,29 @@ class WalletPage extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          tx.type.toString(),
-                          style: const TextStyle(fontWeight: FontWeight.bold),
+                          tx.typeDisplayName,
+                          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                            fontWeight: FontWeight.bold,
+                            color: Theme.of(context).colorScheme.onSurface,
+                          ),
                         ),
                         Text(
                           tx.dateFormatted,
-                          style: const TextStyle(
-                            fontSize: 12,
-                            color: Colors.grey,
+                          style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                            color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.6),
                           ),
                         ),
                       ],
                     ),
-                    Text(
-                      '${tx.isNegative ? '-' : '+'}€${tx.amount?.toStringAsFixed(2) ?? '0.00'}',
-                      style: TextStyle(
-                        color: tx.isNegative ? Colors.red : Colors.green,
-                        fontWeight: FontWeight.bold,
+                      Text(
+                        '${tx.isNegative ? '-' : '+'}€${tx.amount?.toStringAsFixed(2) ?? '0.00'}',
+                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                          color: tx.isNegative
+                            ? Theme.of(context).colorScheme.error
+                            : Theme.of(context).colorScheme.primary,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
-                    ),
                   ],
                 );
               },
