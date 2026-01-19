@@ -7,14 +7,53 @@ class AppTheme {
   static ThemeData get lightTheme {
     return ThemeData(
       textTheme: GoogleFonts.workSansTextTheme().copyWith(
-      headlineMedium: GoogleFonts.workSans(
-      fontSize: 32,
-      fontWeight: FontWeight.w600,
-      letterSpacing: -1,
-      color: AppColors.lightTextBody,
-      ),
-      
-      
+        headlineLarge: GoogleFonts.workSans(
+          fontSize: 32,
+          fontWeight: FontWeight.w600,
+          letterSpacing: -1,
+          color: AppColors.lightTextHeadings,
+        ),
+        headlineMedium: GoogleFonts.workSans(
+          fontSize: 32,
+          fontWeight: FontWeight.w600,
+          letterSpacing: -1,
+          color: AppColors.lightTextBody,
+        ),
+        headlineSmall: GoogleFonts.workSans(
+          fontSize: 24,
+          fontWeight: FontWeight.w600,
+          color: AppColors.lightTextHeadings,
+        ),
+        titleLarge: GoogleFonts.workSans(
+          fontSize: 22,
+          fontWeight: FontWeight.w500,
+          color: AppColors.lightTextHeadings,
+        ),
+        titleMedium: GoogleFonts.workSans(
+          fontSize: 16,
+          fontWeight: FontWeight.w500,
+          color: AppColors.lightTextHeadings,
+        ),
+        bodyLarge: GoogleFonts.workSans(
+          fontSize: 16,
+          fontWeight: FontWeight.w400,
+          color: AppColors.lightTextBody,
+        ),
+        bodyMedium: GoogleFonts.workSans(
+          fontSize: 14,
+          fontWeight: FontWeight.w400,
+          color: AppColors.lightTextBody,
+        ),
+        labelLarge: GoogleFonts.workSans(
+          fontSize: 14,
+          fontWeight: FontWeight.w500,
+          color: AppColors.lightTextBody,
+        ),
+        labelMedium: GoogleFonts.workSans(
+          fontSize: 12,
+          fontWeight: FontWeight.w500,
+          color: AppColors.lightTextBody,
+        ),
       ),
       useMaterial3: true,
       brightness: Brightness.light,
@@ -51,11 +90,52 @@ class AppTheme {
   static ThemeData get darkTheme {
     return ThemeData(
       textTheme: GoogleFonts.workSansTextTheme().copyWith(
+        headlineLarge: GoogleFonts.workSans(
+          fontSize: 32,
+          fontWeight: FontWeight.w600,
+          letterSpacing: -1,
+          color: AppColors.darkTextHeadings,
+        ),
         headlineMedium: GoogleFonts.workSans(
           fontSize: 32,
           fontWeight: FontWeight.w600,
           letterSpacing: -1,
           color: AppColors.darkTextHeadings,
+        ),
+        headlineSmall: GoogleFonts.workSans(
+          fontSize: 24,
+          fontWeight: FontWeight.w600,
+          color: AppColors.darkTextHeadings,
+        ),
+        titleLarge: GoogleFonts.workSans(
+          fontSize: 22,
+          fontWeight: FontWeight.w500,
+          color: AppColors.darkTextHeadings,
+        ),
+        titleMedium: GoogleFonts.workSans(
+          fontSize: 16,
+          fontWeight: FontWeight.w500,
+          color: AppColors.darkTextHeadings,
+        ),
+        bodyLarge: GoogleFonts.workSans(
+          fontSize: 16,
+          fontWeight: FontWeight.w400,
+          color: AppColors.darkTextBody,
+        ),
+        bodyMedium: GoogleFonts.workSans(
+          fontSize: 14,
+          fontWeight: FontWeight.w400,
+          color: AppColors.darkTextBody,
+        ),
+        labelLarge: GoogleFonts.workSans(
+          fontSize: 14,
+          fontWeight: FontWeight.w500,
+          color: AppColors.darkTextBody,
+        ),
+        labelMedium: GoogleFonts.workSans(
+          fontSize: 12,
+          fontWeight: FontWeight.w500,
+          color: AppColors.darkTextBody,
         ),
       ),
       useMaterial3: true,
@@ -63,7 +143,7 @@ class AppTheme {
       scaffoldBackgroundColor: AppColors.darkBackground,
       colorScheme: ColorScheme.dark(
         primary: AppColors.primary,
-        onPrimary: Colors.black,
+        onPrimary: Colors.white,
         surface: AppColors.darkSurface,
         onSurface: AppColors.darkTextHeadings,
         secondary: AppColors.darkSecondaryAccent,

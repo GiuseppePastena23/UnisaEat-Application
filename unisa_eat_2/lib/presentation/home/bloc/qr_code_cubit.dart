@@ -1,45 +1,34 @@
 import 'dart:async';
-
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:unisa_eat_2/domain/home/usecases/get_qr_code.dart';
-import 'package:unisa_eat_2/presentation/home/bloc/qr_code_state.dart';
 import 'package:unisa_eat_2/service_locator.dart';
 
+import 'qr_code_state.dart';
 
-class QrcodeCubit extends Cubit<QrcodeState> {
-  QrcodeCubit() : super(QrcodeInitial());
-  
-  Timer? _timer;
+class QrCodeCubit extends Cubit<QrCodeState> {
   Timer? _countdownTimer;
   bool _isClosed = false;
 
-  Future<void> startQrPolling() async {
-    if (_isClosed) return;
-    
-    await _pollQrCode();
-    
-    _timer?.cancel(); 
-    _timer = Timer.periodic(Duration(seconds: 5), (timer) async {
-      if (_isClosed) {
-        timer.cancel();
-        return;
-      }
-      await _pollQrCode();
-    });
+  QrCodeCubit() : super(QrCodeInitial()) {
+    startQrPolling();
+  }
+
+  void startQrPolling() {
+    _pollQrCode();
   }
 
   Future<void> _pollQrCode() async {
     if (_isClosed) return;
-    
-    emit(QrcodeLoading());
+
+    emit(QrCodeLoading());
     var result = await sl<GetQrcodeUsecase>().call();
     result.fold(
       (error) => {
-        if (!_isClosed) emit(QrcodeError(error.toString()))
-      }, 
+        if (!_isClosed) emit(QrCodeFailure(error.toString()))
+      },
       (token) {
         if (!_isClosed) {
-          emit(QrcodeSuccess(token, remainingTime: 5.0));
+          emit(QrCodeSuccess(token, remainingTime: 5.0));
           _startCountdown(token);
         }
       }
@@ -48,7 +37,7 @@ class QrcodeCubit extends Cubit<QrcodeState> {
 
   void _startCountdown(String token) {
     if (_isClosed) return;
-    
+
     _countdownTimer?.cancel();
     double remaining = 5.0;
     _countdownTimer = Timer.periodic(Duration(milliseconds: 50), (timer) {
@@ -56,14 +45,14 @@ class QrcodeCubit extends Cubit<QrcodeState> {
         timer.cancel();
         return;
       }
-      
+
       remaining -= 0.05;
       if (remaining > 0) {
-        emit(QrcodeSuccess(token, remainingTime: remaining));
+        emit(QrCodeSuccess(token, remainingTime: remaining));
       } else {
         timer.cancel();
         if (!_isClosed) {
-          emit(QrcodeLoading());
+          emit(QrCodeLoading());
           _pollQrCode();
         }
       }
@@ -73,9 +62,7 @@ class QrcodeCubit extends Cubit<QrcodeState> {
   @override
   Future<void> close() async {
     _isClosed = true; // Set flag first
-    _timer?.cancel();
     _countdownTimer?.cancel();
     await super.close();
   }
 }
-

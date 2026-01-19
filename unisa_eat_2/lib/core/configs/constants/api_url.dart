@@ -1,22 +1,17 @@
 class ApiUrl {
-
   static const baseURL = 'https://nonpacifical-nondefined-shanell.ngrok-free.dev/';
-
-  static const apiVersion = 'api/v1/';
-
-  static const login = '${apiVersion}auth/login';
-
-  static const refresh = '${apiVersion}auth/refresh';
-
-  static const getUser = '${apiVersion}users/getUser';
-
-  static const getQrcode = '${apiVersion}users/generate-qr';
-
-  static const getBalance = '${apiVersion}users/get-saldo';
-  
-  static const getTransactions = '${apiVersion}transazioni/get-by-userid'; 
+  static const login = 'api/auth/user-login/';
+  static const register = 'api/auth/register/';
+  static const refresh = 'api/token/refresh/';
+  static const getUser = 'api/users/me/';
+  static const getQrcode = 'api/users/generate-qr/';
+  static const getBalance = 'api/users/me/';
+  static const getTransactions = 'api/transactions/';
+  static const createPaymentIntent = 'api/payments/create-payment-intent/';
+  static const getServerTime = 'api/time/';
+  static const affluence = 'api/affluence/';
 
   static String getMenuByDate(String date) {
-    return '${apiVersion}menu/by-date?date=$date';
+    return 'api/menus/by-date/?date=$date';
   }
 }

@@ -16,7 +16,7 @@ class HomeRepositoryImpl extends HomeRepository {
         return Left(error); 
       }, (data) async {
 
-        return Right(data.data['token']);
+        return Right(data['token']);
       }
     );
   }

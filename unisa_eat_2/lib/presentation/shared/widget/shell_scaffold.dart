@@ -1,16 +1,20 @@
+import 'dart:ui' show ImageFilter;
+
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
-import 'package:unisa_eat_2/presentation/shared/bloc/user_profile_cubit.dart';
 import 'package:unisa_eat_2/presentation/shared/widget/bottom_nav_bar.dart';
 import 'package:unisa_eat_2/presentation/shared/widget/profile_app_bar.dart';
+import 'package:unisa_eat_2/presentation/shared/widget/qr_dialog.dart';
+
 
 
 
 class ShellScaffold extends StatelessWidget {
   final Widget body;
+  final Widget? floatingActionButton;
 
-  const ShellScaffold({required this.body, super.key});
+  const ShellScaffold({required this.body, this.floatingActionButton, super.key});
 
   
 
@@ -21,12 +25,39 @@ class ShellScaffold extends StatelessWidget {
     final hideNavRoutes = ['/login', '/signup', '/splash', '/wallet/add-funds'];
     final shouldHideNav = hideNavRoutes.contains(location);
 
-    return BlocProvider(
-      create: (context) => UserProfileCubit()..getUser(),
+    final showQrButton = !shouldHideNav && location != '/order' && location != '/order/create';
+
+    return PopScope(
+      canPop: location != '/', // Allow pop only if not on root route
+      onPopInvokedWithResult: (didPop, result) {
+        // If we prevented popping on root route, exit the app
+        if (!didPop && location == '/') {
+          SystemNavigator.pop();
+        }
+      },
       child: Scaffold(
         appBar: !shouldHideNav ? ProfileAppBar() : null,
         body: body,
-        bottomNavigationBar: !shouldHideNav ? BottomNavBar() : null, 
+        bottomNavigationBar: !shouldHideNav ? BottomNavBar() : null,
+        floatingActionButton: showQrButton ? FloatingActionButton(
+          onPressed: () {
+            showDialog(
+              context: context,
+              builder: (context) {
+                return Stack(
+                  children: [
+                    BackdropFilter(
+                      filter: ImageFilter.blur(sigmaX: 4, sigmaY: 4),
+                      child: Container(color: Colors.transparent),
+                    ),
+                    Center(child: const QrCodeDialog()),
+                  ],
+                );
+              },
+            );
+          },
+          child: Icon(Icons.qr_code_scanner),
+        ) : null,
       ),
     );
   }

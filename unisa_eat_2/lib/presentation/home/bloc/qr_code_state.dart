@@ -1,24 +1,23 @@
 
-
-abstract class QrcodeState {
+abstract class QrCodeState {
 }
 
-class QrcodeInitial extends QrcodeState {}
+class QrCodeInitial extends QrCodeState {}
 
-class QrcodeLoading extends QrcodeState {}
+class QrCodeLoading extends QrCodeState {}
 
-class QrcodeSuccess extends QrcodeState {
+class QrCodeSuccess extends QrCodeState {
   final String token;
   final double remainingTime;
-  
-  QrcodeSuccess(this.token, {this.remainingTime = 5.0});
+
+  QrCodeSuccess(this.token, {this.remainingTime = 5.0});
 
 }
 
-class QrcodeError extends QrcodeState {
+class QrCodeFailure extends QrCodeState {
   final String message;
 
-  QrcodeError(this.message);
+  QrCodeFailure(this.message);
 
-  
+
 }

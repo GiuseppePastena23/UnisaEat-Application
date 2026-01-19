@@ -14,7 +14,7 @@ class TappableImageCard extends StatelessWidget {
   final BoxFit imageFit;
 
   const TappableImageCard({
-    Key? key,
+    super.key,
     required this.assetImagePath,
     this.overlayText, // Made optional
     this.subtitleText, // Made optional
@@ -23,7 +23,7 @@ class TappableImageCard extends StatelessWidget {
     this.height = 200.0,
     this.width = double.infinity,
     this.imageFit = BoxFit.cover,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -74,14 +74,14 @@ class TappableImageCard extends StatelessWidget {
                     children: [
                       // Bold title text
                       if (overlayText != null)
-                        Text(
-                          overlayText!,
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                            height: 1.2,
-                          ),
+                         Text(
+                           overlayText!,
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                              height: 1.2,
+                            ),
                           maxLines: 2,
                           overflow: TextOverflow.ellipsis,
                         ),
@@ -90,14 +90,14 @@ class TappableImageCard extends StatelessWidget {
                         const SizedBox(height: 4),
                       // Smaller, non-bold subtitle text
                       if (subtitleText != null)
-                        Text(
-                          subtitleText!,
-                          style: TextStyle(
-                            color: Colors.white.withValues(alpha: 0.9),
-                            fontSize: 13,
-                            fontWeight: FontWeight.w400,
-                            height: 1.3,
-                          ),
+                         Text(
+                           subtitleText!,
+                            style: TextStyle(
+                              color: Colors.white.withValues(alpha: 0.9),
+                              fontSize: 13,
+                              fontWeight: FontWeight.w400,
+                              height: 1.3,
+                            ),
                           maxLines: 2,
                           overflow: TextOverflow.ellipsis,
                         ),

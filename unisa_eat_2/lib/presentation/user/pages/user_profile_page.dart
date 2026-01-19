@@ -52,9 +52,7 @@ class UserProfilePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      
-      body: BlocBuilder<UserProfileCubit, UserProfileState>(
+    return BlocBuilder<UserProfileCubit, UserProfileState>(
         builder: (context, state) {
           if (state is UserProfileSuccess) {
             final user = state.user;
@@ -117,9 +115,8 @@ class UserProfilePage extends StatelessWidget {
               ),
             );
           }
-          return const Scaffold();
+          return Container();
         },
-      ),
-    );
+      );
   }
 }

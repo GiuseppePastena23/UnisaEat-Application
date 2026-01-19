@@ -40,8 +40,13 @@ class AuthService {
 
   Future<bool> isTokenValid() async {
     final token = await getAccessToken();
-    if (token == null) return false;
-    return !JwtDecoder.isExpired(token);
+    if (token == null) {
+      logger.d('Token is null');
+      return false;
+    }
+    final isExpired = JwtDecoder.isExpired(token);
+    logger.d('Token expired: $isExpired');
+    return !isExpired;
   }
 
   Future<Map<String, dynamic>?> getUserData() async {

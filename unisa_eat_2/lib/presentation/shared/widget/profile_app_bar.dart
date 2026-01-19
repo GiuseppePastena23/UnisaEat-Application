@@ -2,11 +2,31 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:unisa_eat_2/l10n/app_localizations.dart';
 import 'package:unisa_eat_2/presentation/shared/bloc/user_profile_cubit.dart';
 import 'package:unisa_eat_2/presentation/shared/bloc/user_profile_state.dart';
 
-class ProfileAppBar extends StatelessWidget implements PreferredSizeWidget {
+class ProfileAppBar extends StatefulWidget implements PreferredSizeWidget {
   const ProfileAppBar({super.key});
+
+  @override
+  State<ProfileAppBar> createState() => _ProfileAppBarState();
+
+  @override
+  Size get preferredSize => const Size.fromHeight(kToolbarHeight);
+}
+
+class _ProfileAppBarState extends State<ProfileAppBar> {
+  @override
+  void initState() {
+    super.initState();
+    // Refresh user profile when app bar is shown, but throttled
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) {
+        context.read<UserProfileCubit>().refreshUserIfNeeded();
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -34,14 +54,15 @@ class ProfileAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   // Balance
   Widget _buildBalanceInfo(BuildContext context, UserProfileSuccess state) {
+    final l10n = AppLocalizations.of(context)!;
     return GestureDetector(
       onTap: () {
-
+        context.push('/wallet/add-funds/');
       },
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
-          Text('Balance', style: Theme.of(context).textTheme.bodySmall?.copyWith(
+          Text(l10n.balance, style: Theme.of(context).textTheme.bodySmall?.copyWith(
             color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.7),
             fontWeight: FontWeight.w500,
           )),
@@ -124,7 +145,4 @@ class ProfileAppBar extends StatelessWidget implements PreferredSizeWidget {
       ],
     );
   }
-
-  @override
-  Size get preferredSize => const Size.fromHeight(kToolbarHeight);
 }

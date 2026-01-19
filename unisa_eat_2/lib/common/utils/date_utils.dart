@@ -1,7 +1,10 @@
+import 'package:unisa_eat_2/service_locator.dart';
+import 'package:unisa_eat_2/core/services/time_service.dart';
+
 class DateUtils {
 
   static DateTime getInitialDate() {
-    final today = DateTime.now();
+    final today = sl<TimeService>().now();
     if (today.weekday >= 1 && today.weekday <= 5) {
       return today;
     }

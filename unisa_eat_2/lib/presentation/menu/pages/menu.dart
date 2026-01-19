@@ -1,10 +1,15 @@
 import 'package:flutter/material.dart' hide DateUtils;
+import 'package:flutter/material.dart' hide DateUtils;
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:unisa_eat_2/domain/menu/entity/menu_entity.dart';
+import 'package:unisa_eat_2/domain/menu/entity/piatto_entity.dart';
 import 'package:unisa_eat_2/presentation/menu/bloc/menu_cubit.dart';
 import 'package:unisa_eat_2/presentation/menu/bloc/menu_state.dart';
 import 'package:unisa_eat_2/common/utils/date_utils.dart';
+import 'package:unisa_eat_2/core/services/time_service.dart';
 import 'package:unisa_eat_2/l10n/app_localizations.dart';
+import 'package:unisa_eat_2/service_locator.dart';
 
 class MenuPage extends StatefulWidget {
   const MenuPage({super.key});
@@ -48,7 +53,9 @@ class _MenuPageState extends State<MenuPage> {
     selectedDate = DateUtils.getInitialDate();
     
     Future.microtask(() {
-      context.read<MenuCubit>().fetchMenuByDate(DateUtils.formatDateForApi(selectedDate));
+      if (mounted) {
+        context.read<MenuCubit>().fetchMenuByDate(DateUtils.formatDateForApi(selectedDate));
+      }
     });
   }
 
@@ -88,15 +95,17 @@ class _MenuPageState extends State<MenuPage> {
     return '${days[date.weekday - 1]}, ${date.day} ${months[date.month - 1]}';
   }
 
-  void _showDatePicker() {
+  Future<void> _showDatePicker() async {
     final menuCubit = context.read<MenuCubit>();
+    final prefs = await SharedPreferences.getInstance();
+    final debugMode = prefs.getBool('debug_mode') ?? false;
 
     showDatePicker(
       context: context,
       initialDate: selectedDate,
       firstDate: DateTime(2024),
-      lastDate: DateTime.now().add(const Duration(days: 365)),
-      selectableDayPredicate: (DateTime date) => _isWeekday(date),
+      lastDate: sl<TimeService>().now().add(const Duration(days: 365)),
+      selectableDayPredicate: debugMode ? null : (DateTime date) => _isWeekday(date),
     ).then((pickedDate) {
       if (pickedDate != null) {
         setState(() {
@@ -115,12 +124,7 @@ class _MenuPageState extends State<MenuPage> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(l10n.menu),
-        elevation: 0,
-      ),
-      body: Column(
+    return Column(
         children: [
           // Date Picker Section
           Padding(
@@ -171,37 +175,36 @@ class _MenuPageState extends State<MenuPage> {
               ),
             ),
           ),
-          // Menu content
-          Expanded(
-            child: BlocBuilder<MenuCubit, MenuState>(
-              builder: (context, state) {
-                if (state is MenuLoading) {
-                  return const Center(
-                    child: CircularProgressIndicator(),
-                  );
-                } else if (state is MenuLoaded) {
-                  return _buildMenu(state.menu, l10n);
-                } else if (state is MenuError) {
-                  return _buildError(state.message, l10n);
-                }
-                return const Center(
-                  child: CircularProgressIndicator(),
-                );
-              },
-            ),
-          ),
+           // Menu content
+           Expanded(
+             child: BlocBuilder<MenuCubit, MenuState>(
+               builder: (context, state) {
+                 if (state is MenuLoading) {
+                   return const Center(
+                     child: CircularProgressIndicator(),
+                   );
+                 } else if (state is MenuLoaded) {
+                   return _buildMenu(state.menu, l10n);
+                 } else if (state is MenuError) {
+                   return _buildError(state.message, l10n);
+                 }
+                 return const Center(
+                   child: CircularProgressIndicator(),
+                 );
+               },
+             ),
+           ),
         ],
-      ),
-    );
+      );
   }
 
   Widget _buildMenu(MenuEntity menu, AppLocalizations l10n) {
     if (menu.piatti == null || menu.piatti!.isEmpty) {
       return Center(
         child: Text(
-          l10n.no_dishes_available,
+          l10n.no_menu_found,
           style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                color: Colors.grey.shade600,
+                color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.6),
               ),
         ),
       );
@@ -298,24 +301,24 @@ class _MenuPageState extends State<MenuPage> {
                         if (piatto.allergeni != null && piatto.allergeni!.isNotEmpty)
                           Container(
                             padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
-                            decoration: BoxDecoration(
-                              color: Theme.of(context).colorScheme.primary,
-                              borderRadius: BorderRadius.circular(6.0),
-                              border: Border.all(color: Colors.red.shade100),
-                            ),
-                            child: Text(
-                              '⚠️ ${piatto.allergeni}',
-                              style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                                    color: Colors.black,
-                                  ),
-                            ),
+                             decoration: BoxDecoration(
+                               color: Theme.of(context).colorScheme.primary,
+                               borderRadius: BorderRadius.circular(6.0),
+                               border: Border.all(color: Theme.of(context).colorScheme.error),
+                             ),
+                             child: Text(
+                               '⚠️ ${piatto.allergeni}',
+                               style: Theme.of(context).textTheme.labelSmall?.copyWith(
+                                     color: Theme.of(context).colorScheme.onPrimary,
+                                   ),
+                             ),
                           ),
                       ],
                     ),
                   ),
                 ),
               );
-            }).toList(),
+            }),
           ],
         );
       },
@@ -334,20 +337,13 @@ class _MenuPageState extends State<MenuPage> {
           ),
           const SizedBox(height: 16.0),
           Text(
-            l10n.error_loading,
+            l10n.no_menu_found,
             style: Theme.of(context).textTheme.titleMedium?.copyWith(
                   fontWeight: FontWeight.w600,
                 ),
           ),
           const SizedBox(height: 8.0),
-          Text(
-            message,
-            style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                   color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.6),
-                ),
-            textAlign: TextAlign.center,
-          ),
-          const SizedBox(height: 16.0),
+    
           ElevatedButton(
             onPressed: () => context.read<MenuCubit>().fetchMenuByDate(DateUtils.formatDateForApi(selectedDate)),
             child: Text(l10n.retry),

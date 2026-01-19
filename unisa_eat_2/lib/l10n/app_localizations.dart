@@ -271,6 +271,12 @@ abstract class AppLocalizations {
   /// **'No dishes available'**
   String get no_dishes_available;
 
+  /// No description provided for @no_menu_found.
+  ///
+  /// In en, this message translates to:
+  /// **'No menu found for this day'**
+  String get no_menu_found;
+
   /// No description provided for @error_loading.
   ///
   /// In en, this message translates to:
@@ -402,6 +408,144 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Add Funds'**
   String get add_funds;
+
+  /// No description provided for @transaction_type_topup.
+  ///
+  /// In en, this message translates to:
+  /// **'Top Up'**
+  String get transaction_type_topup;
+
+  /// No description provided for @transaction_type_kiosk.
+  ///
+  /// In en, this message translates to:
+  /// **'Kiosk'**
+  String get transaction_type_kiosk;
+
+  /// No description provided for @transaction_type_order.
+  ///
+  /// In en, this message translates to:
+  /// **'Order'**
+  String get transaction_type_order;
+
+  /// No description provided for @orders.
+  ///
+  /// In en, this message translates to:
+  /// **'Orders'**
+  String get orders;
+
+  /// No description provided for @wallet.
+  ///
+  /// In en, this message translates to:
+  /// **'Wallet'**
+  String get wallet;
+
+  /// No description provided for @theme.
+  ///
+  /// In en, this message translates to:
+  /// **'Theme'**
+  String get theme;
+
+  /// No description provided for @profile.
+  ///
+  /// In en, this message translates to:
+  /// **'Profile'**
+  String get profile;
+
+  /// No description provided for @log_out.
+  ///
+  /// In en, this message translates to:
+  /// **'Log Out'**
+  String get log_out;
+
+  /// No description provided for @balance.
+  ///
+  /// In en, this message translates to:
+  /// **'Balance'**
+  String get balance;
+
+  /// No description provided for @stats.
+  ///
+  /// In en, this message translates to:
+  /// **'Stats'**
+  String get stats;
+
+  /// Pay button text with amount
+  ///
+  /// In en, this message translates to:
+  /// **'Pay €{amount}'**
+  String pay_amount(String amount);
+
+  /// No description provided for @affluence_closed.
+  ///
+  /// In en, this message translates to:
+  /// **'Cafeteria Closed'**
+  String get affluence_closed;
+
+  /// No description provided for @affluence_opens_at.
+  ///
+  /// In en, this message translates to:
+  /// **'Opens at 12:00'**
+  String get affluence_opens_at;
+
+  /// No description provided for @affluence_good.
+  ///
+  /// In en, this message translates to:
+  /// **'Good Affluence'**
+  String get affluence_good;
+
+  /// No description provided for @affluence_medium.
+  ///
+  /// In en, this message translates to:
+  /// **'Medium Affluence'**
+  String get affluence_medium;
+
+  /// No description provided for @affluence_high.
+  ///
+  /// In en, this message translates to:
+  /// **'High Affluence'**
+  String get affluence_high;
+
+  /// No description provided for @affluence_unknown.
+  ///
+  /// In en, this message translates to:
+  /// **'Unknown'**
+  String get affluence_unknown;
+
+  /// No description provided for @affluence_wait.
+  ///
+  /// In en, this message translates to:
+  /// **'Estimated Wait'**
+  String get affluence_wait;
+
+  /// No description provided for @affluence_refresh.
+  ///
+  /// In en, this message translates to:
+  /// **'Refresh'**
+  String get affluence_refresh;
+
+  /// No description provided for @affluence_error.
+  ///
+  /// In en, this message translates to:
+  /// **'Unable to load affluence data'**
+  String get affluence_error;
+
+  /// No description provided for @create_order.
+  ///
+  /// In en, this message translates to:
+  /// **'Create Order'**
+  String get create_order;
+
+  /// No description provided for @cafeteria_status.
+  ///
+  /// In en, this message translates to:
+  /// **'Cafeteria Status'**
+  String get cafeteria_status;
+
+  /// No description provided for @wait_time.
+  ///
+  /// In en, this message translates to:
+  /// **'WAIT TIME'**
+  String get wait_time;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

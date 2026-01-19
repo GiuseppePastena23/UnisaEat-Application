@@ -10,12 +10,15 @@ class MenuRepositoryImpl extends MenuRepository {
   Future<Either> getMenuByDate(String date) async {
     final result = await sl<MenuApiService>().getMenuByDate(date);
     return await result.fold(
-      (error) {
-        return Left(error); 
-      }, (data) async {
-        final menu = MenuMapper.toEntity(MenuModel.fromJson(data.data));
-        
-        return Right(menu);
+      (error) => Left(error),
+      (data) async {
+        // Backend returns a list of menus, take the first one
+        if (data is List && data.isNotEmpty) {
+          final menu = MenuMapper.toEntity(MenuModel.fromJson(data[0]));
+          return Right(menu);
+        } else {
+          return Left('No menu found for this date');
+        }
       }
     );
   }

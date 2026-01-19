@@ -1,43 +1,46 @@
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 import 'package:unisa_eat_2/core/configs/constants/api_url.dart';
+import 'package:unisa_eat_2/core/models/api_error.dart';
 import 'package:unisa_eat_2/core/network/dio_client.dart';
 import 'package:unisa_eat_2/data/auth/models/log_in_params.dart';
+import 'package:unisa_eat_2/data/auth/models/register_params.dart';
 import 'package:unisa_eat_2/service_locator.dart';
 
 abstract class AuthApiService {
-  Future<Either> login(LogInParams params);
-  Future<Either> refresh(String refreshToken);
-
+  Future<Either<ApiError, dynamic>> login(LogInParams params);
+  Future<Either<ApiError, dynamic>> register(RegisterParams params);
+  Future<Either<ApiError, dynamic>> refresh(String refreshToken);
 }
 
 class AuthApiServiceImpl extends AuthApiService {
   @override
-  Future<Either> login(LogInParams params) async {
-    
+  Future<Either<ApiError, dynamic>> login(LogInParams params) async {
     try {
-      var response = await sl<DioClient>().post(ApiUrl.login, data: params.toJson());
-      return Right(response);
+      var response = await sl<DioClient>().post(ApiUrl.login, data: {'email': params.email, 'password': params.password});
+      return Right(response.data);
     } on DioException catch(e) {
-      if (e.response?.data is Map<String, dynamic>) {
-          return Left(e.response!.data['error'] ?? 'Unknown Dio error');
-        } else {
-          return Left(e.message ?? 'Unknown Dio error');
-        }
+      return Left(ApiError.fromDioException(e.response?.data ?? e.message));
     }
   }
 
   @override
-  Future<Either> refresh(String refreshToken) async {
+  Future<Either<ApiError, dynamic>> register(RegisterParams params) async {
     try {
-      var response = await sl<DioClient>().post(ApiUrl.refresh, data: {'refresh_token': refreshToken});
-      return Right(response);
+      var response = await sl<DioClient>().post(ApiUrl.register, data: params.toJson());
+      return Right(response.data);
     } on DioException catch(e) {
-      if (e.response?.data is Map<String, dynamic>) {
-          return Left(e.response!.data['error'] ?? 'Unknown Dio error');
-        } else {
-          return Left(e.message ?? 'Unknown Dio error');
-        }
+      return Left(ApiError.fromDioException(e.response?.data ?? e.message));
+    }
+  }
+
+  @override
+  Future<Either<ApiError, dynamic>> refresh(String refreshToken) async {
+    try {
+      var response = await sl<DioClient>().post(ApiUrl.refresh, data: {'refresh': refreshToken});
+      return Right(response.data);
+    } on DioException catch(e) {
+      return Left(ApiError.fromDioException(e.response?.data ?? e.message));
     }
   }
 }

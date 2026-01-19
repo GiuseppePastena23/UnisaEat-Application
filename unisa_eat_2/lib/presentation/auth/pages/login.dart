@@ -2,13 +2,9 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:loading_animation_widget/loading_animation_widget.dart';
-
-import 'package:unisa_eat_2/core/configs/theme/app_colors.dart';
 import 'package:unisa_eat_2/data/auth/models/log_in_params.dart';
 import 'package:unisa_eat_2/l10n/app_localizations.dart';
 import 'package:unisa_eat_2/presentation/auth/bloc/login_cubit.dart';
-import 'package:unisa_eat_2/presentation/auth/bloc/login_state.dart';
 
 import 'package:unisa_eat_2/presentation/shared/bloc/user_profile_cubit.dart';
 
@@ -20,6 +16,7 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  final _formKey = GlobalKey<FormState>();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   bool _passwordVisible = false;
@@ -28,48 +25,55 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: BlocListener<LoginCubit, LoginState>(
-        listener: (BuildContext context, state) { 
-          if (state is LoginFailure) {
-            Navigator.of(context, rootNavigator: true).pop();
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text(state.error)),
-            );
-            
-          
-          } else if (state is LoginSuccess) {
-            
-            context.go('/');
-            context.read<UserProfileCubit>().getUser();
-            Navigator.of(context, rootNavigator: true).pop();
-            
-          } else if (state is LoginLoading) {
-            // Optionally show a loading indicator
+        listener: (BuildContext context, state) {
+          if (state is LoginLoading) {
+            // Show loading dialog
             showDialog(
               context: context,
               barrierDismissible: false,
-              builder: (BuildContext context) {
-                return Center(child: LoadingAnimationWidget.newtonCradle(color: AppColors.lightSecondaryAccent, size: 150));
-              },
+              builder: (context) => const Center(
+                child: CircularProgressIndicator(),
+              ),
             );
+          } else if (state is LoginFailure) {
+            // Dismiss loading dialog if present
+            if (ModalRoute.of(context)?.canPop ?? false) {
+              Navigator.of(context, rootNavigator: true).pop();
+            }
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text(state.error.message)),
+            );
+           } else if (state is LoginSuccess) {
+            // Dismiss loading dialog if present
+            if (ModalRoute.of(context)?.canPop ?? false) {
+              Navigator.of(context, rootNavigator: true).pop();
+            }
+            // Refresh user profile data
+            context.read<UserProfileCubit>().getUser(forceRefresh: true);
+            context.go('/home');
+            context.read<UserProfileCubit>().getUser();
           }
         },
         child: SafeArea(
           minimum: const EdgeInsets.only(top: 0, right: 30, left: 30, bottom: 0),
           child: Center(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                _loginText(),
-                const SizedBox(height: 20),
-                _emailField(),
-                const SizedBox(height: 20),
-                _passwordField(),
-                _showPasswordCheckbox(),
-                const SizedBox(height: 20),
-                _loginButton(context),
-                const SizedBox(height: 15),
-                _signupText()
-              ],
+            child: Form(
+              key: _formKey,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  _loginText(),
+                  const SizedBox(height: 20),
+                  _emailField(),
+                  const SizedBox(height: 20),
+                  _passwordField(),
+                  _showPasswordCheckbox(),
+                  const SizedBox(height: 20),
+                  _loginButton(context),
+                  const SizedBox(height: 15),
+                  _signupText()
+                ],
+              ),
             ),
           ),
         ),
@@ -85,19 +89,21 @@ class _LoginPageState extends State<LoginPage> {
 
       child: ElevatedButton(
         onPressed: () {
-          context.read<LoginCubit>().login(
-            LogInParams(
-              email: _emailController.text,
-              password: _passwordController.text,
-            ),
-          );
+          if (_formKey.currentState!.validate()) {
+            context.read<LoginCubit>().login(
+              LogInParams(
+                email: _emailController.text,
+                password: _passwordController.text,
+              ),
+            );
+          }
         },
         style: ElevatedButton.styleFrom(
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(10),
         )),
 
-        child: Text(l10n.login_title, style: TextStyle(color: Colors.white)),
+        child: Text(l10n.login_title, style: TextStyle(color: Theme.of(context).colorScheme.onPrimary)),
       ),
     );
   }
@@ -115,18 +121,24 @@ class _LoginPageState extends State<LoginPage> {
 
   Widget _emailField() {
     final l10n = AppLocalizations.of(context)!;
-    return TextField(
+    return TextFormField(
       controller: _emailController,
       decoration: InputDecoration(
         labelText: l10n.email_label,
         border: OutlineInputBorder(),
       ),
+      validator: (value) {
+        if (value == null || value.trim().isEmpty) return 'Enter email';
+        final emailRegex = RegExp(r'^[^@]+@[^@]+\.[^@]+$');
+        if (!emailRegex.hasMatch(value.trim())) return 'Enter a valid email address';
+        return null;
+      },
     );
   }
 
   Widget _passwordField() {
     final l10n = AppLocalizations.of(context)!;
-    return TextField(
+    return TextFormField(
       obscureText: !_passwordVisible,
       controller: _passwordController,
       decoration: InputDecoration(
@@ -134,6 +146,7 @@ class _LoginPageState extends State<LoginPage> {
         border: OutlineInputBorder(),
 
       ),
+      validator: (value) => value == null || value.isEmpty ? 'Enter password' : null,
     );
   }
 
@@ -164,7 +177,7 @@ class _LoginPageState extends State<LoginPage> {
             text: l10n.sign_up,
 
             recognizer: TapGestureRecognizer()..onTap=(){
-
+              context.go('/signup');
             }
 
           )

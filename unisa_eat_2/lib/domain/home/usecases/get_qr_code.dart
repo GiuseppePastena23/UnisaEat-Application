@@ -5,10 +5,7 @@ import 'package:unisa_eat_2/service_locator.dart';
 
 class GetQrcodeUsecase extends Usecase<Either, void> {
   @override
-  Future<Either> call({void params}) async{
-    
+  Future<Either> call({void params}) async {
     return await sl<HomeRepository>().getQrcode();
   }
-  
-  
 }

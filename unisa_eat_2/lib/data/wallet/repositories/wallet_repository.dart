@@ -12,32 +12,37 @@ class WalletRepositoryImpl extends WalletRepository {
     final result = await sl<WalletApiService>().getBalance();
     return await result.fold(
       (error) {
-        return Left(Error);
+        return Left(error);
       }, (data) {
-        return Right(data.data['balance']);
+        return Right(data['balance']);
       }
     );
   }
-  
+
   @override
-  Future<Either<dynamic, dynamic>> getTransactions() async {
+  Future<Either> getTransactions() async {
     final result = await sl<WalletApiService>().getTransactions();
     return await result.fold(
       (error) {
         return Left(error);
-      }, 
+      },
       (data) {
-        
-        final List<dynamic> transactionsList = data.data['transactions'] ?? [];
-        
-        // Mappa ogni TransactionModel a TransactionEntity
-        final List<TransactionEntity> transactions = transactionsList
-            .map((json) => TransactionMapper.toEntity(
-              TransactionModel.fromJson(json as Map<String, dynamic>)
-            ))
-            .toList();
-        
-        return Right(transactions);
+        final rawData = data;
+        final List<dynamic> transactionsList = rawData is List ? rawData : rawData['results'] ?? rawData['transactions'] ?? [];
+
+        try {
+          // Mappa ogni TransactionModel a TransactionEntity
+          final List<TransactionEntity> transactions = transactionsList
+              .whereType<Map<String, dynamic>>()
+              .map((json) => TransactionMapper.toEntity(
+                TransactionModel.fromJson(json)
+              ))
+              .toList();
+
+          return Right(transactions);
+        } catch (e) {
+          return Left('Error parsing transactions: $e');
+        }
       }
     );
   }

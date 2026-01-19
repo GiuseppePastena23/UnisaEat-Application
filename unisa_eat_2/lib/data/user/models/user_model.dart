@@ -9,11 +9,11 @@ class UserModel {
       {this.codiceFiscale, this.cognome, this.email, this.nome, this.saldo});
 
   UserModel.fromJson(Map<String, dynamic> json) {
-    codiceFiscale = json['codice_fiscale'];
-    cognome = json['cognome'];
+    codiceFiscale = json['fiscal_code'];
+    cognome = json['last_name'];
     email = json['email'];
-    nome = json['nome'];
-    saldo = json['saldo'];
+    nome = json['first_name'];
+    saldo = json['balance']?.toDouble();
   }
 
   Map<String, dynamic> toJson() {

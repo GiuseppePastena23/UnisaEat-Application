@@ -11,23 +11,26 @@ dependencies:
     sdk: flutter
   flutter_localizations:
     sdk: flutter
-  get_it: 
-  flutter_bloc: 
-  dio: 
+  get_it:
+  flutter_bloc:
+  dio:
   dartz:
   logger:
   shared_preferences:
   flutter_secure_storage: ^9.2.1
   jwt_decoder:
-  go_router: 
-  qr_flutter: 
-  google_fonts: 
+  go_router:
+  qr_flutter:
+  google_fonts:
   material_design_icons_flutter:
   hive:
-  hive_flutter: 
-  loading_animation_widget: 
-  intl: 
-  flutter_paypal_payment: ^1.0.7
+  hive_flutter:
+  loading_animation_widget:
+  intl:
+  flutter_stripe: ^10.1.1
+  fl_chart: ^1.1.1
+  equatable: ^2.0.8
+  local_auth: ^3.0.0
 
 dev_dependencies:
   flutter_test:
@@ -40,7 +43,7 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
-  assets: 
+  assets:
   - assets/images/
   generate: true
 

@@ -35,9 +35,10 @@
   "category_drink": "Bevande",
   "category_other": "Altro",
 
-  "no_dishes_available": "Nessun piatto disponibile",
-  "error_loading": "Errore nel caricamento",
-  "retry": "Riprova",
+   "no_dishes_available": "Nessun piatto disponibile",
+   "no_menu_found": "Nessun menu trovato per questo giorno",
+   "error_loading": "Errore nel caricamento",
+   "retry": "Riprova",
 
   "greeting_morning": "Buongiorno, {name}!",
   "@greeting_morning": {
@@ -72,6 +73,42 @@
   "language_italian": "Italiano",
   "language_spanish": "Spagnolo",
 
-  "qr_code": "Codice QR",
-  "add_funds": "Aggiungi Fondi"
+   "qr_code": "Codice QR",
+   "add_funds": "Aggiungi Fondi",
+
+   "transaction_type_topup": "Ricarica",
+   "transaction_type_kiosk": "Chiosco",
+   "transaction_type_order": "Ordine",
+
+   "orders": "Ordini",
+   "wallet": "Portafoglio",
+   "theme": "Tema",
+   "profile": "Profilo",
+   "log_out": "Esci",
+   "balance": "Saldo",
+   "stats": "Statistiche",
+
+    "pay_amount": "Paga €{amount}",
+    "@pay_amount": {
+      "description": "Testo del pulsante paga con importo",
+      "placeholders": {
+        "amount": {
+          "type": "String",
+          "example": "5.00"
+        }
+      }
+    },
+
+    "affluence_closed": "Mensa Chiusa",
+    "affluence_opens_at": "Apre alle 12:00",
+    "affluence_good": "Affluenza Buona",
+    "affluence_medium": "Affluenza Media",
+    "affluence_high": "Affluenza Alta",
+    "affluence_unknown": "Sconosciuto",
+    "affluence_wait": "Attesa Stimata",
+    "affluence_refresh": "Aggiorna",
+    "affluence_error": "Impossibile caricare i dati di affluenza",
+    "create_order": "Crea Ordine",
+    "cafeteria_status": "Stato Mensa",
+    "wait_time": "TEMPO DI ATTESA"
 }

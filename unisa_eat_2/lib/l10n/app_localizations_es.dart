@@ -96,6 +96,9 @@ class AppLocalizationsEs extends AppLocalizations {
   String get no_dishes_available => 'No hay platos disponibles';
 
   @override
+  String get no_menu_found => 'No se encontró menú para este día';
+
+  @override
   String get error_loading => 'Error al cargar';
 
   @override
@@ -162,4 +165,75 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get add_funds => 'Agregar Fondos';
+
+  @override
+  String get transaction_type_topup => 'Recarga';
+
+  @override
+  String get transaction_type_kiosk => 'Quiosco';
+
+  @override
+  String get transaction_type_order => 'Pedido';
+
+  @override
+  String get orders => 'Pedidos';
+
+  @override
+  String get wallet => 'Cartera';
+
+  @override
+  String get theme => 'Tema';
+
+  @override
+  String get profile => 'Perfil';
+
+  @override
+  String get log_out => 'Cerrar Sesión';
+
+  @override
+  String get balance => 'Saldo';
+
+  @override
+  String get stats => 'Estadísticas';
+
+  @override
+  String pay_amount(String amount) {
+    return 'Pagar €$amount';
+  }
+
+  @override
+  String get affluence_closed => 'Cafetería Cerrada';
+
+  @override
+  String get affluence_opens_at => 'Abre a las 12:00';
+
+  @override
+  String get affluence_good => 'Buena Afluencia';
+
+  @override
+  String get affluence_medium => 'Afluencia Media';
+
+  @override
+  String get affluence_high => 'Alta Afluencia';
+
+  @override
+  String get affluence_unknown => 'Desconocido';
+
+  @override
+  String get affluence_wait => 'Espera Estimada';
+
+  @override
+  String get affluence_refresh => 'Actualizar';
+
+  @override
+  String get affluence_error => 'No se pueden cargar los datos de afluencia';
+
+  @override
+  String get create_order => 'Crear Pedido';
+
+  @override
+  String get cafeteria_status => 'Estado de la Cafetería';
+
+  @override
+  String get wait_time => 'TIEMPO DE ESPERA';
 }

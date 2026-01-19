@@ -35,9 +35,10 @@
   "category_drink": "Bebidas",
   "category_other": "Otro",
 
-  "no_dishes_available": "No hay platos disponibles",
-  "error_loading": "Error al cargar",
-  "retry": "Reintentar",
+   "no_dishes_available": "No hay platos disponibles",
+   "no_menu_found": "No se encontró menú para este día",
+   "error_loading": "Error al cargar",
+   "retry": "Reintentar",
 
   "greeting_morning": "Buenos días, {name}!",
   "@greeting_morning": {
@@ -72,6 +73,42 @@
   "language_italian": "Italiano",
   "language_spanish": "Español",
 
-  "qr_code": "Código QR",
-  "add_funds": "Agregar Fondos"
+   "qr_code": "Código QR",
+   "add_funds": "Agregar Fondos",
+
+   "transaction_type_topup": "Recarga",
+   "transaction_type_kiosk": "Quiosco",
+   "transaction_type_order": "Pedido",
+
+   "orders": "Pedidos",
+   "wallet": "Cartera",
+   "theme": "Tema",
+   "profile": "Perfil",
+   "log_out": "Cerrar Sesión",
+   "balance": "Saldo",
+   "stats": "Estadísticas",
+
+    "pay_amount": "Pagar €{amount}",
+    "@pay_amount": {
+      "description": "Texto del botón pagar con cantidad",
+      "placeholders": {
+        "amount": {
+          "type": "String",
+          "example": "5.00"
+        }
+      }
+    },
+
+    "affluence_closed": "Cafetería Cerrada",
+    "affluence_opens_at": "Abre a las 12:00",
+    "affluence_good": "Buena Afluencia",
+    "affluence_medium": "Afluencia Media",
+    "affluence_high": "Alta Afluencia",
+    "affluence_unknown": "Desconocido",
+    "affluence_wait": "Espera Estimada",
+    "affluence_refresh": "Actualizar",
+    "affluence_error": "No se pueden cargar los datos de afluencia",
+    "create_order": "Crear Pedido",
+    "cafeteria_status": "Estado de la Cafetería",
+    "wait_time": "TIEMPO DE ESPERA"
 }

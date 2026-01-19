@@ -21,24 +21,54 @@ class TransactionModel {
       this.userId});
 
   TransactionModel.fromJson(Map<String, dynamic> json) {
-    amount = json['amount'];
+    // Parse amount from String (Django DecimalField) to double
+    if (json['amount'] is String) {
+      amount = double.parse(json['amount']);
+    } else if (json['amount'] is num) {
+      amount = (json['amount'] as num).toDouble();
+    } else {
+      amount = null;
+    }
+
     createdAt = json['created_at'];
-    id = json['id'];
+
+    // Parse id from potentially String to int
+    if (json['id'] is String) {
+      id = int.parse(json['id']);
+    } else if (json['id'] is int) {
+      id = json['id'];
+    } else {
+      id = null;
+    }
+
     paymentMethod = json['payment_method'];
     if (json['type'] != null && json['type'] is String) {
-      type = TransactionType.values.byName(json['type']);
+      try {
+        type = TransactionType.values.byName(json['type']);
+      } catch (e) {
+        // If invalid type, default to null
+        type = null;
+      }
     }
-    userId = json['user_id'];
+
+    // Parse userId from potentially String to int
+    if (json['user_id'] is String) {
+      userId = int.parse(json['user_id']);
+    } else if (json['user_id'] is int) {
+      userId = json['user_id'];
+    } else {
+      userId = null;
+    }
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['amount'] = this.amount;
-    data['created_at'] = this.createdAt;
-    data['id'] = this.id;
-    data['payment_method'] = this.paymentMethod;
-    data['type'] = this.type.toString();
-    data['user_id'] = this.userId;
+    final Map<String, dynamic> data = {};
+    data['amount'] = amount;
+    data['created_at'] = createdAt;
+    data['id'] = id;
+    data['payment_method'] = paymentMethod;
+    data['type'] = type.toString();
+    data['user_id'] = userId;
     return data;
   }
 }

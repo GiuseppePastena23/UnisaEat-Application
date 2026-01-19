@@ -14,15 +14,16 @@ const _userKey = HiveBoxes.user;
 class UserRepositoryImpl extends UserRepository {
 
   @override
-  Future<Either> getUser() async {
+  Future<Either> getUser({bool forceRefresh = false}) async {
     final box = sl<Box<CachedUser>>();
     final cachedData = box.get(_userKey);
 
-    if (cachedData != null && !cachedData.isExpired) {
+    // Skip cache if force refresh is requested
+    if (!forceRefresh && cachedData != null && !cachedData.isExpired) {
       return Right(cachedData.user);
     }
 
-    if (cachedData != null) {
+    if (cachedData != null && forceRefresh) {
       await box.delete(_userKey);
     }
   
@@ -31,8 +32,8 @@ class UserRepositoryImpl extends UserRepository {
       (error) {
         return Left(error); 
       }, (data) async {
-        final cachedUser = UserMapper.toCachedEntity(UserModel.fromJson(data.data));
-        final user = UserMapper.toEntity(UserModel.fromJson(data.data));
+        final cachedUser = UserMapper.toCachedEntity(UserModel.fromJson(data));
+        final user = UserMapper.toEntity(UserModel.fromJson(data));
         
         await box.put(_userKey, cachedUser);
         

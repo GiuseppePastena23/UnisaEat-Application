@@ -3,7 +3,6 @@ import 'package:logger/logger.dart';
 import 'package:unisa_eat_2/core/services/auth_service.dart';
 import 'package:unisa_eat_2/data/auth/sources/auth_api_service.dart';
 import 'package:unisa_eat_2/core/configs/constants/api_url.dart';
-
 import 'package:unisa_eat_2/service_locator.dart';
 
 /// This interceptor is used to show request and response logs
@@ -67,8 +66,8 @@ class TokenInterceptor extends Interceptor{
             },
             (data) async {
               // Update tokens
-              sl<AuthService>().setAccessToken(data.data['access_token']);
-              sl<AuthService>().setRefreshToken(data.data['refresh_token']);
+              sl<AuthService>().setAccessToken(data['access_token']);
+              sl<AuthService>().setRefreshToken(data['refresh_token']);
               // Retry the request
               final newToken = await sl<AuthService>().getAccessToken();
               err.requestOptions.headers['Authorization'] = 'Bearer $newToken';

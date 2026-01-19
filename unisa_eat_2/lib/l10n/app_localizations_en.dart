@@ -96,6 +96,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get no_dishes_available => 'No dishes available';
 
   @override
+  String get no_menu_found => 'No menu found for this day';
+
+  @override
   String get error_loading => 'Error loading';
 
   @override
@@ -162,4 +165,75 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get add_funds => 'Add Funds';
+
+  @override
+  String get transaction_type_topup => 'Top Up';
+
+  @override
+  String get transaction_type_kiosk => 'Kiosk';
+
+  @override
+  String get transaction_type_order => 'Order';
+
+  @override
+  String get orders => 'Orders';
+
+  @override
+  String get wallet => 'Wallet';
+
+  @override
+  String get theme => 'Theme';
+
+  @override
+  String get profile => 'Profile';
+
+  @override
+  String get log_out => 'Log Out';
+
+  @override
+  String get balance => 'Balance';
+
+  @override
+  String get stats => 'Stats';
+
+  @override
+  String pay_amount(String amount) {
+    return 'Pay €$amount';
+  }
+
+  @override
+  String get affluence_closed => 'Cafeteria Closed';
+
+  @override
+  String get affluence_opens_at => 'Opens at 12:00';
+
+  @override
+  String get affluence_good => 'Good Affluence';
+
+  @override
+  String get affluence_medium => 'Medium Affluence';
+
+  @override
+  String get affluence_high => 'High Affluence';
+
+  @override
+  String get affluence_unknown => 'Unknown';
+
+  @override
+  String get affluence_wait => 'Estimated Wait';
+
+  @override
+  String get affluence_refresh => 'Refresh';
+
+  @override
+  String get affluence_error => 'Unable to load affluence data';
+
+  @override
+  String get create_order => 'Create Order';
+
+  @override
+  String get cafeteria_status => 'Cafeteria Status';
+
+  @override
+  String get wait_time => 'WAIT TIME';
 }

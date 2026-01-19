@@ -38,9 +38,10 @@
   "category_drink": "Drinks",
   "category_other": "Other",
 
-  "no_dishes_available": "No dishes available",
-  "error_loading": "Error loading",
-  "retry": "Retry",
+   "no_dishes_available": "No dishes available",
+   "no_menu_found": "No menu found for this day",
+   "error_loading": "Error loading",
+   "retry": "Retry",
 
   "greeting_morning": "Good Morning, {name}!",
   "@greeting_morning": {
@@ -75,6 +76,42 @@
   "language_italian": "Italian",
   "language_spanish": "Spanish",
 
-  "qr_code": "QR Code",
-  "add_funds": "Add Funds"
+   "qr_code": "QR Code",
+   "add_funds": "Add Funds",
+
+   "transaction_type_topup": "Top Up",
+   "transaction_type_kiosk": "Kiosk",
+   "transaction_type_order": "Order",
+
+   "orders": "Orders",
+   "wallet": "Wallet",
+   "theme": "Theme",
+   "profile": "Profile",
+   "log_out": "Log Out",
+   "balance": "Balance",
+   "stats": "Stats",
+
+     "pay_amount": "Pay €{amount}",
+    "@pay_amount": {
+      "description": "Pay button text with amount",
+      "placeholders": {
+        "amount": {
+          "type": "String",
+          "example": "5.00"
+        }
+      }
+    },
+
+    "affluence_closed": "Cafeteria Closed",
+    "affluence_opens_at": "Opens at 12:00",
+    "affluence_good": "Good Affluence",
+    "affluence_medium": "Medium Affluence",
+    "affluence_high": "High Affluence",
+    "affluence_unknown": "Unknown",
+    "affluence_wait": "Estimated Wait",
+    "affluence_refresh": "Refresh",
+     "affluence_error": "Unable to load affluence data",
+     "create_order": "Create Order",
+     "cafeteria_status": "Cafeteria Status",
+     "wait_time": "WAIT TIME"
 }
