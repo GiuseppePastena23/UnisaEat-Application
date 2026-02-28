@@ -16,7 +16,7 @@ class MenuApiServiceImpl implements MenuApiService {
       var response = await sl<DioClient>().get(ApiUrl.getMenuByDate(date));
       return Right(response.data);
     } on DioException catch (e) {
-      return Left(ApiError.fromDioException(e.response?.data ?? e.message));
+      return Left(ApiError.fromDioException(e));
     }
   }
 }

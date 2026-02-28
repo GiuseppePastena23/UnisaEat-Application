@@ -96,10 +96,28 @@ class AppLocalizationsIt extends AppLocalizations {
   String get no_dishes_available => 'Nessun piatto disponibile';
 
   @override
-  String get no_menu_found => 'Nessun menu trovato per questo giorno';
+  String get no_menu_found => 'Nessun menu per questo giorno';
 
   @override
   String get error_loading => 'Errore nel caricamento';
+
+  @override
+  String get error_network => 'Errore di rete. Controlla la tua connessione.';
+
+  @override
+  String get error_server => 'Errore del server. Riprova più tardi.';
+
+  @override
+  String get error_auth => 'Autenticazione fallita. Effettua nuovamente l\'accesso.';
+
+  @override
+  String get error_validation => 'Input non valido. Controlla e riprova.';
+
+  @override
+  String get error_balance => 'Saldo insufficiente. Ricarica il tuo portafoglio.';
+
+  @override
+  String get error_unknown => 'Si è verificato un errore imprevisto.';
 
   @override
   String get retry => 'Riprova';
@@ -191,6 +209,9 @@ class AppLocalizationsIt extends AppLocalizations {
   String get log_out => 'Esci';
 
   @override
+  String get notificationSettings => 'Impostazioni Notifiche';
+
+  @override
   String get balance => 'Saldo';
 
   @override
@@ -217,6 +238,9 @@ class AppLocalizationsIt extends AppLocalizations {
   String get affluence_high => 'Affluenza Alta';
 
   @override
+  String get affluence_full => 'Capienza Massima';
+
+  @override
   String get affluence_unknown => 'Sconosciuto';
 
   @override
@@ -236,4 +260,151 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get wait_time => 'TEMPO DI ATTESA';
+
+  @override
+  String get faq => 'FAQ';
+
+  @override
+  String get faq_category_payments => 'Pagamenti';
+
+  @override
+  String get faq_category_account => 'Account';
+
+  @override
+  String get faq_category_orders => 'Ordini';
+
+  @override
+  String get faq_category_general => 'Generale';
+
+  @override
+  String get error_loading_faq => 'Errore nel caricamento FAQ';
+
+  @override
+  String get no_faqs => 'Nessuna FAQ disponibile';
+
+  @override
+  String get feedback => 'Feedback';
+
+  @override
+  String get send_feedback => 'Invia Feedback';
+
+  @override
+  String get feedback_category => 'Categoria';
+
+  @override
+  String get feedback_message => 'Messaggio';
+
+  @override
+  String get feedback_hint => 'Descrivi il tuo feedback...';
+
+  @override
+  String get feedback_sent => 'Feedback inviato con successo';
+
+  @override
+  String get feedback_error => 'Errore nell\'invio del feedback';
+
+  @override
+  String get feedback_suggestion => 'Suggerimento';
+
+  @override
+  String get feedback_complaint => 'Reclamo';
+
+  @override
+  String get feedback_bug => 'Segnalazione Bug';
+
+  @override
+  String get feedback_other => 'Altro';
+
+  @override
+  String get help_support => 'Assistenza';
+
+  @override
+  String get field_required => 'Questo campo è obbligatorio';
+
+  @override
+  String get email_invalid => 'Inserisci un\'email valida';
+
+  @override
+  String get birthdate => 'Data di nascita';
+
+  @override
+  String get password_too_short => 'La password deve essere di almeno 8 caratteri';
+
+  @override
+  String get passwords_not_match => 'Le password non coincidono';
+
+  @override
+  String get phone_invalid => 'Inserisci un numero di telefono valido';
+
+  @override
+  String get fiscal_code_invalid => 'Inserisci un codice fiscale valido';
+
+  @override
+  String get birthdate_required => 'Inserisci la tua data di nascita';
+
+  @override
+  String get already_have_account => 'Hai già un account?';
+
+  @override
+  String get show_at_counter => 'Mostra al banco';
+
+  @override
+  String get close => 'Chiudi';
+
+  @override
+  String get phone_number => 'Numero di telefono';
+
+  @override
+  String get enable_biometric => 'Abilita accesso biometrico';
+
+  @override
+  String get biometric_not_available => 'Autenticazione biometrica non disponibile';
+
+  @override
+  String get enable_notifications => 'Abilita notifiche';
+
+  @override
+  String get turn_on_notifications => 'Attiva le notifiche per ricevere avvisi';
+
+  @override
+  String get low_balance_alerts => 'Avvisi saldo basso';
+
+  @override
+  String get balance_low_message => 'Avvisa quando il saldo è inferiore a €5';
+
+  @override
+  String get order_status_updates => 'Stato ordine';
+
+  @override
+  String get order_status_message => 'Avvisa quando lo stato dell\'ordine cambia';
+
+  @override
+  String get transaction_alerts => 'Avvisi transazione';
+
+  @override
+  String get transaction_message => 'Avvisa sulle transazioni del portafoglio';
+
+  @override
+  String get canteen_open => 'Mensa aperta';
+
+  @override
+  String get canteen_message => 'Avvisa quando la mensa apre';
+
+  @override
+  String get affluence_updates => 'Aggiornamenti affluenza';
+
+  @override
+  String get affluence_message => 'Avvisa sui cambiamenti dell\'affluenza';
+
+  @override
+  String get bypass_time => 'Salta limite orario';
+
+  @override
+  String get bypass_message => 'Permetti ordini dopo le 14:45';
+
+  @override
+  String get show_debug_info => 'Mostra info debug';
+
+  @override
+  String get debug_info => 'Mostra informazioni di debug aggiuntive';
 }

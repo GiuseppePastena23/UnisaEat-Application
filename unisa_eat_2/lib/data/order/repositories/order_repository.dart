@@ -1,5 +1,6 @@
 import 'package:dartz/dartz.dart';
 import 'package:unisa_eat_2/common/helper/mapper/order_mapper.dart';
+import 'package:unisa_eat_2/core/models/api_error.dart';
 import 'package:unisa_eat_2/data/order/models/dish_selection_model.dart';
 import 'package:unisa_eat_2/data/order/models/order_model.dart';
 import 'package:unisa_eat_2/data/order/sources/order_api_service.dart';
@@ -33,7 +34,7 @@ class OrderRepositoryImpl extends OrderRepository {
           final entity = OrderMapper.toEntities([order]).first;
           return Right(entity);
         } catch (e) {
-          return Left('Failed to parse response: $e');
+          return Left(ApiError(type: ErrorType.unknown, details: {'message': 'Failed to parse response: $e'}));
         }
       },
     );

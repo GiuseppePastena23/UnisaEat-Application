@@ -46,6 +46,8 @@ class _AffluenceCardState extends State<AffluenceCard> {
         return l10n.affluence_medium;
       case 'high':
         return l10n.affluence_high;
+      case 'full':
+        return l10n.affluence_full;
       default:
         return l10n.affluence_unknown;
     }
@@ -59,6 +61,8 @@ class _AffluenceCardState extends State<AffluenceCard> {
         return Colors.orange;
       case 'high':
         return Colors.red;
+      case 'full':
+        return Colors.red.shade900;
       default:
         return Colors.grey;
     }

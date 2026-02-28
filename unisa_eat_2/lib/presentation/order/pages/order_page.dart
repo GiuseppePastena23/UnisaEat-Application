@@ -3,8 +3,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:unisa_eat_2/core/models/api_error.dart';
 import 'package:unisa_eat_2/domain/order/entities/order_entity.dart';
 import 'package:unisa_eat_2/domain/menu/entity/piatto_entity.dart';
+import 'package:unisa_eat_2/l10n/app_localizations.dart';
 import 'package:unisa_eat_2/presentation/shared/bloc/order_cubit.dart';
 import 'package:unisa_eat_2/presentation/shared/bloc/order_state.dart';
 import 'package:unisa_eat_2/presentation/shared/widget/custom_card.dart';
@@ -18,11 +20,27 @@ class OrderPage extends StatefulWidget {
 
 class _OrderPageState extends State<OrderPage> with WidgetsBindingObserver {
   final Set<int> _expandedOrders = {};
-  final Set<int> _dismissedOrderIds = {};
   String sortBy = 'dateDesc';
   String? filterStatus;
   bool _debugMode = false;
   List<OrderEntity> _allOrders = [];
+
+  String _getErrorMessage(ApiError error, AppLocalizations l10n) {
+    switch (error.type) {
+      case ErrorType.network:
+        return l10n.error_network;
+      case ErrorType.server:
+        return l10n.error_server;
+      case ErrorType.auth:
+        return l10n.error_auth;
+      case ErrorType.validation:
+        return l10n.error_validation;
+      case ErrorType.balance:
+        return l10n.error_balance;
+      case ErrorType.unknown:
+        return l10n.error_unknown;
+    }
+  }
 
   @override
   void initState() {
@@ -62,29 +80,37 @@ class _OrderPageState extends State<OrderPage> with WidgetsBindingObserver {
     });
   }
 
-  void _dismissOrder(int orderId) {
-    setState(() {
-      _dismissedOrderIds.add(orderId);
-    });
-  }
+
 
   void _showQrDialog(BuildContext context, int orderId) {
+    final l10n = AppLocalizations.of(context)!;
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Order QR Code'),
-        content: SizedBox(
-          width: 200,
-          height: 200,
-          child: QrImageView(
-            data: orderId.toString(),
-            version: QrVersions.auto,
-          ),
+        title: Text('${l10n.qr_code} #${orderId}'),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            SizedBox(
+              width: 200,
+              height: 200,
+              child: QrImageView(
+                data: orderId.toString(),
+                version: QrVersions.auto,
+              ),
+            ),
+            const SizedBox(height: 8),
+            Text(
+              l10n.show_at_counter,
+              style: Theme.of(context).textTheme.bodySmall,
+              textAlign: TextAlign.center,
+            ),
+          ],
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(context).pop(),
-            child: const Text('Close'),
+            child: Text(l10n.close),
           ),
         ],
       ),
@@ -241,127 +267,124 @@ class _OrderPageState extends State<OrderPage> with WidgetsBindingObserver {
     final currentIndex = statuses.indexOf(status.toLowerCase());
     if (currentIndex == -1) return const SizedBox.shrink();
 
+    final progress = (currentIndex + 1) / statuses.length;
+
     return Container(
       margin: const EdgeInsets.only(top: 8),
       height: 4,
-      child: Row(
-        children: statuses.asMap().entries.map((entry) {
-          final isCompleted = entry.key <= currentIndex;
-          return Expanded(
-            child: Container(
-              margin: const EdgeInsets.symmetric(horizontal: 1),
-              decoration: BoxDecoration(
-                color: isCompleted
-                    ? Theme.of(context).colorScheme.primary
-                    : Theme.of(context).colorScheme.outline.withOpacity(0.3),
-                borderRadius: BorderRadius.circular(2),
-              ),
-            ),
-          );
-        }).toList(),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(2),
+        child: LinearProgressIndicator(
+          value: progress,
+          backgroundColor: Theme.of(context).colorScheme.outline.withOpacity(0.3),
+          valueColor: AlwaysStoppedAnimation<Color>(_getStatusColor(status)),
+        ),
       ),
     );
   }
 
   Widget _buildOrderList(List<OrderEntity> orders) {
-    return ListView.builder(
-      itemCount: orders.length,
-      itemBuilder: (context, index) {
-        final order = orders[index];
-        final isExpanded = _expandedOrders.contains(order.id);
+    return RefreshIndicator(
+      onRefresh: () async => context.read<OrderCubit>().getOrders(),
+      child: ListView.builder(
+        itemCount: orders.length,
+        itemBuilder: (context, index) {
+          final order = orders[index];
+          final isExpanded = _expandedOrders.contains(order.id);
 
-        final card = CustomCard(
-          child: InkWell(
-            onTap: () => _toggleExpanded(order.id),
-            child: Padding(
-              padding: const EdgeInsets.all(16),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    children: [
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              'Order #${order.id}',
-                              style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                            ),
-                            Text('Total: €${order.totalCost.toStringAsFixed(2)}'),
-                            Text('Date: ${order.createdAt.toLocal().toString().split(' ')[0]}'),
-                            Text('Items: ${order.dishes.length}'),
-                            if (order.pickupTime != null)
-                              Text('Pickup: ${_formatPickupTime(order.pickupTime!)}'),
-                            if (order.note != null && order.note!.isNotEmpty)
-                              Text('Note: ${order.note}'),
-                          ],
+          final card = CustomCard(
+            child: InkWell(
+              onTap: () => _toggleExpanded(order.id),
+              child: Padding(
+                padding: const EdgeInsets.all(16),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                          decoration: BoxDecoration(
+                            color: _getStatusColor(order.status),
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: Text(
+                            _getStatusText(order.status),
+                            style: Theme.of(context).textTheme.labelSmall?.copyWith(
+                                  color: Theme.of(context).colorScheme.onPrimary,
+                                ),
+                          ),
                         ),
-                      ),
-                      const Spacer(),
-                      IconButton(
-                        onPressed: () => _showQrDialog(context, order.id),
-                        icon: const Icon(Icons.qr_code),
-                        tooltip: 'Show QR Code',
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 8),
-                  Row(
-                    children: [
-                      Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                        decoration: BoxDecoration(
-                          color: _getStatusColor(order.status),
-                          borderRadius: BorderRadius.circular(12),
+                        const Spacer(),
+                        IconButton(
+                          onPressed: () => _showQrDialog(context, order.id),
+                          icon: const Icon(Icons.qr_code),
+                          tooltip: 'Show QR Code',
                         ),
-                        child: Text(
-                          _getStatusText(order.status),
-                          style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                                color: Theme.of(context).colorScheme.onPrimary,
+                      ],
+                    ),
+                    const SizedBox(height: 8),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'Order #${order.id}',
+                                style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                                      fontWeight: FontWeight.bold,
+                                    ),
                               ),
+                              Text('Total: €${order.totalCost.toStringAsFixed(2)}'),
+                              Text('Date: ${order.createdAt.toLocal().toString().split(' ')[0]}'),
+                              Text('Items: ${order.dishes.length}'),
+                              if (order.pickupTime != null)
+                                Text('Pickup: ${_formatPickupTime(order.pickupTime!)}'),
+                              if (order.note != null && order.note!.isNotEmpty)
+                                Text('Note: ${order.note}'),
+                            ],
+                          ),
                         ),
-                      ),
-                      const Spacer(),
-                      Icon(
-                        isExpanded ? Icons.expand_less : Icons.expand_more,
-                        color: Theme.of(context).colorScheme.primary,
-                      ),
+                        const Spacer(),
+                        Icon(
+                          isExpanded ? Icons.expand_less : Icons.expand_more,
+                          color: Theme.of(context).colorScheme.primary,
+                        ),
+                      ],
+                    ),
+                    if (isExpanded) ...[
+                      const Divider(),
+                      ...order.dishes.map((dish) => Padding(
+                        padding: const EdgeInsets.only(bottom: 4),
+                        child: Text('${dish.quantity}x ${dish.dish.nome} - €${dish.subtotal.toStringAsFixed(2)}'),
+                      )),
+                      _buildStatusProgressBar(order.status),
                     ],
-                  ),
-                  if (isExpanded) ...[
-                    const Divider(),
-                    ...order.dishes.map((dish) => Padding(
-                      padding: const EdgeInsets.only(bottom: 4),
-                      child: Text('${dish.quantity}x ${dish.dish.nome} - €${dish.subtotal.toStringAsFixed(2)}'),
-                    )),
-                    _buildStatusProgressBar(order.status),
                   ],
-                ],
+                ),
               ),
             ),
-          ),
-        );
-
-        if (order.status == 'cancelled' || order.status == 'completed') {
-          return Dismissible(
-            key: Key(order.id.toString()),
-            direction: DismissDirection.endToStart,
-            background: Container(
-              alignment: Alignment.centerRight,
-              padding: const EdgeInsets.only(right: 20),
-              color: Colors.red,
-              child: const Icon(Icons.delete, color: Colors.white),
-            ),
-            onDismissed: (direction) => _dismissOrder(order.id),
-            child: card,
           );
-        }
 
-        return card;
-      },
+          if (order.status == 'cancelled' || order.status == 'completed') {
+            return Dismissible(
+              key: Key(order.id.toString()),
+              direction: DismissDirection.endToStart,
+              background: Container(
+                alignment: Alignment.centerRight,
+                padding: const EdgeInsets.only(right: 20),
+                color: Colors.red,
+                child: const Icon(Icons.delete, color: Colors.white),
+              ),
+              onDismissed: (direction) => context.read<OrderCubit>().deleteOrder(order.id),
+              child: card,
+            );
+          }
+
+          return card;
+        },
+      ),
     );
   }
 
@@ -399,11 +422,9 @@ class _OrderPageState extends State<OrderPage> with WidgetsBindingObserver {
         } else if (state is OrderSuccess) {
           final orders = state.orders;
           _allOrders = List.from(orders);
-          final filtered = _filterAndSort(_allOrders.where((o) => !_dismissedOrderIds.contains(o.id)).toList());
+          final filtered = _filterAndSort(_allOrders);
           return Scaffold(
-            appBar: AppBar(
-              title: const Text('Orders'),
-            ),
+            
             floatingActionButton: FloatingActionButton(
               onPressed: () {
                 context.push('/order/create');
@@ -432,7 +453,7 @@ class _OrderPageState extends State<OrderPage> with WidgetsBindingObserver {
                   ),
                   const SizedBox(height: 8),
                   Text(
-                    state.error,
+                    _getErrorMessage(state.error, AppLocalizations.of(context)!),
                     style: Theme.of(context).textTheme.bodyMedium,
                     textAlign: TextAlign.center,
                   ),

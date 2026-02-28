@@ -76,14 +76,31 @@ class AppTheme {
         shape: CircleBorder(),
         elevation: 0,
       ),
+      switchTheme: SwitchThemeData(
+        thumbColor: WidgetStateProperty.resolveWith((states) {
+          if (states.contains(WidgetState.disabled)) {
+            return AppColors.lightSecondaryAccent;
+          }
+          return AppColors.primaryDark;
+        }),
+        trackColor: WidgetStateProperty.resolveWith((states) {
+          if (states.contains(WidgetState.disabled)) {
+            return AppColors.lightSecondaryAccent.withValues(alpha: 0.5);
+          }
+          return AppColors.primaryDark.withValues(alpha: 0.5);
+        }),
+      ),
       appBarTheme: AppBarThemeData(
         backgroundColor: AppColors.lightBackground,
+        elevation: 0,
+        scrolledUnderElevation: 0,
+        shadowColor: Colors.black26,
         titleTextStyle: TextStyle(
           color: AppColors.lightTextHeadings,
           fontWeight: FontWeight.bold,
-          fontSize: 16, // Reduced for better proportion
+          fontSize: 16,
         ),
-      )
+      ),
     );
   }
 
@@ -159,12 +176,31 @@ class AppTheme {
         shape: CircleBorder(),
         elevation: 0,
       ),
+      switchTheme: SwitchThemeData(
+        thumbColor: WidgetStateProperty.resolveWith((states) {
+          if (states.contains(WidgetState.disabled)) {
+            return AppColors.darkTextBody;
+          }
+          return AppColors.primary;
+        }),
+        trackColor: WidgetStateProperty.resolveWith((states) {
+          if (states.contains(WidgetState.disabled)) {
+            return AppColors.darkTextBody.withValues(alpha: 0.5);
+          }
+          return AppColors.primary.withValues(alpha: 0.5);
+        }),
+      ),
       appBarTheme: AppBarThemeData(
-        backgroundColor: AppColors.darkBackground,
+        backgroundColor: AppColors.darkBackground  ,
+        
+        
+        scrolledUnderElevation: 0,
+        shadowColor: AppColors.lightTextBody,
+        
         titleTextStyle: TextStyle(
-          color: AppColors.darkTextHeadings,
+          color: AppColors.balanceIconBackground,
           fontWeight: FontWeight.bold,
-          fontSize: 16, // Reduced from 19
+          fontSize: 16,
         ),
       ),
     );

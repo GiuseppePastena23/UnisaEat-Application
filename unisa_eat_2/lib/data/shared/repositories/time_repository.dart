@@ -18,7 +18,7 @@ class TimeRepositoryImpl implements TimeRepository {
           DateTime serverTime = DateTime.parse(data['server_time']);
           return Right(serverTime);
         } catch (e) {
-          return Left(ApiError(message: 'Invalid server time format'));
+          return Left(ApiError(type: ErrorType.validation));
         }
       },
     );

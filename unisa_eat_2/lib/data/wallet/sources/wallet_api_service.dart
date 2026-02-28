@@ -20,7 +20,7 @@ class WalletApiServiceImpl extends WalletApiService {
       var response = await sl<DioClient>().get(ApiUrl.getBalance);
       return Right(response.data);
     } on DioException catch (e) {
-      return Left(ApiError.fromDioException(e.response?.data ?? e.message));
+      return Left(ApiError.fromDioException(e));
     }
   }
 
@@ -30,7 +30,7 @@ class WalletApiServiceImpl extends WalletApiService {
       var response = await sl<DioClient>().get(ApiUrl.getTransactions);
       return Right(response.data);
     } on DioException catch (e) {
-      return Left(ApiError.fromDioException(e.response?.data ?? e.message));
+      return Left(ApiError.fromDioException(e));
     }
   }
 
@@ -43,7 +43,7 @@ class WalletApiServiceImpl extends WalletApiService {
       );
       return Right(response.data);
     } on DioException catch (e) {
-      return Left(ApiError.fromDioException(e.response?.data ?? e.message));
+      return Left(ApiError.fromDioException(e));
     }
   }
 }

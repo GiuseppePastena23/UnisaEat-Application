@@ -99,19 +99,14 @@ class _ProfileAppBarState extends State<ProfileAppBar> {
 
   
 
-  // Profile section
+  // Profile section - no longer navigates to profile
   Widget _buildProfileSection(BuildContext context, UserProfileSuccess state) {
-    return GestureDetector(
-      onTap: () {
-        context.go('/profile');
-      },
-      child: Row(
-        children: [
-           _buildUserAvatar(context, state),
-          const SizedBox(width: 12),
-           _buildUserInfo(context, state),
-        ],
-      ),
+    return Row(
+      children: [
+        _buildUserAvatar(context, state),
+        const SizedBox(width: 12),
+        _buildUserInfo(context, state),
+      ],
     );
   }
 

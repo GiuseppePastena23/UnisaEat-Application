@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:unisa_eat_2/core/models/api_error.dart';
 import 'package:unisa_eat_2/data/auth/models/register_params.dart';
+import 'package:unisa_eat_2/l10n/app_localizations.dart';
 import 'package:unisa_eat_2/presentation/auth/bloc/login_cubit.dart';
 
 class SignupPage extends StatefulWidget {
@@ -20,6 +22,28 @@ class _SignupPageState extends State<SignupPage> {
   final _lastNameController = TextEditingController();
   final _fiscalCodeController = TextEditingController();
   final _phoneController = TextEditingController();
+  final _birthdateController = TextEditingController();
+  
+  bool _passwordVisible = false;
+  bool _password2Visible = false;
+  DateTime? _selectedBirthdate;
+
+  String _getErrorMessage(ApiError error, AppLocalizations l10n) {
+    switch (error.type) {
+      case ErrorType.network:
+        return l10n.error_network;
+      case ErrorType.server:
+        return l10n.error_server;
+      case ErrorType.auth:
+        return l10n.error_auth;
+      case ErrorType.validation:
+        return l10n.error_validation;
+      case ErrorType.balance:
+        return l10n.error_balance;
+      case ErrorType.unknown:
+        return l10n.error_unknown;
+    }
+  }
 
   @override
   void dispose() {
@@ -30,92 +54,258 @@ class _SignupPageState extends State<SignupPage> {
     _lastNameController.dispose();
     _fiscalCodeController.dispose();
     _phoneController.dispose();
+    _birthdateController.dispose();
     super.dispose();
+  }
+
+  Future<void> _selectBirthdate() async {
+    final l10n = AppLocalizations.of(context)!;
+    final now = DateTime.now();
+    final picked = await showDatePicker(
+      context: context,
+      initialDate: DateTime(now.year - 18, now.month, now.day),
+      firstDate: DateTime(1900),
+      lastDate: now,
+      helpText: l10n.birthdate,
+    );
+    if (picked != null) {
+      setState(() {
+        _selectedBirthdate = picked;
+        _birthdateController.text = '${picked.day.toString().padLeft(2, '0')}-${picked.month.toString().padLeft(2, '0')}-${picked.year}';
+      });
+    }
+  }
+
+  String? _validateEmail(String? value, AppLocalizations l10n) {
+    if (value == null || value.trim().isEmpty) return l10n.field_required;
+    final emailRegex = RegExp(r'^[^@]+@[^@]+\.[^@]+$');
+    if (!emailRegex.hasMatch(value.trim())) return l10n.email_invalid;
+    return null;
+  }
+
+  String? _validatePassword(String? value, AppLocalizations l10n) {
+    if (value == null || value.isEmpty) return l10n.field_required;
+    if (value.length < 8) return l10n.password_too_short;
+    return null;
+  }
+
+  String? _validatePassword2(String? value, AppLocalizations l10n) {
+    if (value == null || value.isEmpty) return l10n.field_required;
+    if (value != _passwordController.text) return l10n.passwords_not_match;
+    return null;
+  }
+
+  String? _validateRequired(String? value, AppLocalizations l10n) {
+    if (value == null || value.trim().isEmpty) return l10n.field_required;
+    return null;
+  }
+
+  String? _validatePhone(String? value, AppLocalizations l10n) {
+    if (value == null || value.trim().isEmpty) return l10n.field_required;
+    final phoneRegex = RegExp(r'^\+?[0-9]{8,15}$');
+    if (!phoneRegex.hasMatch(value.trim())) return l10n.phone_invalid;
+    return null;
+  }
+
+  String? _validateFiscalCode(String? value, AppLocalizations l10n) {
+    if (value == null || value.trim().isEmpty) return l10n.field_required;
+    if (value.trim().length != 16) return l10n.fiscal_code_invalid;
+    return null;
+  }
+
+  String? _validateBirthdate(String? value, AppLocalizations l10n) {
+    if (value == null || value.trim().isEmpty) return l10n.birthdate_required;
+    return null;
   }
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Scaffold(
-      appBar: AppBar(title: const Text('Sign Up')),
+      appBar: AppBar(
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () => context.go('/login'),
+        ),
+        title: Text(l10n.sign_up),
+      ),
       body: BlocListener<LoginCubit, LoginState>(
         listener: (context, state) {
           if (state is RegisterSuccess) {
             ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text('Registration successful! Please login.')),
+              SnackBar(content: Text('Registration successful! Please login.')),
             );
             context.go('/login');
           } else if (state is LoginFailure) {
             ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text(state.error.message)),
+              SnackBar(content: Text(_getErrorMessage(state.error, l10n))),
             );
           }
         },
-        child:         BlocBuilder<LoginCubit, LoginState>(
+        child: BlocBuilder<LoginCubit, LoginState>(
           builder: (context, state) {
-            return Padding(
-              padding: const EdgeInsets.all(16.0),
+            return SingleChildScrollView(
+              padding: const EdgeInsets.all(24.0),
               child: Form(
                 key: _formKey,
-                child: ListView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                     TextFormField(
-                       controller: _emailController,
-                       decoration: const InputDecoration(labelText: 'Email'),
-                       validator: (value) {
-                         if (value == null || value.trim().isEmpty) return 'Enter email';
-                         final emailRegex = RegExp(r'^[^@]+@[^@]+\.[^@]+$');
-                         if (!emailRegex.hasMatch(value.trim())) return 'Enter a valid email address';
-                         return null;
-                       },
-                     ),
-                    const SizedBox(height: 16),
                     TextFormField(
-                      controller: _firstNameController,
-                      decoration: const InputDecoration(labelText: 'First Name'),
-                      validator: (value) => value!.isEmpty ? 'Enter first name' : null,
+                      controller: _emailController,
+                      decoration: InputDecoration(
+                        labelText: l10n.email_label,
+                        prefixIcon: const Icon(Icons.email_outlined),
+                        border: const OutlineInputBorder(),
+                      ),
+                      keyboardType: TextInputType.emailAddress,
+                      autovalidateMode: AutovalidateMode.onUserInteraction,
+                      validator: (value) => _validateEmail(value, l10n),
                     ),
                     const SizedBox(height: 16),
-                    TextFormField(
-                      controller: _lastNameController,
-                      decoration: const InputDecoration(labelText: 'Last Name'),
-                      validator: (value) => value!.isEmpty ? 'Enter last name' : null,
+                    Row(
+                      children: [
+                        Expanded(
+                          child: TextFormField(
+                            controller: _firstNameController,
+                            decoration: InputDecoration(
+                              labelText: 'Nome',
+                              prefixIcon: const Icon(Icons.person_outline),
+                              border: const OutlineInputBorder(),
+                            ),
+                            autovalidateMode: AutovalidateMode.onUserInteraction,
+                            validator: (value) => _validateRequired(value, l10n),
+                          ),
+                        ),
+                        const SizedBox(width: 12),
+                        Expanded(
+                          child: TextFormField(
+                            controller: _lastNameController,
+                            decoration: InputDecoration(
+                              labelText: 'Cognome',
+                              prefixIcon: const Icon(Icons.person_outline),
+                              border: const OutlineInputBorder(),
+                            ),
+                            autovalidateMode: AutovalidateMode.onUserInteraction,
+                            validator: (value) => _validateRequired(value, l10n),
+                          ),
+                        ),
+                      ],
                     ),
                     const SizedBox(height: 16),
                     TextFormField(
                       controller: _fiscalCodeController,
-                      decoration: const InputDecoration(labelText: 'Fiscal Code'),
-                      validator: (value) => value!.isEmpty ? 'Enter fiscal code' : null,
+                      decoration: InputDecoration(
+                        labelText: 'Codice Fiscale',
+                        prefixIcon: const Icon(Icons.badge_outlined),
+                        border: const OutlineInputBorder(),
+                      ),
+                      textCapitalization: TextCapitalization.characters,
+                      autovalidateMode: AutovalidateMode.onUserInteraction,
+                      validator: (value) => _validateFiscalCode(value, l10n),
                     ),
                     const SizedBox(height: 16),
                     TextFormField(
                       controller: _phoneController,
-                      decoration: const InputDecoration(labelText: 'Phone'),
-                      validator: (value) => value!.isEmpty ? 'Enter phone' : null,
+                      decoration: InputDecoration(
+                        labelText: 'Numero di telefono',
+                        prefixIcon: const Icon(Icons.phone_outlined),
+                        border: const OutlineInputBorder(),
+                      ),
+                      keyboardType: TextInputType.phone,
+                      autovalidateMode: AutovalidateMode.onUserInteraction,
+                      validator: (value) => _validatePhone(value, l10n),
+                    ),
+                    const SizedBox(height: 16),
+                    TextFormField(
+                      controller: _birthdateController,
+                      readOnly: true,
+                      onTap: _selectBirthdate,
+                      decoration: InputDecoration(
+                        labelText: l10n.birthdate,
+                        prefixIcon: const Icon(Icons.calendar_today_outlined),
+                        border: const OutlineInputBorder(),
+                        suffixIcon: const Icon(Icons.arrow_drop_down),
+                      ),
+                      autovalidateMode: AutovalidateMode.onUserInteraction,
+                      validator: (value) => _validateBirthdate(value, l10n),
                     ),
                     const SizedBox(height: 16),
                     TextFormField(
                       controller: _passwordController,
-                      decoration: const InputDecoration(labelText: 'Password'),
-                      obscureText: true,
-                      validator: (value) => value!.length < 8 ? 'Password too short' : null,
+                      obscureText: !_passwordVisible,
+                      decoration: InputDecoration(
+                        labelText: l10n.password_label,
+                        prefixIcon: const Icon(Icons.lock_outline),
+                        border: const OutlineInputBorder(),
+                        suffixIcon: IconButton(
+                          icon: Icon(
+                            _passwordVisible ? Icons.visibility_off : Icons.visibility,
+                          ),
+                          onPressed: () {
+                            setState(() {
+                              _passwordVisible = !_passwordVisible;
+                            });
+                          },
+                        ),
+                      ),
+                      autovalidateMode: AutovalidateMode.onUserInteraction,
+                      validator: (value) => _validatePassword(value, l10n),
                     ),
                     const SizedBox(height: 16),
                     TextFormField(
                       controller: _password2Controller,
-                      decoration: const InputDecoration(labelText: 'Confirm Password'),
-                      obscureText: true,
-                      validator: (value) => value != _passwordController.text ? 'Passwords do not match' : null,
+                      obscureText: !_password2Visible,
+                      decoration: InputDecoration(
+                        labelText: 'Conferma Password',
+                        prefixIcon: const Icon(Icons.lock_outline),
+                        border: const OutlineInputBorder(),
+                        suffixIcon: IconButton(
+                          icon: Icon(
+                            _password2Visible ? Icons.visibility_off : Icons.visibility,
+                          ),
+                          onPressed: () {
+                            setState(() {
+                              _password2Visible = !_password2Visible;
+                            });
+                          },
+                        ),
+                      ),
+                      autovalidateMode: AutovalidateMode.onUserInteraction,
+                      validator: (value) => _validatePassword2(value, l10n),
                     ),
                     const SizedBox(height: 32),
                     state is LoginLoading
-                        ? const CircularProgressIndicator()
+                        ? const Center(child: CircularProgressIndicator())
                         : ElevatedButton(
                             onPressed: _register,
-                            child: const Text('Sign Up'),
+                            style: ElevatedButton.styleFrom(
+                              padding: const EdgeInsets.symmetric(vertical: 16),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                            ),
+                            child: Text(
+                              l10n.sign_up,
+                              style: const TextStyle(fontSize: 16),
+                            ),
                           ),
-                    TextButton(
-                      onPressed: () => context.go('/login'),
-                      child: const Text('Already have an account? Login'),
+                    const SizedBox(height: 16),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(l10n.already_have_account),
+                        TextButton(
+                          onPressed: () => context.go('/login'),
+                          child: Text(
+                            l10n.sign_up,
+                            style: TextStyle(
+                              color: Theme.of(context).colorScheme.primary,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                   ],
                 ),
@@ -137,6 +327,7 @@ class _SignupPageState extends State<SignupPage> {
         lastName: _lastNameController.text,
         fiscalCode: _fiscalCodeController.text,
         phone: _phoneController.text,
+        birthdate: _birthdateController.text,
       );
       context.read<LoginCubit>().register(params);
     }

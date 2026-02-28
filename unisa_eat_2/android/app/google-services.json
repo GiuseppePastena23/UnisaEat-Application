@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "366703206265",
+    "project_id": "unisaeat2",
+    "storage_bucket": "unisaeat2.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:366703206265:android:61a54ef3d278b941b0d9a8",
+        "android_client_info": {
+          "package_name": "com.unisaeat.app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCl07k16B3-7EdCvzdYX7_HWPJPxi-oLAs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

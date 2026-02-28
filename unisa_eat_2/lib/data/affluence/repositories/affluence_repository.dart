@@ -1,9 +1,10 @@
 import 'package:dartz/dartz.dart';
+import 'package:unisa_eat_2/core/models/api_error.dart';
 import 'package:unisa_eat_2/data/affluence/models/affluence_model.dart';
 import 'package:unisa_eat_2/data/affluence/sources/affluence_api_service.dart';
 
 abstract class AffluenceRepository {
-  Future<Either<String, AffluenceModel>> getAffluence();
+  Future<Either<ApiError, AffluenceModel>> getAffluence();
 }
 
 class AffluenceRepositoryImpl implements AffluenceRepository {
@@ -12,7 +13,7 @@ class AffluenceRepositoryImpl implements AffluenceRepository {
   AffluenceRepositoryImpl(this.apiService);
 
   @override
-  Future<Either<String, AffluenceModel>> getAffluence() async {
+  Future<Either<ApiError, AffluenceModel>> getAffluence() async {
     return await apiService.getAffluence();
   }
 }

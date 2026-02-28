@@ -10,6 +10,8 @@ class ApiUrl {
   static const createPaymentIntent = 'api/payments/create-payment-intent/';
   static const getServerTime = 'api/time/';
   static const affluence = 'api/affluence/';
+  static const feedback = 'api/feedback/';
+  static const faqs = 'api/faqs/';
 
   static String getMenuByDate(String date) {
     return 'api/menus/by-date/?date=$date';

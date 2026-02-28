@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:local_auth/local_auth.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:unisa_eat_2/core/configs/localization/locale_cubit.dart';
@@ -13,6 +14,9 @@ import 'package:unisa_eat_2/presentation/shared/bloc/user_profile_state.dart';
 import 'package:unisa_eat_2/presentation/shared/widget/custom_card.dart';
 import 'package:unisa_eat_2/service_locator.dart';
 import 'package:unisa_eat_2/core/services/time_service.dart';
+import 'package:unisa_eat_2/presentation/notification/bloc/notification_cubit.dart';
+import 'package:unisa_eat_2/presentation/notification/bloc/notification_state.dart';
+import 'package:unisa_eat_2/data/notification/sources/notification_api_service.dart';
 
 
 class SettingsPage extends StatefulWidget {
@@ -67,9 +71,13 @@ class _SettingsPageState extends State<SettingsPage> {
                           ),
                         ),
                         const SizedBox(height: 8),
-                        _infoRow(context, Icons.email, 'Email', profileState.user.email.toString()),
+                        _infoRow(context, Icons.email, l10n.email_label, profileState.user.email.toString()),
                         const SizedBox(height: 8),
                         _infoRow(context, Icons.badge, 'Codice Fiscale', profileState.user.codiceFiscale.toString()),
+                        if (profileState.user.phone != null && profileState.user.phone!.isNotEmpty) ...[
+                          const SizedBox(height: 8),
+                          _infoRow(context, Icons.phone, l10n.phone_number, profileState.user.phone.toString()),
+                        ],
                         const SizedBox(height: 16),
                         ElevatedButton(
                           onPressed: () {
@@ -85,13 +93,13 @@ class _SettingsPageState extends State<SettingsPage> {
                       ] else if (profileState is UserProfileLoading) ...[
                         const Center(child: CircularProgressIndicator()),
                       ] else if (profileState is UserProfileFailure) ...[
-                        const Center(child: Text('Error loading profile')),
+                        Center(child: Text(l10n.error_loading)),
                         ElevatedButton(
                           onPressed: () => context.read<UserProfileCubit>().getUser(),
-                          child: const Text('Retry'),
+                          child: Text(l10n.retry),
                         ),
                       ] else ...[
-                        const Center(child: Text('No profile data')),
+                        Center(child: Text(l10n.error_loading)),
                       ],
                     ],
                   ),
@@ -194,7 +202,7 @@ class _SettingsPageState extends State<SettingsPage> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Biometric Login',
+                        l10n.enable_biometric,
                         style: Theme.of(context).textTheme.headlineSmall,
                       ),
                       const SizedBox(height: 16),
@@ -212,18 +220,151 @@ class _SettingsPageState extends State<SettingsPage> {
                                   return const CircularProgressIndicator();
                                 }
                                 return SwitchListTile(
-                                  title: const Text('Enable Biometric Login'),
+                                  title: Text(l10n.enable_biometric),
                                   value: enabledSnapshot.data ?? false,
                                   onChanged: (value) async {
                                     await _setBiometricEnabled(value);
                                     setState(() {});
                                   },
+                                  contentPadding: EdgeInsets.zero,
                                 );
                               },
                             );
                           } else {
-                            return const Text('Biometric authentication not available on this device');
+                            return Text(l10n.biometric_not_available);
                           }
+                        },
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              const SizedBox(height: 16),
+              // Notification Section
+              CustomCard(
+                child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        l10n.notificationSettings,
+                        style: Theme.of(context).textTheme.headlineSmall,
+                      ),
+                      const SizedBox(height: 8),
+                      BlocProvider(
+                        create: (context) => NotificationCubit(sl<NotificationApiService>())..loadPreferences(),
+                        child: BlocBuilder<NotificationCubit, NotificationState>(
+                          builder: (context, state) {
+                            if (state is NotificationPreferencesLoaded) {
+                              return Column(
+                                children: [
+                                  SwitchListTile(
+                                    title: Text(l10n.enable_notifications),
+                                    subtitle: Text(l10n.turn_on_notifications),
+                                    value: state.notificationsEnabled,
+                                    onChanged: (value) {
+                                      context.read<NotificationCubit>().setNotificationsEnabled(value);
+                                    },
+                                    contentPadding: EdgeInsets.zero,
+                                  ),
+                                  const Divider(),
+                                  _notificationToggle(
+                                    context,
+                                    l10n.low_balance_alerts,
+                                    l10n.balance_low_message,
+                                    state.lowBalanceAlerts,
+                                    state.notificationsEnabled,
+                                    (value) => context.read<NotificationCubit>().updatePreferences(lowBalanceAlerts: value),
+                                  ),
+                                  _notificationToggle(
+                                    context,
+                                    l10n.order_status_updates,
+                                    l10n.order_status_message,
+                                    state.orderStatusAlerts,
+                                    state.notificationsEnabled,
+                                    (value) => context.read<NotificationCubit>().updatePreferences(orderStatusAlerts: value),
+                                  ),
+                                  _notificationToggle(
+                                    context,
+                                    l10n.transaction_alerts,
+                                    l10n.transaction_message,
+                                    state.transactionAlerts,
+                                    state.notificationsEnabled,
+                                    (value) => context.read<NotificationCubit>().updatePreferences(transactionAlerts: value),
+                                  ),
+                                  _notificationToggle(
+                                    context,
+                                    l10n.canteen_open,
+                                    l10n.canteen_message,
+                                    state.canteenOpenAlerts,
+                                    state.notificationsEnabled,
+                                    (value) => context.read<NotificationCubit>().updatePreferences(canteenOpenAlerts: value),
+                                  ),
+                                  _notificationToggle(
+                                    context,
+                                    l10n.affluence_updates,
+                                    l10n.affluence_message,
+                                    state.affluenceAlerts,
+                                    state.notificationsEnabled,
+                                    (value) => context.read<NotificationCubit>().updatePreferences(affluenceAlerts: value),
+                                  ),
+                                ],
+                              );
+                            }
+                            if (state is NotificationLoading) {
+                              return const Center(child: CircularProgressIndicator());
+                            }
+                            if (state is NotificationError) {
+                              return Column(
+                                children: [
+                                  Text(state.message, style: const TextStyle(color: Colors.red)),
+                                  const SizedBox(height: 8),
+                                  ElevatedButton(
+                                    onPressed: () => context.read<NotificationCubit>().loadPreferences(),
+                                    child: Text(l10n.retry),
+                                  ),
+                                ],
+                              );
+                            }
+                            return const SizedBox.shrink();
+                          },
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              const SizedBox(height: 16),
+              // Help & Support Section
+              CustomCard(
+                child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        l10n.help_support,
+                        style: Theme.of(context).textTheme.headlineSmall,
+                      ),
+                      const SizedBox(height: 8),
+                      ListTile(
+                        leading: const Icon(Icons.help_outlined),
+                        title: Text(l10n.faq),
+                        trailing: const Icon(Icons.arrow_forward_ios, size: 16),
+                        contentPadding: EdgeInsets.zero,
+                        onTap: () {
+                          context.push('/settings/faq');
+                        },
+                      ),
+                      const Divider(),
+                      ListTile(
+                        leading: const Icon(Icons.feedback_outlined),
+                        title: Text(l10n.send_feedback),
+                        trailing: const Icon(Icons.arrow_forward_ios, size: 16),
+                        contentPadding: EdgeInsets.zero,
+                        onTap: () {
+                          context.push('/settings/feedback');
                         },
                       ),
                     ],
@@ -247,15 +388,15 @@ class _SettingsPageState extends State<SettingsPage> {
                         ),
                         const SizedBox(height: 16),
                         SwitchListTile(
-                          title: const Text('Bypass Time Restrictions'),
-                          subtitle: const Text('Allow ordering anytime'),
-                          value: true, // Always on in debug
-                          onChanged: null, // Disabled, always enabled
+                          title: Text(l10n.bypass_time),
+                          subtitle: Text(l10n.bypass_message),
+                          value: true,
+                          onChanged: null,
                         ),
                         const SizedBox(height: 8),
                         ElevatedButton(
                           onPressed: _showDebugInfo,
-                          child: const Text('Show Debug Info'),
+                          child: Text(l10n.show_debug_info),
                         ),
                         const SizedBox(height: 8),
                          Text(
@@ -313,11 +454,12 @@ class _SettingsPageState extends State<SettingsPage> {
   }
 
   void _showDebugInfo() {
+    final l10n = AppLocalizations.of(context)!;
     final now = sl<TimeService>().now();
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Debug Information'),
+        title: Text(l10n.debug_info),
         content: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -359,7 +501,7 @@ class _SettingsPageState extends State<SettingsPage> {
         actions: [
           TextButton(
             onPressed: () => Navigator.of(context).pop(),
-            child: const Text('Close'),
+            child: Text(l10n.close),
           ),
         ],
       ),
@@ -411,5 +553,22 @@ class _SettingsPageState extends State<SettingsPage> {
       case ThemeMode.system:
         return 'System';
     }
+  }
+
+  Widget _notificationToggle(
+    BuildContext context,
+    String title,
+    String subtitle,
+    bool value,
+    bool enabled,
+    Function(bool) onChanged,
+  ) {
+    return SwitchListTile(
+      title: Text(title),
+      subtitle: Text(subtitle, style: const TextStyle(fontSize: 12)),
+      value: value,
+      onChanged: enabled ? onChanged : null,
+      contentPadding: EdgeInsets.zero,
+    );
   }
 }

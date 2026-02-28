@@ -1,5 +1,6 @@
 import 'package:dartz/dartz.dart';
 import 'package:unisa_eat_2/common/helper/mapper/menu_mapper.dart';
+import 'package:unisa_eat_2/core/models/api_error.dart';
 import 'package:unisa_eat_2/data/menu/models/menu_model.dart';
 import 'package:unisa_eat_2/data/menu/sources/menu_api_service.dart';
 import 'package:unisa_eat_2/domain/menu/repository/menu_repository.dart';
@@ -17,7 +18,7 @@ class MenuRepositoryImpl extends MenuRepository {
           final menu = MenuMapper.toEntity(MenuModel.fromJson(data[0]));
           return Right(menu);
         } else {
-          return Left('No menu found for this date');
+          return Left(ApiError(type: ErrorType.validation, details: {'message': 'No menu found for this date'}));
         }
       }
     );

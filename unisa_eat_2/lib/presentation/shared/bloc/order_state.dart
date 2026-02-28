@@ -1,3 +1,4 @@
+import 'package:unisa_eat_2/core/models/api_error.dart';
 import 'package:unisa_eat_2/domain/order/entities/order_entity.dart';
 
 abstract class OrderState {}
@@ -12,7 +13,7 @@ class OrderSuccess extends OrderState {
 }
 
 class OrderFailure extends OrderState {
-  final String error;
+  final ApiError error;
   OrderFailure(this.error);
 }
 

@@ -13,7 +13,7 @@ class TimeService {
       var result = await sl<GetServerTimeUsecase>().call();
       return result.fold(
         (error) {
-          logger.e('Failed to sync server time: ${error.message}');
+          logger.e('Failed to sync server time: ${error.type}');
           return false;
         },
         (serverTime) {

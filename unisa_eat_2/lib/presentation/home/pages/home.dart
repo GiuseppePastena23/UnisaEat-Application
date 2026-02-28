@@ -52,18 +52,14 @@ class _HomePageState extends State<HomePage> {
                   style: Theme.of(context).textTheme.headlineMedium,
                 ),
                 const SizedBox(height: 10),
-                TappableImageCard(assetImagePath: AppImages.todayMenuImage, overlayText: l10n.todays_menu, routePath: '/menu', subtitleText: l10n.tap_to_see_cooking),
-                const SizedBox(height: 10),
-                Align(
-                  alignment: Alignment.centerRight,
-                  child: Text(
-                    l10n.cafeteria_status,
-                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
+                TappableImageCard(
+                  assetImagePath: AppImages.todayMenuImage, 
+                  overlayText: l10n.todays_menu, 
+                  routePath: '/menu', 
+                  subtitleText: l10n.tap_to_see_cooking,
+                  elevation: 4,
                 ),
-                const SizedBox(height: 8),
+                const SizedBox(height: 10),
                 const AffluenceCard(),
                 const SizedBox(height: 10),
                 Row(
@@ -72,8 +68,10 @@ class _HomePageState extends State<HomePage> {
                       child: ElevatedButton(
                         onPressed: () => context.push('/wallet/add-funds'),
                         style: ElevatedButton.styleFrom(
+                          
                           padding: const EdgeInsets.symmetric(vertical: 30),
                           shape: RoundedRectangleBorder(
+                            
                             borderRadius: BorderRadius.circular(12),
                           ),
                         ),

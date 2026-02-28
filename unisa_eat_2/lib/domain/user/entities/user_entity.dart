@@ -15,13 +15,17 @@ class UserEntity {
   String? nome;
   @HiveField(4)
   double? saldo;
+  @HiveField(5)
+  String? phone;
+  @HiveField(6)
+  String? birthdate;
 
 
   UserEntity(
-      {this.codiceFiscale, this.cognome, this.email, this.nome, this.saldo});
+      {this.codiceFiscale, this.cognome, this.email, this.nome, this.saldo, this.phone, this.birthdate});
 
   @override
   String toString() {
-    return 'UserEntity{codiceFiscale: $codiceFiscale, cognome: $cognome, email: $email, nome: $nome, saldo: $saldo}';
+    return 'UserEntity{codiceFiscale: $codiceFiscale, cognome: $cognome, email: $email, nome: $nome, saldo: $saldo, phone: $phone, birthdate: $birthdate}';
   }
 }

@@ -16,7 +16,7 @@ class HomeApiServiceImpl extends HomeApiService {
       var response = await sl<DioClient>().get(ApiUrl.getQrcode);
       return Right(response.data);
     } on DioException catch (e) {
-      return Left(ApiError.fromDioException(e.response?.data ?? e.message));
+      return Left(ApiError.fromDioException(e));
     }
   }
 }

@@ -2,13 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:unisa_eat_2/core/models/api_error.dart';
 import 'package:unisa_eat_2/data/order/models/dish_selection_model.dart';
 import 'package:unisa_eat_2/domain/menu/entity/piatto_entity.dart';
 import 'package:unisa_eat_2/domain/menu/usecases/get_dishes_usecase.dart';
 import 'package:unisa_eat_2/domain/menu/usecases/get_menu_by_date_usecase.dart';
+import 'package:unisa_eat_2/l10n/app_localizations.dart';
 import 'package:unisa_eat_2/presentation/shared/bloc/order_cubit.dart';
 import 'package:unisa_eat_2/presentation/shared/bloc/order_state.dart';
+import 'package:unisa_eat_2/presentation/shared/bloc/user_profile_cubit.dart';
 import 'package:unisa_eat_2/presentation/shared/widget/custom_card.dart';
+import 'package:unisa_eat_2/presentation/wallet/bloc/wallet_cubit.dart';
 import 'package:unisa_eat_2/service_locator.dart';
 import 'package:unisa_eat_2/core/services/time_service.dart';
 
@@ -20,10 +24,30 @@ class OrderCreationScreen extends StatefulWidget {
 }
 
 class _OrderCreationScreenState extends State<OrderCreationScreen> with TickerProviderStateMixin {
-  late TabController _tabController;
-  final List<DishSelection> _cartItems = [];
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController _noteController = TextEditingController();
+  final Map<int, int> _quantities = {};
+  final Map<int, DateTime?> _pickupTimes = {};
+  late TabController _tabController;
+  late List<DishSelection> _cartItems;
   bool _debugMode = false;
+
+  String _getErrorMessage(ApiError error, AppLocalizations l10n) {
+    switch (error.type) {
+      case ErrorType.network:
+        return l10n.error_network;
+      case ErrorType.server:
+        return l10n.error_server;
+      case ErrorType.auth:
+        return l10n.error_auth;
+      case ErrorType.validation:
+        return l10n.error_validation;
+      case ErrorType.balance:
+        return l10n.error_balance;
+      case ErrorType.unknown:
+        return l10n.error_unknown;
+    }
+  }
 
   List<DishSelection> _menuDishes = [];
   List<DishSelection> _exclusiveDishes = [];
@@ -35,6 +59,7 @@ class _OrderCreationScreenState extends State<OrderCreationScreen> with TickerPr
   void initState() {
     super.initState();
     _tabController = TabController(length: 2, vsync: this);
+    _cartItems = [];
     _loadDishes();
     _loadDebugMode();
     // Set default pickup time to 12:00
@@ -54,24 +79,34 @@ class _OrderCreationScreenState extends State<OrderCreationScreen> with TickerPr
     final today = DateTime(now.year, now.month, now.day);
     List<DateTime> times = [];
 
-    // Calculate start time: now + 15 minutes, rounded up to next 15-minute boundary
-    DateTime startTime = now.add(const Duration(minutes: 15));
-    int startTotalMin = startTime.hour * 60 + startTime.minute;
-    int roundedMin = ((startTotalMin + 14) ~/ 15) * 15;
-    int startHour = roundedMin ~/ 60;
-    int startMinute = roundedMin % 60;
+    if (_debugMode) {
+      // In DEBUG MODE, show all times from 12:00 to 15:00 for testing
+      DateTime currentTime = DateTime(today.year, today.month, today.day, 12, 0);
+      while (currentTime.hour < 15 || (currentTime.hour == 15 && currentTime.minute == 0)) {
+        times.add(currentTime);
+        currentTime = currentTime.add(const Duration(minutes: 15));
+        if (currentTime.hour > 15) break;
+      }
+    } else {
+      // Calculate start time: now + 15 minutes, rounded up to next 15-minute boundary
+      DateTime startTime = now.add(const Duration(minutes: 15));
+      int startTotalMin = startTime.hour * 60 + startTime.minute;
+      int roundedMin = ((startTotalMin + 14) ~/ 15) * 15;
+      int startHour = roundedMin ~/ 60;
+      int startMinute = roundedMin % 60;
 
-    DateTime currentTime = DateTime(today.year, today.month, today.day, startHour, startMinute);
+      DateTime currentTime = DateTime(today.year, today.month, today.day, startHour, startMinute);
 
-    // Ensure start time is not before 12:00
-    DateTime minTime = DateTime(today.year, today.month, today.day, 12, 0);
-    if (currentTime.isBefore(minTime)) currentTime = minTime;
+      // Ensure start time is not before 12:00
+      DateTime minTime = DateTime(today.year, today.month, today.day, 12, 0);
+      if (currentTime.isBefore(minTime)) currentTime = minTime;
 
-    // Generate times from start time to 15:00 in 15-minute intervals
-    while (currentTime.hour < 15 || (currentTime.hour == 15 && currentTime.minute == 0)) {
-      times.add(currentTime);
-      currentTime = currentTime.add(const Duration(minutes: 15));
-      if (currentTime.hour > 15) break;
+      // Generate times from start time to 15:00 in 15-minute intervals
+      while (currentTime.hour < 15 || (currentTime.hour == 15 && currentTime.minute == 0)) {
+        times.add(currentTime);
+        currentTime = currentTime.add(const Duration(minutes: 15));
+        if (currentTime.hour > 15) break;
+      }
     }
 
     return times;
@@ -85,7 +120,25 @@ class _OrderCreationScreenState extends State<OrderCreationScreen> with TickerPr
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text('Select Pickup Time'),
+          title: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text('Select Pickup Time'),
+              if (_debugMode)
+                Container(
+                  margin: const EdgeInsets.only(top: 4),
+                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                  decoration: BoxDecoration(
+                    color: Colors.red,
+                    borderRadius: BorderRadius.circular(4),
+                  ),
+                  child: const Text(
+                    'DEBUG MODE - All times available',
+                    style: TextStyle(color: Colors.white, fontSize: 10, fontWeight: FontWeight.bold),
+                  ),
+                ),
+            ],
+          ),
           content: SizedBox(
             width: double.maxFinite,
             height: 300,
@@ -298,23 +351,6 @@ class _OrderCreationScreenState extends State<OrderCreationScreen> with TickerPr
       }
     }
 
-    // Check if today is a weekday (Monday to Friday)
-    final now = sl<TimeService>().now();
-    if (now.weekday < 1 || now.weekday > 5) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Orders can only be placed on weekdays (Monday to Friday)')),
-      );
-      return;
-    }
-
-    // Check if current time is before 14:45
-    if ((now.hour == 14 && now.minute > 45) || now.hour > 14) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Orders can only be placed before 14:45')),
-      );
-      return;
-    }
-
     // Check if pickup time is selected
     if (_selectedPickupTime == null) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -447,10 +483,13 @@ class _OrderCreationScreenState extends State<OrderCreationScreen> with TickerPr
             const SnackBar(content: Text('Order created successfully!')),
           );
           context.read<OrderCubit>().getOrders(); // Refresh orders list
+          context.read<WalletCubit>().getData(); // Refresh wallet balance
+          context.read<UserProfileCubit>().getUser(forceRefresh: true); // Refresh user profile
           Navigator.of(context).pop();
         } else if (state is OrderFailure) {
+          final l10n = AppLocalizations.of(context)!;
           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('Failed to create order: ${state.error}')),
+            SnackBar(content: Text(_getErrorMessage(state.error, l10n))),
           );
         }
       },

@@ -16,7 +16,7 @@ class DishApiServiceImpl implements DishApiService {
       var response = await sl<DioClient>().get('${ApiUrl.baseURL}api/dishes/');
       return Right(response.data);
     } on DioException catch (e) {
-      return Left(ApiError.fromDioException(e.response?.data ?? e.message));
+      return Left(ApiError.fromDioException(e));
     }
   }
 }

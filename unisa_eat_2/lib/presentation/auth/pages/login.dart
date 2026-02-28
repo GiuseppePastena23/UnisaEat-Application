@@ -2,6 +2,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:unisa_eat_2/core/models/api_error.dart';
 import 'package:unisa_eat_2/data/auth/models/log_in_params.dart';
 import 'package:unisa_eat_2/l10n/app_localizations.dart';
 import 'package:unisa_eat_2/presentation/auth/bloc/login_cubit.dart';
@@ -20,6 +21,23 @@ class _LoginPageState extends State<LoginPage> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   bool _passwordVisible = false;
+
+  String _getErrorMessage(ApiError error, AppLocalizations l10n) {
+    switch (error.type) {
+      case ErrorType.network:
+        return l10n.error_network;
+      case ErrorType.server:
+        return l10n.error_server;
+      case ErrorType.auth:
+        return l10n.error_auth;
+      case ErrorType.validation:
+        return l10n.error_validation;
+      case ErrorType.balance:
+        return l10n.error_balance;
+      case ErrorType.unknown:
+        return l10n.error_unknown;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -40,8 +58,9 @@ class _LoginPageState extends State<LoginPage> {
             if (ModalRoute.of(context)?.canPop ?? false) {
               Navigator.of(context, rootNavigator: true).pop();
             }
+            final l10n = AppLocalizations.of(context)!;
             ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text(state.error.message)),
+              SnackBar(content: Text(_getErrorMessage(state.error, l10n))),
             );
            } else if (state is LoginSuccess) {
             // Dismiss loading dialog if present
@@ -84,9 +103,8 @@ class _LoginPageState extends State<LoginPage> {
   Widget _loginButton(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     return SizedBox(
-      width: 200,
+      width: double.infinity,
       height: 50,
-
       child: ElevatedButton(
         onPressed: () {
           if (_formKey.currentState!.validate()) {
@@ -99,23 +117,52 @@ class _LoginPageState extends State<LoginPage> {
           }
         },
         style: ElevatedButton.styleFrom(
+          backgroundColor: Theme.of(context).colorScheme.primary,
+          foregroundColor: Colors.white,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(10),
-        )),
-
-        child: Text(l10n.login_title, style: TextStyle(color: Theme.of(context).colorScheme.onPrimary)),
+          ),
+        ),
+        child: Text(l10n.login_title, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
       ),
     );
   }
 
   Widget _loginText() {
     final l10n = AppLocalizations.of(context)!;
-    return Text(
-      l10n.login_title,
-      style: TextStyle(
-        fontSize: 32,
-        fontWeight: FontWeight.bold,
-      ),
+    return Column(
+      children: [
+        Container(
+          width: 80,
+          height: 80,
+          decoration: BoxDecoration(
+            color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.1),
+            shape: BoxShape.circle,
+          ),
+          child: Icon(
+            Icons.restaurant_menu,
+            size: 40,
+            color: Theme.of(context).colorScheme.primary,
+          ),
+        ),
+        const SizedBox(height: 20),
+        Text(
+          'UnisaEat',
+          style: TextStyle(
+            fontSize: 32,
+            fontWeight: FontWeight.bold,
+            color: Theme.of(context).colorScheme.primary,
+          ),
+        ),
+        const SizedBox(height: 8),
+        Text(
+          l10n.login_title,
+          style: TextStyle(
+            fontSize: 20,
+            fontWeight: FontWeight.w500,
+          ),
+        ),
+      ],
     );
   }
 
@@ -125,12 +172,13 @@ class _LoginPageState extends State<LoginPage> {
       controller: _emailController,
       decoration: InputDecoration(
         labelText: l10n.email_label,
-        border: OutlineInputBorder(),
+        prefixIcon: const Icon(Icons.email_outlined),
+        border: const OutlineInputBorder(),
       ),
       validator: (value) {
-        if (value == null || value.trim().isEmpty) return 'Enter email';
+        if (value == null || value.trim().isEmpty) return l10n.field_required;
         final emailRegex = RegExp(r'^[^@]+@[^@]+\.[^@]+$');
-        if (!emailRegex.hasMatch(value.trim())) return 'Enter a valid email address';
+        if (!emailRegex.hasMatch(value.trim())) return l10n.email_invalid;
         return null;
       },
     );
@@ -143,10 +191,10 @@ class _LoginPageState extends State<LoginPage> {
       controller: _passwordController,
       decoration: InputDecoration(
         labelText: l10n.password_label,
-        border: OutlineInputBorder(),
-
+        prefixIcon: const Icon(Icons.lock_outline),
+        border: const OutlineInputBorder(),
       ),
-      validator: (value) => value == null || value.isEmpty ? 'Enter password' : null,
+      validator: (value) => value == null || value.isEmpty ? l10n.field_required : null,
     );
   }
 
@@ -170,16 +218,17 @@ class _LoginPageState extends State<LoginPage> {
     final l10n = AppLocalizations.of(context)!;
     return Text.rich(
       TextSpan(
-        text: l10n.dont_have_account,
+        text: '${l10n.dont_have_account} ',
         children: [
           TextSpan(
-
             text: l10n.sign_up,
-
+            style: TextStyle(
+              color: Theme.of(context).colorScheme.primary,
+              fontWeight: FontWeight.bold,
+            ),
             recognizer: TapGestureRecognizer()..onTap=(){
               context.go('/signup');
             }
-
           )
         ]
       )

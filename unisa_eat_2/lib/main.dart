@@ -9,6 +9,7 @@ import 'package:unisa_eat_2/core/configs/localization/locale_cubit.dart';
 import 'package:unisa_eat_2/core/configs/localization/supported_locales.dart';
 import 'package:unisa_eat_2/core/configs/theme/app_theme.dart';
 import 'package:unisa_eat_2/core/configs/theme/theme_cubit.dart';
+import 'package:unisa_eat_2/core/services/notification_service.dart';
 import 'package:unisa_eat_2/core/services/time_service.dart';
 import 'package:unisa_eat_2/domain/menu/entity/menu_entity.dart';
 import 'package:unisa_eat_2/l10n/app_localizations.dart';
@@ -18,6 +19,8 @@ import 'package:unisa_eat_2/domain/user/entities/user_entity.dart';
 import 'package:unisa_eat_2/presentation/affluence/bloc/affluence_cubit.dart';
 import 'package:unisa_eat_2/presentation/auth/bloc/login_cubit.dart';
 import 'package:unisa_eat_2/presentation/menu/bloc/menu_cubit.dart';
+import 'package:unisa_eat_2/presentation/notification/bloc/notification_cubit.dart';
+import 'package:unisa_eat_2/data/notification/sources/notification_api_service.dart';
 import 'package:unisa_eat_2/presentation/shared/bloc/order_cubit.dart';
 import 'package:unisa_eat_2/presentation/shared/bloc/user_profile_cubit.dart';
 import 'package:unisa_eat_2/presentation/wallet/bloc/wallet_cubit.dart';
@@ -36,6 +39,9 @@ void main() async{
    await Hive.openBox<CachedUser>('user');
    await Hive.openBox<MenuEntity>('menu');
    setupServiceLocator();
+
+   // Initialize notifications
+   await NotificationService.initialize();
 
    // Sync server time
    await sl<TimeService>().syncServerTime();
@@ -58,6 +64,7 @@ class MainApp extends StatelessWidget {
         BlocProvider(create: (context) => OrderCubit()),
         BlocProvider(create: (context) => MenuCubit()),
         BlocProvider(create: (context) => AffluenceCubit()),
+        BlocProvider(create: (context) => NotificationCubit(sl<NotificationApiService>())),
       ],
       child: BlocBuilder<ThemeCubit, ThemeMode>(
         builder: (context, themeMode) {

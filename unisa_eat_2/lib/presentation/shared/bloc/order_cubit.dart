@@ -1,6 +1,8 @@
 import 'dart:async';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:unisa_eat_2/core/models/api_error.dart';
+import 'package:unisa_eat_2/core/network/dio_client.dart';
 import 'package:unisa_eat_2/data/order/models/dish_selection_model.dart';
 import 'package:unisa_eat_2/domain/order/entities/order_entity.dart';
 import 'package:unisa_eat_2/domain/order/usecases/create_order_usecase.dart';
@@ -18,7 +20,7 @@ class OrderCubit extends Cubit<OrderState> {
     _cancelTimer();
     var result = await sl<GetOrdersUsecase>().call();
     result.fold(
-      (error) => emit(OrderFailure(error.toString())),
+      (error) => emit(OrderFailure(error)),
       (orders) {
         emit(OrderSuccess(orders));
         _startTimerIfNeeded(orders);
@@ -30,9 +32,20 @@ class OrderCubit extends Cubit<OrderState> {
     emit(OrderCreating());
     var result = await sl<CreateOrderUsecase>().call(params: request);
     result.fold(
-      (error) => emit(OrderFailure(error.toString())),
+      (error) => emit(OrderFailure(error)),
       (order) => emit(OrderCreated(order)),
     );
+  }
+
+  void deleteOrder(int orderId) async {
+    try {
+      await sl<DioClient>().delete('api/orders/$orderId/');
+      // On success, refresh orders
+      getOrders();
+    } catch (e) {
+      // For simplicity, emit failure or ignore
+      emit(OrderFailure(ApiError(type: ErrorType.unknown)));
+    }
   }
 
   void _startTimerIfNeeded(List<OrderEntity> orders) {

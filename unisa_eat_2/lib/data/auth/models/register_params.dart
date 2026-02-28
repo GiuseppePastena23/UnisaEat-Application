@@ -6,6 +6,7 @@ class RegisterParams {
   final String lastName;
   final String fiscalCode;
   final String phone;
+  final String? birthdate;
 
   RegisterParams({
     required this.email,
@@ -15,6 +16,7 @@ class RegisterParams {
     required this.lastName,
     required this.fiscalCode,
     required this.phone,
+    this.birthdate,
   });
 
   Map<String, dynamic> toJson() {
@@ -26,6 +28,7 @@ class RegisterParams {
       'last_name': lastName,
       'fiscal_code': fiscalCode,
       'phone': phone,
+      'birthdate': birthdate,
     };
   }
 }

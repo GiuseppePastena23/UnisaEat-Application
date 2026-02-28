@@ -12,6 +12,8 @@ import 'package:unisa_eat_2/presentation/shared/widget/shell_scaffold.dart';
 import 'package:unisa_eat_2/presentation/splash.dart';
 import 'package:unisa_eat_2/presentation/wallet/pages/add_funds_page.dart';
 import 'package:unisa_eat_2/presentation/wallet/pages/wallet_page.dart';
+import 'package:unisa_eat_2/presentation/faq/pages/faq_page.dart';
+import 'package:unisa_eat_2/presentation/feedback/pages/feedback_page.dart';
 import 'package:unisa_eat_2/service_locator.dart';
 
 final appRouter = GoRouter(
@@ -56,37 +58,45 @@ final appRouter = GoRouter(
        builder: (context, state) => const SignupPage(),
      ),
      GoRoute(
-       path: '/wallet/add-funds',
-       builder: (context, state) => const AddFundsPage(),
+        path: '/wallet/add-funds',
+        builder: (context, state) => const AddFundsPage(),
+      ),
+      GoRoute(
+        path: '/settings/faq',
+        builder: (context, state) => const FAQPage(),
+      ),
+      GoRoute(
+        path: '/settings/feedback',
+        builder: (context, state) => const FeedbackPage(),
+      ),
+       ShellRoute(
+       builder: (context, state, child) => ShellScaffold(body: child),
+        routes: [
+          GoRoute(
+            path: '/home',
+            builder: (context, state) => const HomePage(),
+          ),
+         GoRoute(
+           path: '/menu',
+           builder: (context, state) => const MenuPage(),
+         ),
+          GoRoute(
+            path: '/order',
+            builder: (context, state) => const OrderPage(),
+          ),
+          GoRoute(
+            path: '/order/create',
+            builder: (context, state) => const OrderCreationScreen(),
+          ),
+         GoRoute(
+           path: '/wallet',
+           builder: (context, state) => const WalletPage(),
+         ),
+         GoRoute(
+           path: '/settings',
+           builder: (context, state) => const SettingsPage(),
+         ),
+       ],
      ),
-     ShellRoute(
-      builder: (context, state, child) => ShellScaffold(body: child),
-       routes: [
-         GoRoute(
-           path: '/home',
-           builder: (context, state) => const HomePage(),
-         ),
-        GoRoute(
-          path: '/menu',
-          builder: (context, state) => const MenuPage(),
-        ),
-         GoRoute(
-           path: '/order',
-           builder: (context, state) => const OrderPage(),
-         ),
-         GoRoute(
-           path: '/order/create',
-           builder: (context, state) => const OrderCreationScreen(),
-         ),
-        GoRoute(
-          path: '/wallet',
-          builder: (context, state) => const WalletPage(),
-        ),
-        GoRoute(
-          path: '/settings',
-          builder: (context, state) => const SettingsPage(),
-        ),
-      ],
-    ),
   ],
 );

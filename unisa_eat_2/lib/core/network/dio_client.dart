@@ -1,22 +1,40 @@
 import 'package:dio/dio.dart';
+import 'package:dio_smart_retry/dio_smart_retry.dart';
 import 'package:unisa_eat_2/core/configs/constants/api_url.dart';
 
 import 'interceptors.dart';
 
 class DioClient {
-  
+
   late final Dio _dio;
-  DioClient(): _dio = Dio(
-    BaseOptions(
-      baseUrl: ApiUrl.baseURL,
-      headers: {
-        'Content-Type': 'application/json; charset=UTF-8'
-      },
-      responseType: ResponseType.json,
-      sendTimeout: const Duration(seconds: 10),
-      receiveTimeout: const Duration(seconds: 10)
-    ),
-  )..interceptors.addAll([LoggerInterceptor(), TokenInterceptor()]);
+
+  DioClient() {
+    _dio = Dio(
+      BaseOptions(
+        baseUrl: ApiUrl.baseURL,
+        headers: {
+          'Content-Type': 'application/json; charset=UTF-8'
+        },
+        responseType: ResponseType.json,
+        sendTimeout: const Duration(seconds: 10),
+        receiveTimeout: const Duration(seconds: 10)
+      ),
+    );
+    _dio.interceptors.addAll([
+      LoggerInterceptor(),
+      TokenInterceptor(),
+      RetryInterceptor(
+        dio: _dio,
+        logPrint: (message) => print('Retry: $message'),
+        retries: 3,
+        retryDelays: [
+          Duration(seconds: 1),
+          Duration(seconds: 2),
+          Duration(seconds: 4),
+        ],
+      ),
+    ]);
+  }
 
   // GET METHOD
   Future < Response > get(

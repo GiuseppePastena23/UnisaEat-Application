@@ -25,12 +25,12 @@ class ShellScaffold extends StatelessWidget {
     final hideNavRoutes = ['/login', '/signup', '/splash', '/wallet/add-funds'];
     final shouldHideNav = hideNavRoutes.contains(location);
 
-    final showQrButton = !shouldHideNav && location != '/order' && location != '/order/create';
+    final showQrButton = !shouldHideNav && location != '/order' && location != '/order/create' && location != '/wallet';
+    final isWalletPage = location == '/wallet';
 
     return PopScope(
-      canPop: location != '/', // Allow pop only if not on root route
+      canPop: location != '/',
       onPopInvokedWithResult: (didPop, result) {
-        // If we prevented popping on root route, exit the app
         if (!didPop && location == '/') {
           SystemNavigator.pop();
         }
@@ -41,22 +41,26 @@ class ShellScaffold extends StatelessWidget {
         bottomNavigationBar: !shouldHideNav ? BottomNavBar() : null,
         floatingActionButton: showQrButton ? FloatingActionButton(
           onPressed: () {
-            showDialog(
-              context: context,
-              builder: (context) {
-                return Stack(
-                  children: [
-                    BackdropFilter(
-                      filter: ImageFilter.blur(sigmaX: 4, sigmaY: 4),
-                      child: Container(color: Colors.transparent),
-                    ),
-                    Center(child: const QrCodeDialog()),
-                  ],
-                );
-              },
-            );
+            if (isWalletPage) {
+              context.push('/wallet/add-funds');
+            } else {
+              showDialog(
+                context: context,
+                builder: (context) {
+                  return Stack(
+                    children: [
+                      BackdropFilter(
+                        filter: ImageFilter.blur(sigmaX: 4, sigmaY: 4),
+                        child: Container(color: Colors.transparent),
+                      ),
+                      Center(child: const QrCodeDialog()),
+                    ],
+                  );
+                },
+              );
+            }
           },
-          child: Icon(Icons.qr_code_scanner),
+          child: Icon(isWalletPage ? Icons.add : Icons.qr_code_scanner),
         ) : null,
       ),
     );

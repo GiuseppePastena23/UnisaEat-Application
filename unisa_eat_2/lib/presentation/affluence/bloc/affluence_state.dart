@@ -15,5 +15,5 @@ class AffluenceLoaded extends AffluenceState {
 class AffluenceError extends AffluenceState {
   final String error;
 
-  AffluenceError(this.error);
+  AffluenceError(ApiError apiError) : error = apiError.type.toString();
 }

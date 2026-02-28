@@ -1,4 +1,5 @@
 
+import 'package:unisa_eat_2/core/models/api_error.dart';
 import 'package:unisa_eat_2/domain/menu/entity/menu_entity.dart';
 
 abstract class MenuState {
@@ -15,12 +16,12 @@ class MenuLoading extends MenuState {
 
 class MenuLoaded extends MenuState {
   final MenuEntity menu;
-  
+
   const MenuLoaded(this.menu);
 }
 
 class MenuError extends MenuState {
-  final String message;
-  
-  const MenuError(this.message);
+  final ApiError error;
+
+  const MenuError(this.error);
 }

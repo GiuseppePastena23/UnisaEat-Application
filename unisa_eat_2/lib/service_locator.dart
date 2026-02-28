@@ -7,6 +7,7 @@ import 'package:unisa_eat_2/core/configs/constants/hive_boxes.dart';
 import 'package:unisa_eat_2/core/network/dio_client.dart';
 import 'package:unisa_eat_2/core/services/auth_service.dart';
 import 'package:unisa_eat_2/core/services/time_service.dart';
+import 'package:unisa_eat_2/core/services/notification_service.dart';
 
 import 'package:unisa_eat_2/data/auth/repositories/auth_repository.dart';
 import 'package:unisa_eat_2/data/auth/sources/auth_api_service.dart';
@@ -26,6 +27,9 @@ import 'package:unisa_eat_2/data/affluence/repositories/affluence_repository.dar
 import 'package:unisa_eat_2/data/affluence/sources/affluence_api_service.dart';
 import 'package:unisa_eat_2/data/wallet/repositories/wallet_repository.dart';
 import 'package:unisa_eat_2/data/wallet/sources/wallet_api_service.dart';
+import 'package:unisa_eat_2/data/notification/sources/notification_api_service.dart';
+import 'package:unisa_eat_2/data/faq/sources/faq_api_service.dart';
+import 'package:unisa_eat_2/data/feedback/sources/feedback_api_service.dart';
 import 'package:unisa_eat_2/domain/affluence/usecases/get_affluence_usecase.dart';
 import 'package:unisa_eat_2/domain/auth/repositories/auth_repository.dart';
 import 'package:unisa_eat_2/domain/auth/usecases/login.dart';
@@ -48,6 +52,7 @@ import 'package:unisa_eat_2/domain/user/usecases/get_user.dart';
 import 'package:unisa_eat_2/domain/wallet/repositories/wallet_repository.dart';
 import 'package:unisa_eat_2/domain/wallet/usecases/get_balance_usecase.dart';
 import 'package:unisa_eat_2/domain/wallet/usecases/get_transactions_usecase.dart';
+import 'package:unisa_eat_2/presentation/notification/bloc/notification_cubit.dart';
 
 final sl  = GetIt.instance;
 
@@ -77,8 +82,11 @@ void setupServiceLocator() {
      sl.registerSingleton<MenuApiService>(MenuApiServiceImpl());
       sl.registerSingleton<DishApiService>(DishApiServiceImpl());
      sl.registerSingleton<OrderApiService>(OrderApiServiceImpl());
-     sl.registerSingleton<TimeApiService>(TimeApiServiceImpl());
-     sl.registerSingleton<AffluenceApiService>(AffluenceApiServiceImpl());
+      sl.registerSingleton<TimeApiService>(TimeApiServiceImpl());
+      sl.registerSingleton<AffluenceApiService>(AffluenceApiServiceImpl());
+      sl.registerSingleton<NotificationApiService>(NotificationApiServiceImpl());
+      sl.registerSingleton<FAQApiService>(FAQApiServiceImpl());
+      sl.registerSingleton<FeedbackApiService>(FeedbackApiServiceImpl());
 
     // Repositories
     sl.registerSingleton<WalletRepository>(WalletRepositoryImpl());

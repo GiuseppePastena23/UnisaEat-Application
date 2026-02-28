@@ -27,38 +27,61 @@ class _WalletPageState extends State<WalletPage> {
   Widget build(BuildContext context) {
     return DefaultTabController(
       length: 2,
-      child: BlocBuilder<WalletCubit, WalletState>(
-        builder: (context, state) {
-          if (state is WalletSuccess) {
-            return _buildTabbedBody(context, state);
-          } else if (state is WalletFailure) {
-            return Center(child: Text('Errore: ${state.error}'));
-          } else {
-            return const Center(child: CircularProgressIndicator());
-          }
-        },
+      child: Scaffold(
+        body: BlocBuilder<WalletCubit, WalletState>(
+          builder: (context, state) {
+            if (state is WalletSuccess) {
+              return _buildTabbedBody(context, state);
+            } else if (state is WalletFailure) {
+              return Center(child: Text('Errore: ${state.error}'));
+            } else {
+              return const Center(child: CircularProgressIndicator());
+            }
+          },
+        ),
+        floatingActionButton: FloatingActionButton(
+          onPressed: () => context.push('/wallet/add-funds'),
+          child: const Icon(Icons.add),
+        ),
       ),
     );
   }
 
   Widget _buildTabbedBody(BuildContext context, WalletSuccess state) {
-    return Column(
-      children: [
-        TabBar(
-          tabs: [
-            Tab(text: 'Wallet'),
-            Tab(text: 'Stats'),
-          ],
-        ),
-        Expanded(
-          child: TabBarView(
-            children: [
-              _buildWalletTab(context, state),
-              _buildStatsTab(context, state),
-            ],
+    final l10n = AppLocalizations.of(context)!;
+    return RefreshIndicator(
+      onRefresh: () async => context.read<WalletCubit>().getData(),
+      child: Column(
+        children: [
+          Container(
+            decoration: BoxDecoration(
+              color: Theme.of(context).colorScheme.surface,
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withValues(alpha: 0.1),
+                  blurRadius: 4,
+                  offset: const Offset(0, 2),
+                ),
+              ],
+            ),
+            child: TabBar(
+              dividerColor: Colors.transparent,
+              tabs: [
+                Tab(text: l10n.wallet),
+                Tab(text: l10n.stats),
+              ],
+            ),
           ),
-        ),
-      ],
+          Expanded(
+            child: TabBarView(
+              children: [
+                _buildWalletTab(context, state),
+                _buildStatsTab(context, state),
+              ],
+            ),
+          ),
+        ],
+      ),
     );
   }
 
@@ -95,31 +118,12 @@ class _WalletPageState extends State<WalletPage> {
             ),
           ),
           const SizedBox(height: 10),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                '€${balance.toStringAsFixed(2)}',
-                style: Theme.of(context).textTheme.headlineLarge?.copyWith(
-                  color: Theme.of(context).colorScheme.onSurface,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              const SizedBox(width: 10),
-              Container(
-                width: 35,
-                height: 35,
-                decoration: BoxDecoration(
-                  color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.1),
-                  shape: BoxShape.circle,
-                ),
-                child: IconButton(
-                  icon: Icon(Icons.add, size: 20),
-                  color: Theme.of(context).colorScheme.primary,
-                  onPressed: () => context.push('/wallet/add-funds'),
-                ),
-              ),
-            ],
+          Text(
+            '€${balance.toStringAsFixed(2)}',
+            style: Theme.of(context).textTheme.headlineLarge?.copyWith(
+              color: Theme.of(context).colorScheme.onSurface,
+              fontWeight: FontWeight.bold,
+            ),
           ),
           const SizedBox(height: 10),
         ],
@@ -429,20 +433,23 @@ class _WalletPageState extends State<WalletPage> {
       child: BlocBuilder<StatsCubit, StatsState>(
         builder: (context, statsState) {
           if (statsState is StatsSuccess) {
-            return SingleChildScrollView(
-              padding: const EdgeInsets.all(16),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  _summaryCards(context, statsState.data),
-                  const SizedBox(height: 24),
-                  Text(
-                    'Spending Overview (Last 7 Days)',
-                    style: Theme.of(context).textTheme.titleLarge,
-                  ),
-                  const SizedBox(height: 16),
-                  _barChart(context, statsState.data.chartPoints),
-                ],
+            return RefreshIndicator(
+              onRefresh: () async => context.read<WalletCubit>().getData(),
+              child: SingleChildScrollView(
+                padding: const EdgeInsets.all(16),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    _summaryCards(context, statsState.data),
+                    const SizedBox(height: 24),
+                    Text(
+                      'Spending Overview (Last 7 Days)',
+                      style: Theme.of(context).textTheme.titleLarge,
+                    ),
+                    const SizedBox(height: 16),
+                    _barChart(context, statsState.data.chartPoints),
+                  ],
+                ),
               ),
             );
           } else if (statsState is StatsFailure) {

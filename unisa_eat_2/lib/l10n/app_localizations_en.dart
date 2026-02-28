@@ -96,10 +96,28 @@ class AppLocalizationsEn extends AppLocalizations {
   String get no_dishes_available => 'No dishes available';
 
   @override
-  String get no_menu_found => 'No menu found for this day';
+  String get no_menu_found => 'No menu for this day';
 
   @override
   String get error_loading => 'Error loading';
+
+  @override
+  String get error_network => 'Network error. Please check your connection.';
+
+  @override
+  String get error_server => 'Server error. Please try again later.';
+
+  @override
+  String get error_auth => 'Authentication failed. Please log in again.';
+
+  @override
+  String get error_validation => 'Invalid input. Please check and try again.';
+
+  @override
+  String get error_balance => 'Insufficient balance. Please top up your wallet.';
+
+  @override
+  String get error_unknown => 'An unexpected error occurred.';
 
   @override
   String get retry => 'Retry';
@@ -191,6 +209,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get log_out => 'Log Out';
 
   @override
+  String get notificationSettings => 'Notification Settings';
+
+  @override
   String get balance => 'Balance';
 
   @override
@@ -217,6 +238,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get affluence_high => 'High Affluence';
 
   @override
+  String get affluence_full => 'Full Capacity';
+
+  @override
   String get affluence_unknown => 'Unknown';
 
   @override
@@ -236,4 +260,151 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get wait_time => 'WAIT TIME';
+
+  @override
+  String get faq => 'FAQ';
+
+  @override
+  String get faq_category_payments => 'Payments';
+
+  @override
+  String get faq_category_account => 'Account';
+
+  @override
+  String get faq_category_orders => 'Orders';
+
+  @override
+  String get faq_category_general => 'General';
+
+  @override
+  String get error_loading_faq => 'Error loading FAQ';
+
+  @override
+  String get no_faqs => 'No FAQs available';
+
+  @override
+  String get feedback => 'Feedback';
+
+  @override
+  String get send_feedback => 'Send Feedback';
+
+  @override
+  String get feedback_category => 'Category';
+
+  @override
+  String get feedback_message => 'Message';
+
+  @override
+  String get feedback_hint => 'Describe your feedback...';
+
+  @override
+  String get feedback_sent => 'Feedback sent successfully';
+
+  @override
+  String get feedback_error => 'Error sending feedback';
+
+  @override
+  String get feedback_suggestion => 'Suggestion';
+
+  @override
+  String get feedback_complaint => 'Complaint';
+
+  @override
+  String get feedback_bug => 'Bug Report';
+
+  @override
+  String get feedback_other => 'Other';
+
+  @override
+  String get help_support => 'Help & Support';
+
+  @override
+  String get field_required => 'This field is required';
+
+  @override
+  String get email_invalid => 'Please enter a valid email';
+
+  @override
+  String get birthdate => 'Birthdate';
+
+  @override
+  String get password_too_short => 'Password must be at least 8 characters';
+
+  @override
+  String get passwords_not_match => 'Passwords do not match';
+
+  @override
+  String get phone_invalid => 'Please enter a valid phone number';
+
+  @override
+  String get fiscal_code_invalid => 'Please enter a valid fiscal code';
+
+  @override
+  String get birthdate_required => 'Please enter your birthdate';
+
+  @override
+  String get already_have_account => 'Already have an account?';
+
+  @override
+  String get show_at_counter => 'Show at counter';
+
+  @override
+  String get close => 'Close';
+
+  @override
+  String get phone_number => 'Phone Number';
+
+  @override
+  String get enable_biometric => 'Enable Biometric Login';
+
+  @override
+  String get biometric_not_available => 'Biometric authentication not available';
+
+  @override
+  String get enable_notifications => 'Enable Notifications';
+
+  @override
+  String get turn_on_notifications => 'Turn on notifications to receive alerts';
+
+  @override
+  String get low_balance_alerts => 'Low Balance Alerts';
+
+  @override
+  String get balance_low_message => 'Alert when balance is below €5';
+
+  @override
+  String get order_status_updates => 'Order Status Updates';
+
+  @override
+  String get order_status_message => 'Alert when order status changes';
+
+  @override
+  String get transaction_alerts => 'Transaction Alerts';
+
+  @override
+  String get transaction_message => 'Alert on wallet transactions';
+
+  @override
+  String get canteen_open => 'Canteen Open';
+
+  @override
+  String get canteen_message => 'Alert when cafeteria opens';
+
+  @override
+  String get affluence_updates => 'Affluence Updates';
+
+  @override
+  String get affluence_message => 'Alert on crowd level changes';
+
+  @override
+  String get bypass_time => 'Bypass Time Restriction';
+
+  @override
+  String get bypass_message => 'Allow orders after 14:45';
+
+  @override
+  String get show_debug_info => 'Show Debug Info';
+
+  @override
+  String get debug_info => 'Show additional debug information';
 }

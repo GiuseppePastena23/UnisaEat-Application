@@ -8,6 +8,7 @@ import 'package:unisa_eat_2/presentation/menu/bloc/menu_cubit.dart';
 import 'package:unisa_eat_2/presentation/menu/bloc/menu_state.dart';
 import 'package:unisa_eat_2/common/utils/date_utils.dart';
 import 'package:unisa_eat_2/core/services/time_service.dart';
+import 'package:unisa_eat_2/core/models/api_error.dart';
 import 'package:unisa_eat_2/l10n/app_localizations.dart';
 import 'package:unisa_eat_2/service_locator.dart';
 
@@ -140,7 +141,7 @@ class _MenuPageState extends State<MenuPage> {
                    color: Theme.of(context).colorScheme.surface,
                    borderRadius: BorderRadius.circular(12.0),
                    border: Border.all(
-                     color: Theme.of(context).colorScheme.outline,
+                     color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.5),
                      width: 1.5,
                    ),
                  ),
@@ -185,9 +186,9 @@ class _MenuPageState extends State<MenuPage> {
                    );
                  } else if (state is MenuLoaded) {
                    return _buildMenu(state.menu, l10n);
-                 } else if (state is MenuError) {
-                   return _buildError(state.message, l10n);
-                 }
+                  } else if (state is MenuError) {
+                    return _buildError(state.error, l10n);
+                  }
                  return const Center(
                    child: CircularProgressIndicator(),
                  );
@@ -325,7 +326,24 @@ class _MenuPageState extends State<MenuPage> {
     );
   }
 
-  Widget _buildError(String message, AppLocalizations l10n) {
+  String _getErrorMessage(ApiError error, AppLocalizations l10n) {
+    switch (error.type) {
+      case ErrorType.network:
+        return l10n.error_network;
+      case ErrorType.server:
+        return l10n.error_server;
+      case ErrorType.auth:
+        return l10n.error_auth;
+      case ErrorType.validation:
+        return l10n.error_validation;
+      case ErrorType.balance:
+        return l10n.error_balance;
+      case ErrorType.unknown:
+        return l10n.error_unknown;
+    }
+  }
+
+  Widget _buildError(ApiError error, AppLocalizations l10n) {
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -336,12 +354,12 @@ class _MenuPageState extends State<MenuPage> {
             color: Theme.of(context).colorScheme.error,
           ),
           const SizedBox(height: 16.0),
-          Text(
-            l10n.no_menu_found,
-            style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                  fontWeight: FontWeight.w600,
-                ),
-          ),
+           Text(
+             _getErrorMessage(error, l10n),
+             style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                   fontWeight: FontWeight.w600,
+                 ),
+           ),
           const SizedBox(height: 8.0),
     
           ElevatedButton(

@@ -19,8 +19,8 @@ class AuthApiServiceImpl extends AuthApiService {
     try {
       var response = await sl<DioClient>().post(ApiUrl.login, data: {'email': params.email, 'password': params.password});
       return Right(response.data);
-    } on DioException catch(e) {
-      return Left(ApiError.fromDioException(e.response?.data ?? e.message));
+    } catch(e) {
+      return Left(ApiError.fromDioException(e));
     }
   }
 
@@ -29,8 +29,8 @@ class AuthApiServiceImpl extends AuthApiService {
     try {
       var response = await sl<DioClient>().post(ApiUrl.register, data: params.toJson());
       return Right(response.data);
-    } on DioException catch(e) {
-      return Left(ApiError.fromDioException(e.response?.data ?? e.message));
+    } catch(e) {
+      return Left(ApiError.fromDioException(e));
     }
   }
 
@@ -39,8 +39,8 @@ class AuthApiServiceImpl extends AuthApiService {
     try {
       var response = await sl<DioClient>().post(ApiUrl.refresh, data: {'refresh': refreshToken});
       return Right(response.data);
-    } on DioException catch(e) {
-      return Left(ApiError.fromDioException(e.response?.data ?? e.message));
+    } catch(e) {
+      return Left(ApiError.fromDioException(e));
     }
   }
 }

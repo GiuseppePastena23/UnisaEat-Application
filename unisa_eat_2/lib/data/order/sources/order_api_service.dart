@@ -17,7 +17,7 @@ class OrderApiServiceImpl implements OrderApiService {
       var response = await sl<DioClient>().get('${ApiUrl.baseURL}api/orders/');
       return Right(response.data);
     } on DioException catch (e) {
-      return Left(ApiError.fromDioException(e.response?.data ?? e.message));
+      return Left(ApiError.fromDioException(e));
     }
   }
 
@@ -27,7 +27,7 @@ class OrderApiServiceImpl implements OrderApiService {
       var response = await sl<DioClient>().post('${ApiUrl.baseURL}api/orders/create_order/', data: requestData);
       return Right(response.data);
     } on DioException catch (e) {
-      return Left(ApiError.fromDioException(e.response?.data ?? e.message));
+      return Left(ApiError.fromDioException(e));
     }
   }
 }

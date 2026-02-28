@@ -19,7 +19,7 @@ class MenuCubit extends Cubit<MenuState> {
     
     result.fold(
       (error) {
-        emit(MenuError(error.toString()));
+        emit(MenuError(error));
       },
       (menu) {
         emit(MenuLoaded(menu as MenuEntity));

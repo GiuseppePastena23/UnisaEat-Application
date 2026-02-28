@@ -274,7 +274,7 @@ abstract class AppLocalizations {
   /// No description provided for @no_menu_found.
   ///
   /// In en, this message translates to:
-  /// **'No menu found for this day'**
+  /// **'No menu for this day'**
   String get no_menu_found;
 
   /// No description provided for @error_loading.
@@ -282,6 +282,42 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Error loading'**
   String get error_loading;
+
+  /// No description provided for @error_network.
+  ///
+  /// In en, this message translates to:
+  /// **'Network error. Please check your connection.'**
+  String get error_network;
+
+  /// No description provided for @error_server.
+  ///
+  /// In en, this message translates to:
+  /// **'Server error. Please try again later.'**
+  String get error_server;
+
+  /// No description provided for @error_auth.
+  ///
+  /// In en, this message translates to:
+  /// **'Authentication failed. Please log in again.'**
+  String get error_auth;
+
+  /// No description provided for @error_validation.
+  ///
+  /// In en, this message translates to:
+  /// **'Invalid input. Please check and try again.'**
+  String get error_validation;
+
+  /// No description provided for @error_balance.
+  ///
+  /// In en, this message translates to:
+  /// **'Insufficient balance. Please top up your wallet.'**
+  String get error_balance;
+
+  /// No description provided for @error_unknown.
+  ///
+  /// In en, this message translates to:
+  /// **'An unexpected error occurred.'**
+  String get error_unknown;
 
   /// No description provided for @retry.
   ///
@@ -457,6 +493,12 @@ abstract class AppLocalizations {
   /// **'Log Out'**
   String get log_out;
 
+  /// No description provided for @notificationSettings.
+  ///
+  /// In en, this message translates to:
+  /// **'Notification Settings'**
+  String get notificationSettings;
+
   /// No description provided for @balance.
   ///
   /// In en, this message translates to:
@@ -505,6 +547,12 @@ abstract class AppLocalizations {
   /// **'High Affluence'**
   String get affluence_high;
 
+  /// No description provided for @affluence_full.
+  ///
+  /// In en, this message translates to:
+  /// **'Full Capacity'**
+  String get affluence_full;
+
   /// No description provided for @affluence_unknown.
   ///
   /// In en, this message translates to:
@@ -546,6 +594,300 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'WAIT TIME'**
   String get wait_time;
+
+  /// No description provided for @faq.
+  ///
+  /// In en, this message translates to:
+  /// **'FAQ'**
+  String get faq;
+
+  /// No description provided for @faq_category_payments.
+  ///
+  /// In en, this message translates to:
+  /// **'Payments'**
+  String get faq_category_payments;
+
+  /// No description provided for @faq_category_account.
+  ///
+  /// In en, this message translates to:
+  /// **'Account'**
+  String get faq_category_account;
+
+  /// No description provided for @faq_category_orders.
+  ///
+  /// In en, this message translates to:
+  /// **'Orders'**
+  String get faq_category_orders;
+
+  /// No description provided for @faq_category_general.
+  ///
+  /// In en, this message translates to:
+  /// **'General'**
+  String get faq_category_general;
+
+  /// No description provided for @error_loading_faq.
+  ///
+  /// In en, this message translates to:
+  /// **'Error loading FAQ'**
+  String get error_loading_faq;
+
+  /// No description provided for @no_faqs.
+  ///
+  /// In en, this message translates to:
+  /// **'No FAQs available'**
+  String get no_faqs;
+
+  /// No description provided for @feedback.
+  ///
+  /// In en, this message translates to:
+  /// **'Feedback'**
+  String get feedback;
+
+  /// No description provided for @send_feedback.
+  ///
+  /// In en, this message translates to:
+  /// **'Send Feedback'**
+  String get send_feedback;
+
+  /// No description provided for @feedback_category.
+  ///
+  /// In en, this message translates to:
+  /// **'Category'**
+  String get feedback_category;
+
+  /// No description provided for @feedback_message.
+  ///
+  /// In en, this message translates to:
+  /// **'Message'**
+  String get feedback_message;
+
+  /// No description provided for @feedback_hint.
+  ///
+  /// In en, this message translates to:
+  /// **'Describe your feedback...'**
+  String get feedback_hint;
+
+  /// No description provided for @feedback_sent.
+  ///
+  /// In en, this message translates to:
+  /// **'Feedback sent successfully'**
+  String get feedback_sent;
+
+  /// No description provided for @feedback_error.
+  ///
+  /// In en, this message translates to:
+  /// **'Error sending feedback'**
+  String get feedback_error;
+
+  /// No description provided for @feedback_suggestion.
+  ///
+  /// In en, this message translates to:
+  /// **'Suggestion'**
+  String get feedback_suggestion;
+
+  /// No description provided for @feedback_complaint.
+  ///
+  /// In en, this message translates to:
+  /// **'Complaint'**
+  String get feedback_complaint;
+
+  /// No description provided for @feedback_bug.
+  ///
+  /// In en, this message translates to:
+  /// **'Bug Report'**
+  String get feedback_bug;
+
+  /// No description provided for @feedback_other.
+  ///
+  /// In en, this message translates to:
+  /// **'Other'**
+  String get feedback_other;
+
+  /// No description provided for @help_support.
+  ///
+  /// In en, this message translates to:
+  /// **'Help & Support'**
+  String get help_support;
+
+  /// No description provided for @field_required.
+  ///
+  /// In en, this message translates to:
+  /// **'This field is required'**
+  String get field_required;
+
+  /// No description provided for @email_invalid.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter a valid email'**
+  String get email_invalid;
+
+  /// No description provided for @birthdate.
+  ///
+  /// In en, this message translates to:
+  /// **'Birthdate'**
+  String get birthdate;
+
+  /// No description provided for @password_too_short.
+  ///
+  /// In en, this message translates to:
+  /// **'Password must be at least 8 characters'**
+  String get password_too_short;
+
+  /// No description provided for @passwords_not_match.
+  ///
+  /// In en, this message translates to:
+  /// **'Passwords do not match'**
+  String get passwords_not_match;
+
+  /// No description provided for @phone_invalid.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter a valid phone number'**
+  String get phone_invalid;
+
+  /// No description provided for @fiscal_code_invalid.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter a valid fiscal code'**
+  String get fiscal_code_invalid;
+
+  /// No description provided for @birthdate_required.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter your birthdate'**
+  String get birthdate_required;
+
+  /// No description provided for @already_have_account.
+  ///
+  /// In en, this message translates to:
+  /// **'Already have an account?'**
+  String get already_have_account;
+
+  /// No description provided for @show_at_counter.
+  ///
+  /// In en, this message translates to:
+  /// **'Show at counter'**
+  String get show_at_counter;
+
+  /// No description provided for @close.
+  ///
+  /// In en, this message translates to:
+  /// **'Close'**
+  String get close;
+
+  /// No description provided for @phone_number.
+  ///
+  /// In en, this message translates to:
+  /// **'Phone Number'**
+  String get phone_number;
+
+  /// No description provided for @enable_biometric.
+  ///
+  /// In en, this message translates to:
+  /// **'Enable Biometric Login'**
+  String get enable_biometric;
+
+  /// No description provided for @biometric_not_available.
+  ///
+  /// In en, this message translates to:
+  /// **'Biometric authentication not available'**
+  String get biometric_not_available;
+
+  /// No description provided for @enable_notifications.
+  ///
+  /// In en, this message translates to:
+  /// **'Enable Notifications'**
+  String get enable_notifications;
+
+  /// No description provided for @turn_on_notifications.
+  ///
+  /// In en, this message translates to:
+  /// **'Turn on notifications to receive alerts'**
+  String get turn_on_notifications;
+
+  /// No description provided for @low_balance_alerts.
+  ///
+  /// In en, this message translates to:
+  /// **'Low Balance Alerts'**
+  String get low_balance_alerts;
+
+  /// No description provided for @balance_low_message.
+  ///
+  /// In en, this message translates to:
+  /// **'Alert when balance is below €5'**
+  String get balance_low_message;
+
+  /// No description provided for @order_status_updates.
+  ///
+  /// In en, this message translates to:
+  /// **'Order Status Updates'**
+  String get order_status_updates;
+
+  /// No description provided for @order_status_message.
+  ///
+  /// In en, this message translates to:
+  /// **'Alert when order status changes'**
+  String get order_status_message;
+
+  /// No description provided for @transaction_alerts.
+  ///
+  /// In en, this message translates to:
+  /// **'Transaction Alerts'**
+  String get transaction_alerts;
+
+  /// No description provided for @transaction_message.
+  ///
+  /// In en, this message translates to:
+  /// **'Alert on wallet transactions'**
+  String get transaction_message;
+
+  /// No description provided for @canteen_open.
+  ///
+  /// In en, this message translates to:
+  /// **'Canteen Open'**
+  String get canteen_open;
+
+  /// No description provided for @canteen_message.
+  ///
+  /// In en, this message translates to:
+  /// **'Alert when cafeteria opens'**
+  String get canteen_message;
+
+  /// No description provided for @affluence_updates.
+  ///
+  /// In en, this message translates to:
+  /// **'Affluence Updates'**
+  String get affluence_updates;
+
+  /// No description provided for @affluence_message.
+  ///
+  /// In en, this message translates to:
+  /// **'Alert on crowd level changes'**
+  String get affluence_message;
+
+  /// No description provided for @bypass_time.
+  ///
+  /// In en, this message translates to:
+  /// **'Bypass Time Restriction'**
+  String get bypass_time;
+
+  /// No description provided for @bypass_message.
+  ///
+  /// In en, this message translates to:
+  /// **'Allow orders after 14:45'**
+  String get bypass_message;
+
+  /// No description provided for @show_debug_info.
+  ///
+  /// In en, this message translates to:
+  /// **'Show Debug Info'**
+  String get show_debug_info;
+
+  /// No description provided for @debug_info.
+  ///
+  /// In en, this message translates to:
+  /// **'Show additional debug information'**
+  String get debug_info;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
