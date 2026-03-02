@@ -89,9 +89,12 @@ final appRouter = GoRouter(
             builder: (context, state) => const OrderCreationScreen(),
           ),
          GoRoute(
-           path: '/wallet',
-           builder: (context, state) => const WalletPage(),
-         ),
+            path: '/wallet',
+            builder: (context, state) {
+              final extra = state.extra as Map<String, dynamic>?;
+              return WalletPage(showReceipt: extra?['show_receipt'] ?? false);
+            },
+          ),
          GoRoute(
            path: '/settings',
            builder: (context, state) => const SettingsPage(),

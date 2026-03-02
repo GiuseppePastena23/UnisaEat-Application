@@ -37,6 +37,7 @@ import 'package:unisa_eat_2/domain/auth/usecases/logout.dart';
 import 'package:unisa_eat_2/domain/auth/usecases/register.dart';
 import 'package:unisa_eat_2/domain/home/repositories/home_repository.dart';
 import 'package:unisa_eat_2/domain/home/usecases/get_qr_code.dart';
+import 'package:unisa_eat_2/domain/home/usecases/get_order_qr_code.dart';
 import 'package:unisa_eat_2/domain/menu/repository/menu_repository.dart';
 import 'package:unisa_eat_2/domain/menu/usecases/get_dishes_usecase.dart';
 import 'package:unisa_eat_2/domain/menu/usecases/get_menu_by_date_usecase.dart';
@@ -106,7 +107,8 @@ void setupServiceLocator() {
      sl.registerSingleton<RegisterUsecase>(RegisterUsecase(sl()));
      sl.registerSingleton<GetUserUsecase>(GetUserUsecase());
      sl.registerSingleton<LogoutUsecase>(LogoutUsecase());
-     sl.registerSingleton<GetQrcodeUsecase>(GetQrcodeUsecase());
+      sl.registerSingleton<GetQrcodeUsecase>(GetQrcodeUsecase());
+      sl.registerSingleton<GetOrderQrcodeUsecase>(GetOrderQrcodeUsecase());
       sl.registerSingleton<GetMenuByDateUsecase>(GetMenuByDateUsecase());
       sl.registerSingleton<GetDishesUsecase>(GetDishesUsecase());
        sl.registerSingleton<GetOrdersUsecase>(GetOrdersUsecase());

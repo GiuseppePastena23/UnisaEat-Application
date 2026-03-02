@@ -1,6 +1,9 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
+import 'package:go_router/go_router.dart';
 
 import 'package:hive_flutter/adapters.dart';
 
@@ -49,8 +52,100 @@ void main() async{
    runApp(const MainApp());
 }
 
-class MainApp extends StatelessWidget {
+class MainApp extends StatefulWidget {
   const MainApp({super.key});
+
+  @override
+  State<MainApp> createState() => _MainAppState();
+}
+
+class _MainAppState extends State<MainApp> with WidgetsBindingObserver {
+  StreamSubscription? _notificationSubscription;
+  StreamSubscription? _navigationSubscription;
+  
+  // Store references to cubits for external access
+  static WalletCubit? _walletCubit;
+  static UserProfileCubit? _userProfileCubit;
+  
+  static WalletCubit? get walletCubit => _walletCubit;
+  static UserProfileCubit? get userProfileCubit => _userProfileCubit;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+    _listenToTransactionNotifications();
+    _listenToNavigation();
+  }
+
+  void _listenToTransactionNotifications() {
+    _notificationSubscription = NotificationService.onTransactionNotification.listen((data) {
+      print('[MainApp] Transaction notification received: $data');
+      
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) {
+          print('[MainApp] Calling refresh via static references');
+          _walletCubit?.getData();
+          _userProfileCubit?.getUser(forceRefresh: true);
+        }
+      });
+    });
+  }
+
+  void _listenToNavigation() {
+    _navigationSubscription = NotificationService.onNavigate.listen((data) {
+      print('[MainApp] Navigation event: $data');
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) {
+          final page = data['page'];
+          if (page == 'wallet') {
+            // Navigate to wallet and show receipt
+            _walletCubit?.getData();
+            _userProfileCubit?.getUser(forceRefresh: true);
+            // Navigate to wallet page with transaction data to show receipt
+            GoRouter.of(context).go('/wallet', extra: {
+              'show_receipt': true,
+              'transaction_id': data['transaction_id'],
+              'amount': data['amount'],
+              'type': data['transaction_type'],
+            });
+          } else if (page == 'orders') {
+            GoRouter.of(context).go('/orders');
+          } else if (page == 'menu') {
+            GoRouter.of(context).go('/menu');
+          }
+        }
+      });
+    });
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    _notificationSubscription?.cancel();
+    _navigationSubscription?.cancel();
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) {
+      // Refresh wallet and user profile when app comes to foreground
+      // This catches kiosk transactions made while app was in background
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) {
+          try {
+            final walletCubit = BlocProvider.of<WalletCubit>(context, listen: false);
+            final userProfileCubit = BlocProvider.of<UserProfileCubit>(context, listen: false);
+            walletCubit.getData();
+            userProfileCubit.getUser(forceRefresh: true);
+          } catch (e) {
+            // Cubits might not be available yet
+          }
+        }
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -59,8 +154,14 @@ class MainApp extends StatelessWidget {
         BlocProvider(create: (context) => LocaleCubit()),
         BlocProvider(create: (context) => ThemeCubit()),
         BlocProvider(create: (context) => LoginCubit()),
-        BlocProvider(create: (context) => UserProfileCubit()),
-        BlocProvider(create: (context) => WalletCubit()..getData()),
+        BlocProvider(create: (context) {
+          _userProfileCubit = UserProfileCubit();
+          return _userProfileCubit!;
+        }),
+        BlocProvider(create: (context) {
+          _walletCubit = WalletCubit()..getData();
+          return _walletCubit!;
+        }),
         BlocProvider(create: (context) => OrderCubit()),
         BlocProvider(create: (context) => MenuCubit()),
         BlocProvider(create: (context) => AffluenceCubit()),

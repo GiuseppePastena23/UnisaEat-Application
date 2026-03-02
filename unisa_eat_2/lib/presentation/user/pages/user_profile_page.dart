@@ -4,6 +4,7 @@ import 'package:unisa_eat_2/domain/auth/usecases/logout.dart';
 import 'package:unisa_eat_2/presentation/shared/bloc/user_profile_cubit.dart';
 import 'package:unisa_eat_2/presentation/shared/bloc/user_profile_state.dart';
 import 'package:unisa_eat_2/presentation/shared/widget/custom_card.dart';
+import 'package:unisa_eat_2/presentation/wallet/bloc/wallet_cubit.dart';
 import 'package:unisa_eat_2/service_locator.dart';
 
 
@@ -41,7 +42,11 @@ class UserProfilePage extends StatelessWidget {
 
   Widget _logoutButton(BuildContext context) {
     return ElevatedButton(
-      onPressed: () {sl<LogoutUsecase>().call(); context.read<UserProfileCubit>().reset();},
+      onPressed: () {
+        sl<LogoutUsecase>().call();
+        context.read<UserProfileCubit>().reset();
+        context.read<WalletCubit>().reset();
+      },
       style: ElevatedButton.styleFrom(
         backgroundColor: Theme.of(context).colorScheme.primary,
         foregroundColor: Theme.of(context).colorScheme.onPrimary,

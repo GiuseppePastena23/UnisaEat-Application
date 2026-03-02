@@ -6,10 +6,12 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:unisa_eat_2/core/models/api_error.dart';
 import 'package:unisa_eat_2/domain/order/entities/order_entity.dart';
 import 'package:unisa_eat_2/domain/menu/entity/piatto_entity.dart';
+import 'package:unisa_eat_2/domain/home/usecases/get_order_qr_code.dart';
 import 'package:unisa_eat_2/l10n/app_localizations.dart';
 import 'package:unisa_eat_2/presentation/shared/bloc/order_cubit.dart';
 import 'package:unisa_eat_2/presentation/shared/bloc/order_state.dart';
 import 'package:unisa_eat_2/presentation/shared/widget/custom_card.dart';
+import 'package:unisa_eat_2/service_locator.dart';
 
 class OrderPage extends StatefulWidget {
   const OrderPage({super.key});
@@ -88,24 +90,60 @@ class _OrderPageState extends State<OrderPage> with WidgetsBindingObserver {
       context: context,
       builder: (context) => AlertDialog(
         title: Text('${l10n.qr_code} #${orderId}'),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            SizedBox(
-              width: 200,
-              height: 200,
-              child: QrImageView(
-                data: orderId.toString(),
-                version: QrVersions.auto,
-              ),
-            ),
-            const SizedBox(height: 8),
-            Text(
-              l10n.show_at_counter,
-              style: Theme.of(context).textTheme.bodySmall,
-              textAlign: TextAlign.center,
-            ),
-          ],
+        content: FutureBuilder(
+          future: sl<GetOrderQrcodeUsecase>().call(params: orderId),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const SizedBox(
+                width: 200,
+                height: 200,
+                child: Center(child: CircularProgressIndicator()),
+              );
+            }
+            
+            if (snapshot.hasError) {
+              return SizedBox(
+                width: 200,
+                height: 200,
+                child: Center(child: Text('Error: ${snapshot.error}')),
+              );
+            }
+            
+            final result = snapshot.data;
+            String? token;
+            result?.fold(
+              (error) => token = null,
+              (data) => token = data as String?,
+            );
+            
+            if (token == null) {
+              return SizedBox(
+                width: 200,
+                height: 200,
+                child: Center(child: Text('Failed to generate QR code')),
+              );
+            }
+            
+            return Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                SizedBox(
+                  width: 200,
+                  height: 200,
+                  child: QrImageView(
+                    data: token!,
+                    version: QrVersions.auto,
+                  ),
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  l10n.show_at_counter,
+                  style: Theme.of(context).textTheme.bodySmall,
+                  textAlign: TextAlign.center,
+                ),
+              ],
+            );
+          },
         ),
         actions: [
           TextButton(

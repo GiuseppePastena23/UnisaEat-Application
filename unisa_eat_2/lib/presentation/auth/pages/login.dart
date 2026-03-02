@@ -8,6 +8,7 @@ import 'package:unisa_eat_2/l10n/app_localizations.dart';
 import 'package:unisa_eat_2/presentation/auth/bloc/login_cubit.dart';
 
 import 'package:unisa_eat_2/presentation/shared/bloc/user_profile_cubit.dart';
+import 'package:unisa_eat_2/presentation/wallet/bloc/wallet_cubit.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -63,15 +64,15 @@ class _LoginPageState extends State<LoginPage> {
               SnackBar(content: Text(_getErrorMessage(state.error, l10n))),
             );
            } else if (state is LoginSuccess) {
-            // Dismiss loading dialog if present
-            if (ModalRoute.of(context)?.canPop ?? false) {
-              Navigator.of(context, rootNavigator: true).pop();
-            }
-            // Refresh user profile data
-            context.read<UserProfileCubit>().getUser(forceRefresh: true);
-            context.go('/home');
-            context.read<UserProfileCubit>().getUser();
-          }
+             // Dismiss loading dialog if present
+             if (ModalRoute.of(context)?.canPop ?? false) {
+               Navigator.of(context, rootNavigator: true).pop();
+             }
+             // Refresh user profile data and wallet
+             context.read<UserProfileCubit>().getUser(forceRefresh: true);
+             context.read<WalletCubit>().getData();
+             context.go('/home');
+           }
         },
         child: SafeArea(
           minimum: const EdgeInsets.only(top: 0, right: 30, left: 30, bottom: 0),

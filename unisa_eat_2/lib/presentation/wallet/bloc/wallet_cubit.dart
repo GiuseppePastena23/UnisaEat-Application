@@ -10,6 +10,10 @@ class WalletCubit extends Cubit<WalletState>{
 
   WalletCubit() : super(WalletInitial());
 
+  void reset() {
+    emit(WalletInitial());
+  }
+
   void getData() async {
     emit(WalletLoading());
     

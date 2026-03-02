@@ -71,7 +71,7 @@ class _SignupPageState extends State<SignupPage> {
     if (picked != null) {
       setState(() {
         _selectedBirthdate = picked;
-        _birthdateController.text = '${picked.day.toString().padLeft(2, '0')}-${picked.month.toString().padLeft(2, '0')}-${picked.year}';
+        _birthdateController.text = '${picked.year}-${picked.month.toString().padLeft(2, '0')}-${picked.day.toString().padLeft(2, '0')}';
       });
     }
   }

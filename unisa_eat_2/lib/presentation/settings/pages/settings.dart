@@ -12,6 +12,7 @@ import 'package:unisa_eat_2/l10n/app_localizations.dart';
 import 'package:unisa_eat_2/presentation/shared/bloc/user_profile_cubit.dart';
 import 'package:unisa_eat_2/presentation/shared/bloc/user_profile_state.dart';
 import 'package:unisa_eat_2/presentation/shared/widget/custom_card.dart';
+import 'package:unisa_eat_2/presentation/wallet/bloc/wallet_cubit.dart';
 import 'package:unisa_eat_2/service_locator.dart';
 import 'package:unisa_eat_2/core/services/time_service.dart';
 import 'package:unisa_eat_2/presentation/notification/bloc/notification_cubit.dart';
@@ -83,6 +84,7 @@ class _SettingsPageState extends State<SettingsPage> {
                           onPressed: () {
                             sl<LogoutUsecase>().call();
                             context.read<UserProfileCubit>().reset();
+                            context.read<WalletCubit>().reset();
                           },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Theme.of(context).colorScheme.primary,

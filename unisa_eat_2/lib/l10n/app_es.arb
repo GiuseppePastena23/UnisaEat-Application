@@ -112,6 +112,7 @@
     "affluence_medium": "Afluencia Media",
     "affluence_high": "Alta Afluencia",
     "affluence_full": "Aforo Completo",
+  
     "affluence_unknown": "Desconocido",
     "affluence_wait": "Espera Estimada",
     "affluence_refresh": "Actualizar",

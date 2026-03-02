@@ -32,12 +32,9 @@ class WalletRepositoryImpl extends WalletRepository {
         final List<dynamic> transactionsList = rawData is List ? rawData : rawData['results'] ?? rawData['transactions'] ?? [];
 
         try {
-          // Mappa ogni TransactionModel a TransactionEntity
           final List<TransactionEntity> transactions = transactionsList
               .whereType<Map<String, dynamic>>()
-              .map((json) => TransactionMapper.toEntity(
-                TransactionModel.fromJson(json)
-              ))
+              .map((json) => TransactionMapper.toEntityFromJson(json))
               .toList();
 
           return Right(transactions);

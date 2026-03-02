@@ -21,4 +21,17 @@ class HomeRepositoryImpl extends HomeRepository {
     );
   }
 
+  @override
+  Future<Either> getOrderQrcode(int orderId) async{
+    final result = await sl<HomeApiService>().getOrderQrcode(orderId);
+    return await result.fold(
+      (error) {
+        return Left(error); 
+      }, (data) async {
+
+        return Right(data['token']);
+      }
+    );
+  }
+
 }

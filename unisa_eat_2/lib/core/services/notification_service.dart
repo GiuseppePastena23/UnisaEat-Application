@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -9,11 +10,29 @@ class NotificationService {
   static final FlutterLocalNotificationsPlugin _localNotifications = FlutterLocalNotificationsPlugin();
   static const _storage = FlutterSecureStorage();
   
+  static final StreamController<Map<String, dynamic>> _transactionController = StreamController<Map<String, dynamic>>.broadcast();
+  static Stream<Map<String, dynamic>> get onTransactionNotification => _transactionController.stream;
+  
+  static final StreamController<Map<String, dynamic>> _navigationController = StreamController<Map<String, dynamic>>.broadcast();
+  static Stream<Map<String, dynamic>> get onNavigate => _navigationController.stream;
+  
+  // Test method - call this to simulate a transaction notification
+  static void simulateTransactionNotification() {
+    print('[NotificationService] Simulating transaction notification');
+    _transactionController.add({
+      'type': 'transaction',
+      'transaction_id': '123',
+      'amount': '10.00',
+      'transaction_type': 'kiosk',
+    });
+  }
+  
   static const String _deviceTokenKey = 'fcm_device_token';
   
   static Future<void> initialize() async {
     // Initialize Firebase
     await Firebase.initializeApp();
+    print('[NotificationService] Firebase initialized');
     
     // Initialize local notifications
     const androidSettings = AndroidInitializationSettings('@mipmap/ic_launcher');
@@ -32,6 +51,7 @@ class NotificationService {
       initSettings,
       onDidReceiveNotificationResponse: _onNotificationTapped,
     );
+    print('[NotificationService] Local notifications initialized');
     
     // Request notification permissions
     await _requestPermissions();
@@ -41,9 +61,11 @@ class NotificationService {
     
     // Handle foreground messages
     FirebaseMessaging.onMessage.listen(_handleForegroundMessage);
+    print('[NotificationService] Foreground listener registered');
     
     // Handle background messages when app opens
     FirebaseMessaging.onMessageOpenedApp.listen(_handleMessageOpenedApp);
+    print('[NotificationService] Message opened listener registered');
     
     // Check if app was opened from notification
     await _checkInitialMessage();
@@ -105,9 +127,18 @@ class NotificationService {
   
   static void _handleForegroundMessage(RemoteMessage message) {
     print('Received foreground message: ${message.notification?.title}');
+    print('Message data: ${message.data}');
     
     final notification = message.notification;
     final android = message.notification?.android;
+    final data = message.data;
+    
+    // Emit transaction event for wallet refresh
+    print('Notification type: ${data['type']}');
+    if (data['type'] == 'transaction') {
+      print('Emitting transaction event');
+      _transactionController.add(Map<String, dynamic>.from(data));
+    }
     
     if (notification != null) {
       final androidDetails = AndroidNotificationDetails(
@@ -142,8 +173,15 @@ class NotificationService {
   
   static void _handleMessageOpenedApp(RemoteMessage message) {
     print('App opened from notification: ${message.notification?.title}');
+    final data = Map<String, dynamic>.from(message.data);
+    
+    // Emit transaction event for wallet refresh
+    if (data['type'] == 'transaction') {
+      _transactionController.add(data);
+    }
+    
     if (message.data.isNotEmpty) {
-      _handleNotificationData(Map<String, dynamic>.from(message.data));
+      _handleNotificationData(data);
     }
   }
 
@@ -151,8 +189,15 @@ class NotificationService {
     final message = await _firebaseMessaging.getInitialMessage();
     if (message != null) {
       print('App opened from killed state: ${message.notification?.title}');
+      final data = Map<String, dynamic>.from(message.data);
+      
+      // Emit transaction event for wallet refresh
+      if (data['type'] == 'transaction') {
+        _transactionController.add(data);
+      }
+      
       if (message.data.isNotEmpty) {
-        _handleNotificationData(Map<String, dynamic>.from(message.data));
+        _handleNotificationData(data);
       }
     }
   }
@@ -169,16 +214,16 @@ class NotificationService {
     
     switch (type) {
       case 'order_status':
-        // Navigate to orders page
+        _navigationController.add({'page': 'orders'});
         break;
       case 'transaction':
-        // Navigate to wallet page
+        _navigationController.add({'page': 'wallet', 'transaction_id': data['transaction_id']});
         break;
       case 'low_balance':
-        // Navigate to wallet page to add funds
+        _navigationController.add({'page': 'wallet'});
         break;
       case 'canteen_open':
-        // Navigate to menu page
+        _navigationController.add({'page': 'menu'});
         break;
       default:
         break;

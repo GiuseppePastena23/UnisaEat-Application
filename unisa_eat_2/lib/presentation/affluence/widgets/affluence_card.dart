@@ -161,7 +161,7 @@ class _AffluenceCardState extends State<AffluenceCard> {
               ),
               const SizedBox(height: 12),
               Text(
-                data.message ?? 'The cafeteria is currently closed.',
+                data.message ?? l10n.affluence_closed,
               ),
             ],
           ),

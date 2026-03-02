@@ -10,9 +10,12 @@ import 'package:unisa_eat_2/presentation/stats/bloc/stats_cubit.dart';
 import 'package:unisa_eat_2/presentation/stats/bloc/stats_state.dart';
 import 'package:unisa_eat_2/presentation/wallet/bloc/wallet_cubit.dart';
 import 'package:unisa_eat_2/presentation/wallet/bloc/wallet_state.dart';
+import 'package:unisa_eat_2/presentation/wallet/widgets/transaction_detail_modal.dart';
 
 class WalletPage extends StatefulWidget {
-  const WalletPage({super.key});
+  final bool showReceipt;
+
+  const WalletPage({super.key, this.showReceipt = false});
 
   @override
   State<WalletPage> createState() => _WalletPageState();
@@ -22,6 +25,59 @@ class _WalletPageState extends State<WalletPage> {
   TransactionType? selectedType;
   String sortBy = 'dateDesc';
   String groupBy = 'none';
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (widget.showReceipt) {
+        // Wait a bit for wallet data to load
+        Future.delayed(const Duration(milliseconds: 500), () {
+          if (mounted) {
+            _showReceiptForLastTransaction();
+          }
+        });
+      }
+    });
+  }
+
+  void _showReceiptForLastTransaction() {
+    final walletState = context.read<WalletCubit>().state;
+    if (walletState is WalletSuccess && walletState.transactions.isNotEmpty) {
+      final lastTx = walletState.transactions.first;
+      showDialog(
+        context: context,
+        builder: (ctx) => AlertDialog(
+          title: const Text('Kiosk Purchase'),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text('Amount: €${lastTx.amount?.toStringAsFixed(2) ?? '0.00'}'),
+              const SizedBox(height: 8),
+              Text('Date: ${lastTx.dateFormatted}'),
+              if (lastTx.dishes != null && lastTx.dishes!.isNotEmpty) ...[
+                const SizedBox(height: 16),
+                const Text(
+                  'Items:',
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
+                ...lastTx.dishes!.map(
+                  (d) => Text('${d.quantity}x ${d.name} - €${d.price?.toStringAsFixed(2)}'),
+                ),
+              ],
+            ],
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(ctx).pop(),
+              child: const Text('OK'),
+            ),
+          ],
+        ),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -58,7 +114,7 @@ class _WalletPageState extends State<WalletPage> {
               color: Theme.of(context).colorScheme.surface,
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withValues(alpha: 0.1),
+                  color: Colors.black.withOpacity(0.1),
                   blurRadius: 4,
                   offset: const Offset(0, 2),
                 ),
@@ -114,16 +170,16 @@ class _WalletPageState extends State<WalletPage> {
           Text(
             l10n.current_balance,
             style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-              color: Theme.of(context).colorScheme.onSurface,
-            ),
+                  color: Theme.of(context).colorScheme.onSurface,
+                ),
           ),
           const SizedBox(height: 10),
           Text(
             '€${balance.toStringAsFixed(2)}',
             style: Theme.of(context).textTheme.headlineLarge?.copyWith(
-              color: Theme.of(context).colorScheme.onSurface,
-              fontWeight: FontWeight.bold,
-            ),
+                  color: Theme.of(context).colorScheme.onSurface,
+                  fontWeight: FontWeight.bold,
+                ),
           ),
           const SizedBox(height: 10),
         ],
@@ -142,7 +198,12 @@ class _WalletPageState extends State<WalletPage> {
               hint: Text('Type'),
               items: [
                 DropdownMenuItem(value: null, child: Text('All')),
-                ...TransactionType.values.map((type) => DropdownMenuItem(value: type, child: Text(_getLocalizedTransactionType(context, type)))),
+                ...TransactionType.values.map(
+                  (type) => DropdownMenuItem(
+                    value: type,
+                    child: Text(_getLocalizedTransactionType(context, type)),
+                  ),
+                ),
               ],
               onChanged: (value) => setState(() => selectedType = value),
             ),
@@ -192,9 +253,9 @@ class _WalletPageState extends State<WalletPage> {
             Text(
               l10n.recent_transactions,
               style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                fontWeight: FontWeight.bold,
-                color: Theme.of(context).colorScheme.onSurface,
-              ),
+                    fontWeight: FontWeight.bold,
+                    color: Theme.of(context).colorScheme.onSurface,
+                  ),
             ),
             const SizedBox(height: 10),
             if (filtered.isEmpty)
@@ -207,46 +268,50 @@ class _WalletPageState extends State<WalletPage> {
                 separatorBuilder: (_, __) => const Divider(height: 16),
                 itemBuilder: (context, index) {
                   final tx = filtered[index];
-                  return Row(
-                    children: [
-                      Icon(
-                        _getIconForType(tx.type),
-                        color: _getIconColorForType(tx.type, context),
-                        size: 28,
-                      ),
-                      const SizedBox(width: 16),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              _getLocalizedTransactionType(context, tx.type),
-                              style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                  return InkWell(
+                    onTap: () => showTransactionDetail(context, tx),
+                    child: Row(
+                      children: [
+                        Icon(
+                          _getIconForType(tx.type),
+                          color: _getIconColorForType(tx.type, context),
+                          size: 28,
+                        ),
+                        const SizedBox(width: 16),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                _getLocalizedTransactionType(context, tx.type),
+                                style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                                      fontWeight: FontWeight.bold,
+                                      color: Theme.of(context).colorScheme.onSurface,
+                                    ),
+                              ),
+                              Text(
+                                tx.dateFormatted,
+                                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                                      color: Theme.of(context).colorScheme.onSurface
+                                          .withOpacity(0.6),
+                                    ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        Text(
+                          '${tx.isNegative ? '-' : '+'}€${tx.amount?.toStringAsFixed(2) ?? '0.00'}',
+                          style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                                color: tx.type == TransactionType.topup
+                                    ? Colors.green
+                                    : tx.isNegative
+                                        ? Theme.of(context).colorScheme.error
+                                        : Theme.of(context).colorScheme.primary,
                                 fontWeight: FontWeight.bold,
-                                color: Theme.of(context).colorScheme.onSurface,
                               ),
-                            ),
-                            Text(
-                              tx.dateFormatted,
-                              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.6),
-                              ),
-                            ),
-                          ],
                         ),
-                      ),
-                      Text(
-                        '${tx.isNegative ? '-' : '+'}€${tx.amount?.toStringAsFixed(2) ?? '0.00'}',
-                        style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                          color: tx.type == TransactionType.topup
-                            ? Colors.green
-                            : tx.isNegative
-                              ? Theme.of(context).colorScheme.error
-                              : Theme.of(context).colorScheme.primary,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ],
+                      ],
+                    ),
                   );
                 },
               ),
@@ -264,9 +329,9 @@ class _WalletPageState extends State<WalletPage> {
             Text(
               l10n.recent_transactions,
               style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                fontWeight: FontWeight.bold,
-                color: Theme.of(context).colorScheme.onSurface,
-              ),
+                    fontWeight: FontWeight.bold,
+                    color: Theme.of(context).colorScheme.onSurface,
+                  ),
             ),
             const SizedBox(height: 10),
             if (grouped.isEmpty)
@@ -284,9 +349,9 @@ class _WalletPageState extends State<WalletPage> {
                       Text(
                         entry.key,
                         style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                          fontWeight: FontWeight.bold,
-                          color: Theme.of(context).colorScheme.primary,
-                        ),
+                              fontWeight: FontWeight.bold,
+                              color: Theme.of(context).colorScheme.primary,
+                            ),
                       ),
                       ListView.separated(
                         shrinkWrap: true,
@@ -295,46 +360,50 @@ class _WalletPageState extends State<WalletPage> {
                         separatorBuilder: (_, __) => const Divider(height: 8),
                         itemBuilder: (context, idx) {
                           final tx = entry.value[idx];
-                          return Row(
-                            children: [
-                              Icon(
-                                _getIconForType(tx.type),
-                                color: _getIconColorForType(tx.type, context),
-                                size: 28,
-                              ),
-                              const SizedBox(width: 16),
-                              Expanded(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      _getLocalizedTransactionType(context, tx.type),
-                                      style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                          return InkWell(
+                            onTap: () => showTransactionDetail(context, tx),
+                            child: Row(
+                              children: [
+                                Icon(
+                                  _getIconForType(tx.type),
+                                  color: _getIconColorForType(tx.type, context),
+                                  size: 28,
+                                ),
+                                const SizedBox(width: 16),
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        _getLocalizedTransactionType(context, tx.type),
+                                        style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                                              fontWeight: FontWeight.bold,
+                                              color: Theme.of(context).colorScheme.onSurface,
+                                            ),
+                                      ),
+                                      Text(
+                                        tx.dateFormatted,
+                                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                                              color: Theme.of(context).colorScheme.onSurface
+                                                  .withOpacity(0.6),
+                                            ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                Text(
+                                  '${tx.isNegative ? '-' : '+'}€${tx.amount?.toStringAsFixed(2) ?? '0.00'}',
+                                  style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                                        color: tx.type == TransactionType.topup
+                                            ? Colors.green
+                                            : tx.isNegative
+                                                ? Theme.of(context).colorScheme.error
+                                                : Theme.of(context).colorScheme.primary,
                                         fontWeight: FontWeight.bold,
-                                        color: Theme.of(context).colorScheme.onSurface,
                                       ),
-                                    ),
-                                    Text(
-                                      tx.dateFormatted,
-                                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                        color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.6),
-                                      ),
-                                    ),
-                                  ],
                                 ),
-                              ),
-                              Text(
-                                '${tx.isNegative ? '-' : '+'}€${tx.amount?.toStringAsFixed(2) ?? '0.00'}',
-                                style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                                  color: tx.type == TransactionType.topup
-                                    ? Colors.green
-                                    : tx.isNegative
-                                      ? Theme.of(context).colorScheme.error
-                                      : Theme.of(context).colorScheme.primary,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ],
+                              ],
+                            ),
                           );
                         },
                       ),
@@ -389,7 +458,8 @@ class _WalletPageState extends State<WalletPage> {
   }
 
   List<TransactionEntity> _filterAndSort(List<TransactionEntity> transactions) {
-    var filtered = transactions.where((tx) => selectedType == null || tx.type == selectedType).toList();
+    var filtered =
+        transactions.where((tx) => selectedType == null || tx.type == selectedType).toList();
     filtered.sort((a, b) {
       switch (sortBy) {
         case 'dateDesc':
@@ -480,9 +550,9 @@ class _WalletPageState extends State<WalletPage> {
                   Text(
                     '€${data.totalSpent.toStringAsFixed(2)}',
                     style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                      color: Colors.red,
-                      fontWeight: FontWeight.bold,
-                    ),
+                          color: Colors.red,
+                          fontWeight: FontWeight.bold,
+                        ),
                   ),
                 ],
               ),
@@ -505,9 +575,9 @@ class _WalletPageState extends State<WalletPage> {
                   Text(
                     '€${data.totalAdded.toStringAsFixed(2)}',
                     style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                      color: Colors.green,
-                      fontWeight: FontWeight.bold,
-                    ),
+                          color: Colors.green,
+                          fontWeight: FontWeight.bold,
+                        ),
                   ),
                 ],
               ),
@@ -538,7 +608,7 @@ class _WalletPageState extends State<WalletPage> {
             return BarChartGroupData(
               x: index,
               barRods: [
-                BarChartRodData(
+                                BarChartRodData(
                   toY: point.added,
                   color: Colors.green,
                   width: 12,
@@ -582,3 +652,4 @@ class _WalletPageState extends State<WalletPage> {
     );
   }
 }
+

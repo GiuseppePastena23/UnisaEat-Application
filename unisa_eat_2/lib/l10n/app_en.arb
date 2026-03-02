@@ -115,6 +115,7 @@
     "affluence_medium": "Medium Affluence",
     "affluence_high": "High Affluence",
     "affluence_full": "Full Capacity",
+    
     "affluence_unknown": "Unknown",
     "affluence_wait": "Estimated Wait",
     "affluence_refresh": "Refresh",
