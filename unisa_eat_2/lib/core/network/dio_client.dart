@@ -32,6 +32,14 @@ class DioClient {
           Duration(seconds: 2),
           Duration(seconds: 4),
         ],
+        retryEvaluator: (error, attempt) {
+          if (error.response != null && error.response!.statusCode != null) {
+            if (error.response!.statusCode! >= 400 && error.response!.statusCode! < 500) {
+              return false;
+            }
+          }
+          return true;
+        },
       ),
     ]);
   }

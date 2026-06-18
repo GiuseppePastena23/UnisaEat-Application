@@ -15,6 +15,7 @@ import 'package:unisa_eat_2/core/configs/theme/theme_cubit.dart';
 import 'package:unisa_eat_2/core/services/notification_service.dart';
 import 'package:unisa_eat_2/core/services/time_service.dart';
 import 'package:unisa_eat_2/domain/menu/entity/menu_entity.dart';
+import 'package:unisa_eat_2/domain/menu/entity/piatto_entity.dart';
 import 'package:unisa_eat_2/l10n/app_localizations.dart';
 
 import 'package:unisa_eat_2/domain/user/entities/cached_user.dart';
@@ -39,8 +40,10 @@ void main() async{
   await Hive.initFlutter();
   Hive.registerAdapter(CachedUserAdapter());
   Hive.registerAdapter(UserEntityAdapter());
-   await Hive.openBox<CachedUser>('user');
-   await Hive.openBox<MenuEntity>('menu');
+  Hive.registerAdapter(MenuEntityAdapter());
+  Hive.registerAdapter(PiattoEntityAdapter());
+  await Hive.openBox<CachedUser>('user');
+  await Hive.openBox<MenuEntity>('menu');
    setupServiceLocator();
 
    // Initialize notifications

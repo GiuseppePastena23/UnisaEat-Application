@@ -65,9 +65,8 @@ class TokenInterceptor extends Interceptor{
               handler.next(err);
             },
             (data) async {
-              // Update tokens
-              sl<AuthService>().setAccessToken(data['access_token']);
-              sl<AuthService>().setRefreshToken(data['refresh_token']);
+              // Update only access token (refresh token non ruotato)
+              sl<AuthService>().setAccessToken(data['access']);
               // Retry the request
               final newToken = await sl<AuthService>().getAccessToken();
               err.requestOptions.headers['Authorization'] = 'Bearer $newToken';

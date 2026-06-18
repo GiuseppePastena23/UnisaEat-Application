@@ -46,6 +46,7 @@ import 'package:unisa_eat_2/domain/order/usecases/create_order_usecase.dart';
 import 'package:unisa_eat_2/domain/order/usecases/get_orders_usecase.dart';
 
 import 'package:unisa_eat_2/domain/shared/usecases/get_server_time_usecase.dart';
+import 'package:unisa_eat_2/domain/menu/entity/menu_entity.dart';
 import 'package:unisa_eat_2/domain/user/entities/cached_user.dart';
 
 import 'package:unisa_eat_2/domain/user/repositories/user_repository.dart';
@@ -60,6 +61,7 @@ final sl  = GetIt.instance;
 void setupServiceLocator() {
   
   sl.registerSingleton<Box<CachedUser>>(Hive.box<CachedUser>(HiveBoxes.user));
+  sl.registerSingleton<Box<MenuEntity>>(Hive.box<MenuEntity>(HiveBoxes.menu));
 
 
   

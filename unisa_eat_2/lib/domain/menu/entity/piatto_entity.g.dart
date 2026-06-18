@@ -1,50 +1,50 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'user_entity.dart';
+part of 'piatto_entity.dart';
 
 // **************************************************************************
 // TypeAdapterGenerator
 // **************************************************************************
 
-class UserEntityAdapter extends TypeAdapter<UserEntity> {
+class PiattoEntityAdapter extends TypeAdapter<PiattoEntity> {
   @override
-  final int typeId = 0;
+  final int typeId = 3;
 
   @override
-  UserEntity read(BinaryReader reader) {
+  PiattoEntity read(BinaryReader reader) {
     final numOfFields = reader.readByte();
     final fields = <int, dynamic>{
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
-    return UserEntity(
-      codiceFiscale: fields[0] as String?,
-      cognome: fields[1] as String?,
-      email: fields[2] as String?,
-      nome: fields[3] as String?,
-      saldo: fields[4] as double?,
-      phone: fields[5] as String?,
-      birthdate: fields[6] as String?,
+    return PiattoEntity(
+      allergeni: fields[0] as String?,
+      categoria: fields[1] as String?,
+      costoBase: fields[2] as double?,
+      descrizione: fields[3] as String?,
+      nome: fields[4] as String?,
+      piattoId: fields[5] as int?,
+      tipo: fields[6] as String?,
     );
   }
 
   @override
-  void write(BinaryWriter writer, UserEntity obj) {
+  void write(BinaryWriter writer, PiattoEntity obj) {
     writer
       ..writeByte(7)
       ..writeByte(0)
-      ..write(obj.codiceFiscale)
+      ..write(obj.allergeni)
       ..writeByte(1)
-      ..write(obj.cognome)
+      ..write(obj.categoria)
       ..writeByte(2)
-      ..write(obj.email)
+      ..write(obj.costoBase)
       ..writeByte(3)
-      ..write(obj.nome)
+      ..write(obj.descrizione)
       ..writeByte(4)
-      ..write(obj.saldo)
+      ..write(obj.nome)
       ..writeByte(5)
-      ..write(obj.phone)
+      ..write(obj.piattoId)
       ..writeByte(6)
-      ..write(obj.birthdate);
+      ..write(obj.tipo);
   }
 
   @override
@@ -53,7 +53,7 @@ class UserEntityAdapter extends TypeAdapter<UserEntity> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is UserEntityAdapter &&
+      other is PiattoEntityAdapter &&
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }

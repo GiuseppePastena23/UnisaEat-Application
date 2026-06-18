@@ -43,62 +43,55 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: BlocListener<LoginCubit, LoginState>(
+      body: BlocConsumer<LoginCubit, LoginState>(
         listener: (BuildContext context, state) {
-          if (state is LoginLoading) {
-            // Show loading dialog
-            showDialog(
-              context: context,
-              barrierDismissible: false,
-              builder: (context) => const Center(
-                child: CircularProgressIndicator(),
-              ),
-            );
-          } else if (state is LoginFailure) {
-            // Dismiss loading dialog if present
-            if (ModalRoute.of(context)?.canPop ?? false) {
-              Navigator.of(context, rootNavigator: true).pop();
-            }
+          if (state is LoginFailure) {
             final l10n = AppLocalizations.of(context)!;
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(content: Text(_getErrorMessage(state.error, l10n))),
             );
            } else if (state is LoginSuccess) {
-             // Dismiss loading dialog if present
-             if (ModalRoute.of(context)?.canPop ?? false) {
-               Navigator.of(context, rootNavigator: true).pop();
-             }
-             // Refresh user profile data and wallet
              context.read<UserProfileCubit>().getUser(forceRefresh: true);
              context.read<WalletCubit>().getData();
              context.go('/home');
            }
         },
-        child: SafeArea(
-          minimum: const EdgeInsets.only(top: 0, right: 30, left: 30, bottom: 0),
-          child: Center(
-            child: Form(
-              key: _formKey,
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  _loginText(),
-                  const SizedBox(height: 20),
-                  _emailField(),
-                  const SizedBox(height: 20),
-                  _passwordField(),
-                  _showPasswordCheckbox(),
-                  const SizedBox(height: 20),
-                  _loginButton(context),
-                  const SizedBox(height: 15),
-                  _signupText()
-                ],
+        builder: (context, state) {
+          return Stack(
+            children: [
+              SafeArea(
+                minimum: const EdgeInsets.only(top: 0, right: 30, left: 30, bottom: 0),
+                child: Center(
+                  child: Form(
+                    key: _formKey,
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        _loginText(),
+                        const SizedBox(height: 20),
+                        _emailField(),
+                        const SizedBox(height: 20),
+                        _passwordField(),
+                        _showPasswordCheckbox(),
+                        const SizedBox(height: 20),
+                        _loginButton(context),
+                        const SizedBox(height: 15),
+                        _signupText()
+                      ],
+                    ),
+                  ),
+                ),
               ),
-            ),
-          ),
+              if (state is LoginLoading)
+                Container(
+                  color: Colors.black26,
+                  child: const Center(child: CircularProgressIndicator()),
+                ),
+            ],
+          );
+        },
         ),
-      ),
-    );
+      );
   }
 
   Widget _loginButton(BuildContext context) {
